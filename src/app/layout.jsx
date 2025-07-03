@@ -1,3 +1,4 @@
+import Footer from "@/components/Footer";
 import "./globals.css";
 import ReduxProvider from "@/lib/reduxProvider";
 
@@ -10,7 +11,10 @@ export default function RootLayout({ children }) {
   return (
     <html lang="fr">
       <body className={`antialiased`}>
-        <ReduxProvider>{children}</ReduxProvider>
+        <ReduxProvider>
+          {children}
+          <Footer />
+        </ReduxProvider>
       </body>
     </html>
   );
