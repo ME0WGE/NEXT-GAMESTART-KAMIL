@@ -1,1 +1,31 @@
 @import "tailwindcss";
+
+@layer utilities {
+  @keyframes toast-in {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  .animate-toast-in {
+    animation: toast-in 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+  @keyframes pulse-once {
+    0% {
+      box-shadow: 0 0 0 0 #facc15;
+    }
+    70% {
+      box-shadow: 0 0 0 8px #fde68a44;
+    }
+    100% {
+      box-shadow: 0 0 0 0 #facc15;
+    }
+  }
+  .animate-pulse-once:active {
+    animation: pulse-once 0.5s;
+  }
+}
