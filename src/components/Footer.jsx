@@ -106,7 +106,7 @@ export default function Footer() {
                 <h2 className="mb-4 text-sm font-semibold text-gray-900 uppercase dark:text-white cursor-default">
                   Newsletter
                 </h2>
-                <p className="mb-2 text-gray-500 dark:text-gray-400 text-xs">
+                <p className="mb-2 text-gray-500 dark:text-gray-400 text-xs cursor-default">
                   Promotions qui choquent, nouvelles sorties et actualités
                   directement dans votre boîte mail !
                 </p>
@@ -135,20 +135,20 @@ export default function Footer() {
           </div>
           <hr className="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8" />
           <div className="sm:flex sm:items-center sm:justify-between">
-            <span className="text-sm text-gray-500 sm:text-center dark:text-gray-400">
-              © 2025 GameStart™. Projet à but éducatif. Réalisé par Kamil
-              Baldyga
+            <span className="text-sm text-gray-500 sm:text-center dark:text-gray-400 cursor-default">
+              © 2025 GameStart™. Projet à but éducatif. Réalisé par{" "}
+              <span className="font-bold text-yellow-400">Kamil Baldyga</span>
             </span>
             <div className="flex mt-4 sm:justify-center sm:mt-0 gap-2">
               <Link href={"https://github.com/me0wge"} target="_blank">
-                <span className="text-gray-500 hover:text-gray-900 dark:hover:text-white ms-5">
+                <span className="text-gray-500 hover:text-gray-900 dark:hover:text-white ms-5 text-2xl">
                   <FontAwesomeIcon icon={faGithub} />
                 </span>
               </Link>
               <Link
                 href={"https://www.linkedin.com/in/kamil-baldyga/"}
                 target="_blank">
-                <span className="text-gray-500 hover:text-gray-900 dark:hover:text-white ms-5">
+                <span className="text-gray-500 hover:text-gray-900 dark:hover:text-white ms-5 text-2xl">
                   <FontAwesomeIcon icon={faLinkedin} />
                 </span>
               </Link>
