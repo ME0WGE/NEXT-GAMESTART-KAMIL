@@ -1,13 +1,30 @@
 "use client";
 
-import React, { useState } from "react";
-import { Menu, X, ShoppingCart, User } from "lucide-react";
+import React, { useState, useRef, useEffect } from "react";
+import { Menu, X, ShoppingCart, User, Search } from "lucide-react";
+import Link from "next/link";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const searchInputRef = useRef(null);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
+  };
+
+  const handleSearchClick = () => {
+    setIsSearchOpen((prev) => !prev);
+  };
+
+  useEffect(() => {
+    if (isSearchOpen && searchInputRef.current) {
+      searchInputRef.current.focus();
+    }
+  }, [isSearchOpen]);
+
+  const handleSearchBlur = (e) => {
+    setTimeout(() => setIsSearchOpen(false), 100);
   };
 
   return (
@@ -40,8 +57,31 @@ export default function Navbar() {
             </div>
           </div>
 
-          {/* Desktop Icons */}
+          {/* Desktop Icons + Search */}
           <div className="hidden md:flex items-center space-x-4">
+            {/* Search Icon & Bar */}
+            <div className="relative flex items-center">
+              <button
+                className={`text-slate-300 hover:text-blue-400 hover:bg-slate-800 p-2 rounded-full transition-all duration-200 focus:outline-none ${
+                  isSearchOpen ? "bg-slate-800" : ""
+                }`}
+                onClick={handleSearchClick}
+                aria-label="Rechercher">
+                <Search size={20} />
+              </button>
+              <div
+                className={`transition-all duration-300 overflow-hidden ${
+                  isSearchOpen ? "w-48 opacity-100 ml-2" : "w-0 opacity-0 ml-0"
+                }`}>
+                <input
+                  ref={searchInputRef}
+                  type="text"
+                  placeholder="Rechercher..."
+                  className="bg-slate-800 text-white px-3 py-1 rounded-md border border-slate-700 focus:outline-none focus:border-blue-800 w-full text-sm"
+                  onBlur={handleSearchBlur}
+                />
+              </div>
+            </div>
             <button className="text-slate-300 hover:text-blue-400 hover:bg-slate-800 p-2 rounded-full transition-all duration-200">
               <ShoppingCart size={20} />
             </button>
@@ -70,21 +110,31 @@ export default function Navbar() {
         {isMenuOpen && (
           <div className="md:hidden">
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-slate-800/50 rounded-lg mt-2">
-              <a
-                href="#store"
+              <Link
+                href="/"
                 className="text-slate-300 hover:text-blue-400 hover:bg-slate-700 block px-3 py-2 rounded-md text-base font-medium transition-all duration-200">
                 Store
-              </a>
-              <a
-                href="#library"
+              </Link>
+              <Link
+                href="/"
                 className="text-slate-300 hover:text-blue-400 hover:bg-slate-700 block px-3 py-2 rounded-md text-base font-medium transition-all duration-200">
                 Mes jeux
-              </a>
-              <a
-                href="#account"
+              </Link>
+              <Link
+                href="/"
                 className="text-slate-300 hover:text-blue-400 hover:bg-slate-700 block px-3 py-2 rounded-md text-base font-medium transition-all duration-200">
                 Compte
-              </a>
+              </Link>
+              <div className="flex items-center gap-2">
+                <Search size={20} className="text-blue-400" />
+                <input
+                  ref={searchInputRef}
+                  type="text"
+                  placeholder="Rechercher..."
+                  className="bg-slate-800 text-white px-3 py-1 rounded-md border border-slate-700 focus:outline-none focus:border-blue-800 w-full text-sm"
+                  onBlur={handleSearchBlur}
+                />
+              </div>
             </div>
           </div>
         )}
