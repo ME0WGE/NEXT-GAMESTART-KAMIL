@@ -8,34 +8,40 @@ export default function Footer() {
       <footer className="bg-white dark:bg-gray-900">
         <div className="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8">
           <div className="md:flex md:justify-between">
-            <div className="mb-6 md:mb-0">
+            <div className="mb-6 md:mb-0 pr-12">
               <Link href={"/"} className="flex items-center">
                 <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
                   GameStart
                 </span>
               </Link>
             </div>
-            <div className="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-3">
+            <div className="grid grid-cols-2 gap-1 sm:gap-1 md:grid-cols-4 lg:grid-cols-5">
               <div>
                 <h2 className="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">
-                  GameStart
+                  Général
                 </h2>
                 <ul className="text-gray-500 dark:text-gray-400 font-medium">
-                  <Link href={"/"}>
-                    <li className="mb-4">
-                      <p className="hover:underline">Accueil</p>
-                    </li>
-                  </Link>
-                  <Link href={"/"}>
-                    <li className="mb-4">
-                      <p className="hover:underline">Boutique</p>
-                    </li>
-                  </Link>
-                  <Link href={"/"}>
-                    <li className="mb-4">
-                      <p className="hover:underline">Panier</p>
-                    </li>
-                  </Link>
+                  <li className="mb-4">
+                    <Link href={"/"} className="inline-block group">
+                      <p className="relative inline-block after:content-[''] after:block after:absolute after:left-0 after:bottom-0 after:h-[2px] after:bg-yellow-400 after:w-0 after:transition-all after:duration-300 group-hover:after:w-full">
+                        Accueil
+                      </p>
+                    </Link>
+                  </li>
+                  <li className="mb-4">
+                    <Link href={"/"} className="inline-block group">
+                      <p className="relative inline-block after:content-[''] after:block after:absolute after:left-0 after:bottom-0 after:h-[2px] after:bg-yellow-400 after:w-0 after:transition-all after:duration-300 group-hover:after:w-full">
+                        Boutique
+                      </p>
+                    </Link>
+                  </li>
+                  <li className="mb-4">
+                    <Link href={"/"} className="inline-block group">
+                      <p className="relative inline-block after:content-[''] after:block after:absolute after:left-0 after:bottom-0 after:h-[2px] after:bg-yellow-400 after:w-0 after:transition-all after:duration-300 group-hover:after:w-full">
+                        Panier
+                      </p>
+                    </Link>
+                  </li>
                 </ul>
               </div>
               <div>
@@ -43,16 +49,20 @@ export default function Footer() {
                   Compte
                 </h2>
                 <ul className="text-gray-500 dark:text-gray-400 font-medium">
-                  <Link href={"/"}>
-                    <li className="mb-4">
-                      <p className="hover:underline">Mon Compte</p>
-                    </li>
-                  </Link>
-                  <Link href={"/"}>
-                    <li className="mb-4">
-                      <p className="hover:underline">Ma bibliothèque</p>
-                    </li>
-                  </Link>
+                  <li className="mb-4">
+                    <Link href={"/"} className="inline-block group">
+                      <p className="relative inline-block after:content-[''] after:block after:absolute after:left-0 after:bottom-0 after:h-[2px] after:bg-yellow-400 after:w-0 after:transition-all after:duration-300 group-hover:after:w-full">
+                        Mon Compte
+                      </p>
+                    </Link>
+                  </li>
+                  <li className="mb-4">
+                    <Link href={"/"} className="inline-block group">
+                      <p className="relative inline-block after:content-[''] after:block after:absolute after:left-0 after:bottom-0 after:h-[2px] after:bg-yellow-400 after:w-0 after:transition-all after:duration-300 group-hover:after:w-full">
+                        Ma bibliothèque
+                      </p>
+                    </Link>
+                  </li>
                 </ul>
               </div>
               <div>
@@ -60,19 +70,50 @@ export default function Footer() {
                   Contact
                 </h2>
                 <ul className="text-gray-500 dark:text-gray-400 font-medium list-none p-0 m-0">
-                  <Link href={"https://github.com/me0wge"} target="_blank">
-                    <li className="mb-4">
-                      <p className="hover:underline">GitHub</p>
-                    </li>
-                  </Link>
-                  <Link
-                    href={"https://www.linkedin.com/in/kamil-baldyga/"}
-                    target="_blank">
-                    <li className="mb-4">
-                      <p className="hover:underline">LinkedIn</p>
-                    </li>
-                  </Link>
+                  <li className="mb-4">
+                    <Link
+                      href={"https://github.com/me0wge"}
+                      target="_blank"
+                      className="inline-block group">
+                      <p className="relative inline-block after:content-[''] after:block after:absolute after:left-0 after:bottom-0 after:h-[2px] after:bg-yellow-400 after:w-0 after:transition-all after:duration-300 group-hover:after:w-full">
+                        GitHub
+                      </p>
+                    </Link>
+                  </li>
+                  <li className="mb-4">
+                    <Link
+                      href={"https://www.linkedin.com/in/kamil-baldyga/"}
+                      target="_blank"
+                      className="inline-block group">
+                      <p className="relative inline-block after:content-[''] after:block after:absolute after:left-0 after:bottom-0 after:h-[2px] after:bg-yellow-400 after:w-0 after:transition-all after:duration-300 group-hover:after:w-full">
+                        LinkedIn
+                      </p>
+                    </Link>
+                  </li>
                 </ul>
+              </div>
+              {/* Newsletter Section */}
+              <div>
+                <h2 className="mb-4 text-sm font-semibold text-gray-900 uppercase dark:text-white">
+                  Newsletter
+                </h2>
+                <p className="mb-2 text-gray-500 dark:text-gray-400 text-xs">
+                  Recevez les dernières promos et nouveautés directement dans
+                  votre boîte mail !
+                </p>
+                <form className="flex flex-col sm:flex-row gap-2">
+                  <input
+                    type="email"
+                    required
+                    placeholder="Votre email..."
+                    className="rounded-lg px-3 py-2 text-sm border border-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-400 dark:bg-gray-800 dark:text-white dark:border-gray-700"
+                  />
+                  <button
+                    type="submit"
+                    className="rounded-lg bg-yellow-400 hover:bg-yellow-500 text-white font-semibold px-4 py-2 text-sm transition-colors duration-200">
+                    S'inscrire
+                  </button>
+                </form>
               </div>
             </div>
           </div>
