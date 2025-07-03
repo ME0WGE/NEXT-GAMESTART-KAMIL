@@ -2,157 +2,14 @@
 
 import React, { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-
-// Composant Skeleton pour les éléments de chargement
-const GameSkeleton = ({ className = "", size = "default" }) => {
-  const sizeClasses = {
-    small: {
-      container: "h-32",
-      circle: "w-8 h-8",
-      rect1: "w-6 h-6",
-      rect2: "w-10 h-6",
-    },
-    default: {
-      container: "h-64",
-      circle: "w-16 h-16",
-      rect1: "w-12 h-12",
-      rect2: "w-20 h-12",
-    },
-    medium: {
-      container: "h-53",
-      circle: "w-8 h-8",
-      rect1: "w-6 h-6",
-      rect2: "w-10 h-6",
-    },
-    large: {
-      container: "h-96 lg:h-[450px]",
-      circle: "w-24 h-24",
-      rect1: "w-20 h-20",
-      rect2: "w-28 h-20",
-    },
-  };
-
-  const sizes = sizeClasses[size];
-
-  return (
-    <div className={`${className} ${sizes.container} relative overflow-hidden`}>
-      <div className="absolute inset-3 bg-slate-700 rounded-lg flex items-center justify-center">
-        <div className="text-center">
-          <div
-            className={`${sizes.circle} bg-slate-600 rounded-full mx-auto mb-2 flex items-center justify-center animate-pulse`}></div>
-          <div
-            className={`${sizes.rect1} bg-slate-600 rounded mx-auto mb-2 animate-pulse`}></div>
-          <div
-            className={`${sizes.rect2} bg-slate-600 rounded mx-auto animate-pulse`}></div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-// Composant pour afficher un jeu avec image réelle
-const GameCard = ({
-  game,
-  className = "",
-  size = "default",
-  showDiscount = false,
-}) => {
-  const [imageLoaded, setImageLoaded] = useState(false);
-  const [imageError, setImageError] = useState(false);
-
-  const sizeClasses = {
-    small: "h-32",
-    default: "h-64",
-    large: "h-96 lg:h-[450px]",
-  };
-
-  return (
-    <div
-      className={`${className} ${sizeClasses[size]} relative overflow-hidden`}>
-      {!imageLoaded && !imageError && (
-        <GameSkeleton size={size} className="absolute inset-0" />
-      )}
-
-      {imageError && <GameSkeleton size={size} className="absolute inset-0" />}
-
-      <img
-        src={game.image}
-        alt={game.title}
-        className={`w-full h-full object-cover rounded-lg transition-opacity duration-300 ${
-          imageLoaded ? "opacity-100" : "opacity-0"
-        }`}
-        onLoad={() => setImageLoaded(true)}
-        onError={() => setImageError(true)}
-      />
-
-      {showDiscount && game.discount && (
-        <div className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded text-sm font-bold">
-          {game.discount}
-        </div>
-      )}
-
-      {imageLoaded && (
-        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
-          <h3 className="text-white font-bold text-lg">{game.title}</h3>
-        </div>
-      )}
-    </div>
-  );
-};
+import { GameSkeleton } from "./placeholder/GameSkeleton";
 
 export default function DiscountCarousel() {
   const [currentHighlight, setCurrentHighlight] = useState(0);
   const [highlights, setHighlights] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Simulation d'un appel API
-  useEffect(() => {
-    const fetchGames = async () => {
-      setLoading(true);
-
-      // Simuler un délai d'API
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-
-      // Données fictives qui arriveraient de l'API
-      const apiData = [
-        {
-          id: 1,
-          title: "Cyberpunk 2077",
-          image:
-            "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=300&h=200&fit=crop",
-          discount: "50%",
-        },
-        {
-          id: 2,
-          title: "The Witcher 3",
-          image:
-            "https://images.unsplash.com/photo-1511512578047-dfb367046420?w=300&h=200&fit=crop",
-          discount: "30%",
-        },
-        {
-          id: 3,
-          title: "Red Dead Redemption 2",
-          image:
-            "https://images.unsplash.com/photo-1493711662062-fa541adb3fc8?w=300&h=200&fit=crop",
-          discount: "25%",
-        },
-        {
-          id: 4,
-          title: "GTA V",
-          image:
-            "https://images.unsplash.com/photo-1556438064-2d7646166914?w=300&h=200&fit=crop",
-          discount: "40%",
-        },
-      ];
-
-      setHighlights(apiData);
-      setLoading(false);
-    };
-
-    // fetchGames();
-  }, []);
-
-  // Auto-slide pour les highlights
+  // Auto-slide
   useEffect(() => {
     if (loading || highlights.length === 0) return;
 
@@ -176,7 +33,7 @@ export default function DiscountCarousel() {
 
   return (
     <div className="bg-slate-900 text-white min-h-screen">
-      {/* Highlights Section */}
+      {/* Promotions Section */}
       <div className="px-4 md:px-8 lg:px-16 py-8">
         <h2 className="text-2xl md:text-3xl font-bold text-yellow-400 mb-6">
           Promotions
