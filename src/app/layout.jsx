@@ -1,6 +1,7 @@
 import Footer from "@/components/Footer";
 import "./globals.css";
 import ReduxProvider from "@/lib/reduxProvider";
+import Navbar from "@/components/Navbar";
 
 export const metadata = {
   title: "GameStart",
@@ -12,6 +13,7 @@ export default function RootLayout({ children }) {
     <html lang="fr">
       <body className={`antialiased`}>
         <ReduxProvider>
+          <Navbar />
           {children}
           <Footer />
         </ReduxProvider>
