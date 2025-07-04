@@ -2,4 +2,4 @@
 
 ## Videos
 
-https://www.freetogame.com//g/608/videoplayback.webm
+https://www.freetogame.com//g/{id}/videoplayback.webm
