@@ -25,10 +25,10 @@ export default function Footer() {
                 </span>
               </Link>
             </div>
-            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-5 gap-2 md:gap-0">
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-6 gap-2 md:gap-0">
               <div className="transition-all duration-100 translate-y-8 hover:scale-105 hover:shadow-lg rounded-lg mb-2">
                 <h2 className="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white cursor-default">
-                  Général
+                  Menu
                 </h2>
                 <ul className="text-gray-500 dark:text-gray-400 font-medium">
                   <li className="mb-4">
@@ -39,9 +39,11 @@ export default function Footer() {
                     </Link>
                   </li>
                   <li className="mb-4">
-                    <Link href={"/"} className="inline-block group">
+                    <Link
+                      href={"/cookie-clicker"}
+                      className="inline-block group">
                       <p className="relative inline-block after:content-[''] after:block after:absolute after:left-0 after:bottom-0 after:h-[2px] after:bg-yellow-400 after:w-0 after:transition-all after:duration-300 group-hover:after:w-full">
-                        Boutique
+                        Bibliothèque
                       </p>
                     </Link>
                   </li>
@@ -62,14 +64,23 @@ export default function Footer() {
                   <li className="mb-4">
                     <Link href={"/"} className="inline-block group">
                       <p className="relative inline-block after:content-[''] after:block after:absolute after:left-0 after:bottom-0 after:h-[2px] after:bg-yellow-400 after:w-0 after:transition-all after:duration-300 group-hover:after:w-full">
-                        Mon Compte
+                        Mon Profil
                       </p>
                     </Link>
                   </li>
+                </ul>
+              </div>
+              <div className="transition-all duration-100 translate-y-8 hover:scale-105 hover:shadow-lg rounded-lg mb-2">
+                <h2 className="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white cursor-default">
+                  CookieClicker
+                </h2>
+                <ul className="text-gray-500 dark:text-gray-400 font-medium">
                   <li className="mb-4">
-                    <Link href={"/"} className="inline-block group">
+                    <Link
+                      href={"/cookie-clicker"}
+                      className="inline-block group">
                       <p className="relative inline-block after:content-[''] after:block after:absolute after:left-0 after:bottom-0 after:h-[2px] after:bg-yellow-400 after:w-0 after:transition-all after:duration-300 group-hover:after:w-full">
-                        Ma bibliothèque
+                        CookieClicker
                       </p>
                     </Link>
                   </li>

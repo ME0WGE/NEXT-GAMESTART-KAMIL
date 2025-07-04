@@ -37,32 +37,39 @@ export default function Navbar() {
           {/* Logo/Company Name */}
           <div className="flex-shrink-0">
             {/* Company Logo */}
-            <Image
-              src="/gamestart-2.png"
-              width={80}
-              height={80}
-              alt="GameStart logo"
-            />
+            <Link href="/">
+              <Image
+                src="/gamestart-2.png"
+                width={80}
+                height={80}
+                alt="GameStart logo"
+              />
+            </Link>
           </div>
 
           {/* Desktop Navigation Links */}
           <div className="hidden md:block">
             <div className="ml-10 flex items-baseline space-x-8">
-              <a
-                href="#store"
+              <Link
+                href="/"
                 className="text-slate-300 hover:text-blue-400 hover:bg-slate-800 px-3 py-2 rounded-md text-sm font-medium transition-all duration-200">
-                Store
-              </a>
-              <a
-                href="#library"
+                Accueil
+              </Link>
+              <Link
+                href="/cookie-clicker"
+                className="text-slate-300 hover:text-blue-400 hover:bg-slate-800 px-3 py-2 rounded-md text-sm font-medium transition-all duration-200">
+                CookieClicker
+              </Link>
+              <Link
+                href="/"
                 className="text-slate-300 hover:text-blue-400 hover:bg-slate-800 px-3 py-2 rounded-md text-sm font-medium transition-all duration-200">
                 Ma bilbiothèque
-              </a>
-              <a
-                href="#account"
+              </Link>
+              <Link
+                href="/"
                 className="text-slate-300 hover:text-blue-400 hover:bg-slate-800 px-3 py-2 rounded-md text-sm font-medium transition-all duration-200">
                 Mon Compte
-              </a>
+              </Link>
             </div>
           </div>
 
