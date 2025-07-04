@@ -11,6 +11,7 @@ export default function Header() {
           src="/gog.com-summer-sale.jpg"
           alt="Summer Sale Banner Desktop"
           fill
+          sizes="auto"
           className="object-cover w-full h-full"
           priority
         />
@@ -21,6 +22,7 @@ export default function Header() {
           src="/gog.com-summer-sale-mobile.jpg"
           alt="Summer Sale Banner Mobile"
           fill
+          sizes="auto"
           className="object-cover w-full h-full"
           priority
         />

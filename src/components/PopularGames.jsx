@@ -6,7 +6,7 @@ import { useMostPlayedGames } from "@/lib/hooks/useMostPlayedGames";
 
 export default function PopularGames() {
   const [showAll, setShowAll] = useState(false);
-  const { loading, mostPlayedGames } = useMostPlayedGames();
+  const { loading, mostPlayedGames, error } = useMostPlayedGames();
 
   {
     /* --------------------------------------------------------------------|
@@ -14,11 +14,15 @@ export default function PopularGames() {
     */
   }
 
+  // Number of games per row
   const gamesPerRow = 4;
+  // Number of games to display initially
   const initialGamesCount = 2 * gamesPerRow;
+  // Games to display
   const displayedGames = showAll
     ? mostPlayedGames
     : mostPlayedGames.slice(0, initialGamesCount);
+  // Check if there are more games to display
   const hasMoreGames = mostPlayedGames.length > initialGamesCount;
 
   return (
@@ -34,8 +38,8 @@ export default function PopularGames() {
           </div>
 
           {/* Grid of games */}
-          {loading ? (
-            // Loading skeleton
+          {loading || error ? (
+            // Loading skeleton (affiché aussi en cas d'erreur)
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {Array.from({ length: 8 }).map((_, index) => (
                 <div
@@ -59,7 +63,7 @@ export default function PopularGames() {
                     {/* Game image */}
                     <div className="relative h-32 overflow-hidden">
                       <img
-                        src={game.image}
+                        src={game.thumbnail}
                         alt={game.title}
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                       />

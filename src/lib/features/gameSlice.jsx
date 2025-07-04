@@ -6,6 +6,7 @@ const GameSlice = createSlice({
     games: [],
     mostPlayedGames: [],
     loading: false,
+    error: null,
   },
   reducers: {
     setGames: (state, action) => {
@@ -17,9 +18,21 @@ const GameSlice = createSlice({
     setMostPlayedGames: (state, action) => {
       state.mostPlayedGames = action.payload;
     },
+    setError: (state, action) => {
+      state.error = action.payload;
+    },
+    clearError: (state) => {
+      state.error = null;
+    },
   },
 });
 
-export const { setGames, setLoading, setMostPlayedGames } = GameSlice.actions;
+export const {
+  setGames,
+  setLoading,
+  setMostPlayedGames,
+  setError,
+  clearError,
+} = GameSlice.actions;
 
 export const GameReducer = GameSlice.reducer;
