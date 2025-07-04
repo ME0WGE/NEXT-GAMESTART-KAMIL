@@ -93,9 +93,7 @@ export default function Navbar() {
             <button className="text-slate-300 hover:text-blue-400 hover:bg-slate-800 p-2 rounded-full transition-all duration-200">
               <ShoppingCart size={20} />
             </button>
-            <button className="text-slate-300 hover:text-blue-400 hover:bg-slate-800 p-2 rounded-full transition-all duration-200">
-              <Login />
-            </button>
+            <Login />
           </div>
 
           {/* Mobile menu button */}
