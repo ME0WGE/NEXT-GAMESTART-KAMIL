@@ -3,6 +3,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Menu, X, ShoppingCart, User, Search } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -33,7 +34,13 @@ export default function Navbar() {
         <div className="flex justify-between items-center h-12">
           {/* Logo/Company Name */}
           <div className="flex-shrink-0">
-            <h1 className="text-2xl font-bold text-white">GameStart</h1>
+            {/* <h1 className="text-2xl font-bold text-white">GameStart</h1> */}
+            <Image
+              src="/gamestart-2.png"
+              width={80}
+              height={80}
+              alt="GameStart logo"
+            />
           </div>
 
           {/* Desktop Navigation Links */}
