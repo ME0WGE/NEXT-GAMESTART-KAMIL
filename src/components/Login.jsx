@@ -106,7 +106,12 @@ export default function Login() {
         />
       )}
       {auth.user.isConnected ? (
-        <h1>Connected as {auth.user.name}</h1>
+        <div className="flex text-slate-300 hover:text-blue-400 hover:bg-slate-800 p-2 rounded-full transition-all duration-200 cursor-default">
+          <button>
+            <User size={20} />
+          </button>
+          <h1 className="font-bold text-white self-center">{auth.user.name}</h1>
+        </div>
       ) : (
         <>
           <button className="text-slate-300 hover:text-blue-400 hover:bg-slate-800 p-2 rounded-full transition-all duration-200">
