@@ -8,6 +8,7 @@ import upgrades from "@/components/cookie-clicker/upgrade.json";
 import StatsBar from "@/components/cookie-clicker/StatsBar";
 import Header from "@/components/cookie-clicker/CookieHeader";
 import MainButton from "@/components/cookie-clicker/MainButton";
+import { CookieIcon } from "lucide-react";
 
 export default function CookieClicker() {
   const clicker = useSelector((state) => state.clicker);
@@ -34,15 +35,21 @@ export default function CookieClicker() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white">
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-8 pt-20">
         {/* Header */}
-        <Header />
+        <Header
+          title="🍪 Cookie Clicker"
+          description="Cliquez sur le cookie pour gagner des points !"
+        />
 
         {/* Stats Bar */}
         <StatsBar clicker={clicker} />
 
         {/* Main Cookie */}
-        <MainButton handleCookieClick={handleCookieClick} />
+        <MainButton
+          handleCookieClick={handleCookieClick}
+          icon={<CookieIcon size={110} />}
+        />
 
         {/* Upgrades Section */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

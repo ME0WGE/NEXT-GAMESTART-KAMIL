@@ -10,15 +10,19 @@ const ClickerSlice = createSlice({
   initialState,
   reducers: {
     clickCookie: (state, action) => {
-      state.cookies += action.payload || 1;
+      const amount = action.payload || 1;
+      state.cookies = Math.round((state.cookies + amount) * 10) / 10;
     },
     upgradeCookie: (state) => {
-      state.cookiesPerSecond += 1;
+      state.cookiesPerSecond =
+        Math.round((state.cookiesPerSecond + 1) * 10) / 10;
     },
     buyUpgrade: (state, action) => {
       if (state.cookies >= action.payload.price) {
-        state.cookies -= action.payload.price;
-        state.cookiesPerSecond += action.payload.value;
+        state.cookies =
+          Math.round((state.cookies - action.payload.price) * 10) / 10;
+        state.cookiesPerSecond =
+          Math.round((state.cookiesPerSecond + action.payload.value) * 10) / 10;
       }
     },
   },
