@@ -101,7 +101,7 @@ export default function Login() {
           </button>
           {modal &&
             (toggle ? (
-              <div className="absolute left-1/2 top-12 -translate-x-1/2 z-50 w-80 bg-slate-900 sm:bg-slate-900/90 rounded-xl shadow-lg p-6 border border-gray-700 flex flex-col gap-3">
+              <div className="fixed inset-0 z-50 w-full min-h-screen h-full bg-slate-900 flex flex-col justify-center p-4 rounded-none shadow-none sm:bg-slate-900/90 sm:absolute sm:left-1/2 sm:top-12 sm:-translate-x-1/2 sm:w-80 sm:h-auto sm:max-h-[90vh] sm:rounded-xl sm:shadow-lg sm:p-6 sm:border border-gray-700 sm:min-h-[45vh] sm:justify-start gap-3">
                 <span
                   onClick={() => setModal(false)}
                   className="absolute top-3 right-3 cursor-pointer text-gray-400 hover:text-gray-200">
@@ -180,7 +180,7 @@ export default function Login() {
                 )}
               </div>
             ) : (
-              <div className="absolute left-1/2 top-12 -translate-x-1/2 z-50 w-80 bg-slate-900 sm:bg-slate-900/90 rounded-xl shadow-lg p-6 border border-gray-700 flex flex-col gap-3">
+              <div className="fixed inset-0 z-50 w-full min-h-screen h-full bg-slate-900 flex flex-col justify-center p-4 rounded-none shadow-none sm:bg-slate-900/90 sm:absolute sm:left-1/2 sm:top-12 sm:-translate-x-1/2 sm:w-80 sm:h-auto sm:max-h-[90vh] sm:rounded-xl sm:shadow-lg sm:p-6 sm:border border-gray-700 sm:min-h-[40vh] sm:justify-start gap-3">
                 <span
                   onClick={() => setModal(false)}
                   className="absolute top-3 right-3 cursor-pointer text-gray-400 hover:text-gray-200">
