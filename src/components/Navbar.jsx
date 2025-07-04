@@ -101,9 +101,7 @@ export default function Navbar() {
             <button className="text-slate-300 hover:text-blue-400 hover:bg-slate-700 p-2 rounded-full transition-all duration-200">
               <ShoppingCart size={20} />
             </button>
-            <button className="text-slate-300 hover:text-blue-400 hover:bg-slate-700 p-2 rounded-full transition-all duration-200">
-              <User size={20} />
-            </button>
+            <Login />
             <button
               onClick={toggleMenu}
               className="text-slate-300 hover:text-blue-400 hover:bg-slate-800 p-2 rounded-md transition-all duration-200">
