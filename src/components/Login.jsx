@@ -10,7 +10,7 @@ import { Cross, CrossIcon, User, X, XCircle } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-export default async function Login() {
+export default function Login() {
   const auth = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
