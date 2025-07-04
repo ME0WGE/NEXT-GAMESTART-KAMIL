@@ -1,0 +1,50 @@
+[
+  {
+    "title": "Menu",
+    "links": [
+      {
+        "name": "Accueil",
+        "url": "/"
+      },
+      {
+        "name": "Bibliothèque",
+        "url": "/library"
+      },
+      {
+        "name": "Panier",
+        "url": "/cart"
+      }
+    ]
+  },
+  {
+    "title": "Compte",
+    "links": [
+      {
+        "name": "Mon Profil",
+        "url": "/profile"
+      }
+    ]
+  },
+  {
+    "title": "CookieClicker",
+    "links": [
+      {
+        "name": "CookieClicker",
+        "url": "/cookie-clicker"
+      }
+    ]
+  },
+  {
+    "title": "Contact",
+    "links": [
+      {
+        "name": "GitHub",
+        "url": "https://github.com/me0wge"
+      },
+      {
+        "name": "LinkedIn",
+        "url": "https://www.linkedin.com/in/kamil-baldyga/"
+      }
+    ]
+  }
+]

@@ -4,7 +4,7 @@ import { buyUpgrade, clickCookie } from "@/lib/features/clickerSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import Upgrade from "@/components/cookie-clicker/Upgrade";
-import upgrades from "@/components/cookie-clicker/upgrade.json";
+import upgrades from "@/components/cookie-clicker/data.json";
 import StatsBar from "@/components/cookie-clicker/StatsBar";
 import Header from "@/components/cookie-clicker/CookieHeader";
 import MainButton from "@/components/cookie-clicker/MainButton";
