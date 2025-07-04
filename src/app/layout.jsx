@@ -1,7 +1,7 @@
 import Footer from "@/components/Footer/Footer";
 import "./globals.css";
 import ReduxProvider from "@/lib/reduxProvider";
-import Navbar from "@/components/Navbar";
+import Navbar from "@/components/Navbar/Navbar";
 
 export const metadata = {
   title: "GameStart",
