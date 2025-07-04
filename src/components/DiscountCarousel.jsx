@@ -1,63 +1,52 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { GameSkeleton } from "./placeholder/GameSkeleton";
+import { useCarousel } from "@/lib/hooks/useCarousel";
+import GameCard from "./GameCard";
 
+{
+  /* --------------------------------------------------------------------|
+    --------------------------- DiscountCarousel ---------------------------|
+  */
+}
 export default function DiscountCarousel() {
-  const [currentHighlight, setCurrentHighlight] = useState(0);
-  const [highlights, setHighlights] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  // --------------------------------------------------------------------|
-  // --------------------------- Auto-slide -----------------------------|
-  useEffect(() => {
-    if (loading || highlights.length === 0) return;
-
-    const interval = setInterval(() => {
-      setCurrentHighlight((prev) => (prev + 1) % highlights.length);
-    }, 5000);
-    return () => clearInterval(interval);
-  }, [highlights.length, loading]);
-
-  const nextHighlight = () => {
-    if (loading) return;
-    setCurrentHighlight((prev) => (prev + 1) % highlights.length);
-  };
-
-  const prevHighlight = () => {
-    if (loading) return;
-    setCurrentHighlight(
-      (prev) => (prev - 1 + highlights.length) % highlights.length
-    );
-  };
+  const {
+    currentHighlight,
+    highlights,
+    loading,
+    currentGame,
+    nextGame,
+    prevGame,
+    handleNext,
+    handlePrev,
+    handleGoTo,
+  } = useCarousel();
 
   return (
     <>
-      {
-        // --------------------------------------------------------------------|
-        // --------------------------- Promotions -----------------------------|
-      }
+      {/* --------------------------------------------------------------------|
+        --------------------------- Discounts -----------------------------|
+      */}
       <div className="bg-slate-900 text-white min-h-screen">
         <div className="px-4 md:px-8 lg:px-16 py-8">
           <h2 className="text-2xl md:text-3xl font-bold text-yellow-400 mb-6">
             Promotions
           </h2>
 
-          {
-            // --------------------------------------------------------------------|
-            // --------------------- Mobile Layout - Vertical Stack----------------|
-          }
+          {/* --------------------------------------------------------------------|
+            --------------------- Mobile Layout - Vertical Stack----------------|
+          */}
           <div className="relative">
-            {
-              // --------------------------------------------------------------------|
-              // --------------------- Next Element (Top) ---------------------------|
-            }
+            {/* --------------------------------------------------------------------|
+              --------------------- Next Element (Top) ---------------------------|
+            */}
             <div className="block md:hidden space-y-4">
               <div className="w-full">
                 <div
                   className="bg-slate-800/70 rounded-lg p-3 relative overflow-hidden cursor-pointer hover:bg-slate-800/90 transition-all duration-300"
-                  onClick={nextHighlight}>
+                  onClick={handleNext}>
                   {loading ? (
                     <GameSkeleton
                       size="small"
@@ -65,9 +54,7 @@ export default function DiscountCarousel() {
                     />
                   ) : (
                     <GameCard
-                      game={
-                        highlights[(currentHighlight + 1) % highlights.length]
-                      }
+                      game={nextGame}
                       size="small"
                       className="bg-slate-800/70 rounded-lg"
                     />
@@ -79,10 +66,9 @@ export default function DiscountCarousel() {
                 </div>
               </div>
 
-              {
-                // --------------------------------------------------------------------|
-                // --------------------- Main Content (Center) ------------------------|
-              }
+              {/* --------------------------------------------------------------------|
+                --------------------- Main Content (Center) ------------------------|
+              */}
               <div className="w-full">
                 <div className="bg-slate-800 rounded-lg p-4 relative overflow-hidden border-2 border-yellow-400/30">
                   {loading ? (
@@ -92,7 +78,7 @@ export default function DiscountCarousel() {
                     />
                   ) : (
                     <GameCard
-                      game={highlights[currentHighlight]}
+                      game={currentGame}
                       size="default"
                       className="bg-slate-800 rounded-lg"
                       showDiscount={true}
@@ -101,14 +87,13 @@ export default function DiscountCarousel() {
                 </div>
               </div>
 
-              {
-                // --------------------------------------------------------------------|
-                // --------------------- Previous Element (Bottom) --------------------|
-              }
+              {/* --------------------------------------------------------------------|
+                --------------------- Previous Element (Bottom) --------------------|
+              */}
               <div className="w-full">
                 <div
                   className="bg-slate-800/70 rounded-lg p-3 relative overflow-hidden cursor-pointer hover:bg-slate-800/90 transition-all duration-300"
-                  onClick={prevHighlight}>
+                  onClick={handlePrev}>
                   {loading ? (
                     <GameSkeleton
                       size="small"
@@ -116,12 +101,7 @@ export default function DiscountCarousel() {
                     />
                   ) : (
                     <GameCard
-                      game={
-                        highlights[
-                          (currentHighlight - 1 + highlights.length) %
-                            highlights.length
-                        ]
-                      }
+                      game={prevGame}
                       size="small"
                       className="bg-slate-800/70 rounded-lg"
                     />
@@ -132,13 +112,12 @@ export default function DiscountCarousel() {
                 </div>
               </div>
 
-              {
-                // --------------------------------------------------------------------|
-                // --------------------- Mobile Navigation Arrows ---------------------|
-              }
+              {/* --------------------------------------------------------------------|
+                --------------------- Mobile Navigation Arrows ---------------------|
+              */}
               <div className="flex justify-center space-x-4 mt-4">
                 <button
-                  onClick={prevHighlight}
+                  onClick={handlePrev}
                   disabled={loading}
                   className={`text-white p-3 rounded-full transition-colors duration-200 ${
                     loading
@@ -148,7 +127,7 @@ export default function DiscountCarousel() {
                   <ChevronLeft size={20} />
                 </button>
                 <button
-                  onClick={nextHighlight}
+                  onClick={handleNext}
                   disabled={loading}
                   className={`text-white p-3 rounded-full transition-colors duration-200 ${
                     loading
@@ -160,10 +139,9 @@ export default function DiscountCarousel() {
               </div>
             </div>
 
-            {
-              // --------------------------------------------------------------------|
-              // ------------ Desktop Layout - Positioned Elements ------------------|
-            }
+            {/* --------------------------------------------------------------------|
+              ------------ Desktop Layout - Positioned Elements ------------------|
+            */}
             <div className="hidden md:block relative h-[500px] lg:h-[600px]">
               {/* Main Content (Center) */}
               <div className="absolute inset-0 z-10 flex items-center justify-center px-16 lg:px-24">
@@ -175,7 +153,7 @@ export default function DiscountCarousel() {
                     />
                   ) : (
                     <GameCard
-                      game={highlights[currentHighlight]}
+                      game={currentGame}
                       size="large"
                       className="bg-slate-800 rounded-lg"
                       showDiscount={true}
@@ -184,14 +162,13 @@ export default function DiscountCarousel() {
                 </div>
               </div>
 
-              {
-                // --------------------------------------------------------------------|
-                // ----------------- Previous Element (Bottom Left) -------------------|
-              }
+              {/* --------------------------------------------------------------------|
+                  ----------------- Previous Element (Bottom Left) -----------------|
+            */}
               <div className="absolute bottom-12 left-0 z-5 w-64 lg:w-80">
                 <div
                   className="bg-slate-800/70 rounded-lg p-4 h-40 lg:h-62 relative overflow-hidden cursor-pointer hover:bg-slate-800/90 transition-all duration-300 transform hover:scale-105"
-                  onClick={prevHighlight}>
+                  onClick={handlePrev}>
                   {loading ? (
                     <GameSkeleton
                       size="medium"
@@ -199,12 +176,7 @@ export default function DiscountCarousel() {
                     />
                   ) : (
                     <GameCard
-                      game={
-                        highlights[
-                          (currentHighlight - 1 + highlights.length) %
-                            highlights.length
-                        ]
-                      }
+                      game={prevGame}
                       size="small"
                       className="bg-slate-800/70 rounded-lg"
                     />
@@ -212,14 +184,13 @@ export default function DiscountCarousel() {
                 </div>
               </div>
 
-              {
-                // --------------------------------------------------------------------|
-                // ----------------- Nextx Element (Top Right) ------------------------|
-              }
+              {/* --------------------------------------------------------------------|
+                  ----------------- Next Element (Top Right) -----------------------|
+            */}
               <div className="absolute top-12 right-0 z-5 w-64 lg:w-80">
                 <div
                   className="bg-slate-800/70 rounded-lg p-4 h-40 lg:h-62 relative overflow-hidden cursor-pointer hover:bg-slate-800/90 transition-all duration-300 transform hover:scale-105"
-                  onClick={nextHighlight}>
+                  onClick={handleNext}>
                   {loading ? (
                     <GameSkeleton
                       size="medium"
@@ -227,9 +198,7 @@ export default function DiscountCarousel() {
                     />
                   ) : (
                     <GameCard
-                      game={
-                        highlights[(currentHighlight + 1) % highlights.length]
-                      }
+                      game={nextGame}
                       size="small"
                       className="bg-slate-800/70 rounded-lg"
                     />
@@ -237,12 +206,11 @@ export default function DiscountCarousel() {
                 </div>
               </div>
 
-              {
-                // --------------------------------------------------------------------|
-                // ----------------- Desktop Navigation Arrows ------------------------|
-              }
+              {/* --------------------------------------------------------------------|
+                  ----------------- Desktop Navigation Arrows ----------------------|
+            */}
               <button
-                onClick={prevHighlight}
+                onClick={handlePrev}
                 disabled={loading}
                 className={`absolute left-4 top-1/2 -translate-y-1/2 text-white p-2 rounded-full transition-colors duration-200 z-20 ${
                   loading
@@ -252,7 +220,7 @@ export default function DiscountCarousel() {
                 <ChevronLeft size={24} />
               </button>
               <button
-                onClick={nextHighlight}
+                onClick={handleNext}
                 disabled={loading}
                 className={`absolute right-4 top-1/2 -translate-y-1/2 text-white p-2 rounded-full transition-colors duration-200 z-20 ${
                   loading
@@ -263,10 +231,9 @@ export default function DiscountCarousel() {
               </button>
             </div>
 
-            {
-              // --------------------------------------------------------------------|
-              // -------------------------- Dots Indicator --------------------------|
-            }
+            {/* --------------------------------------------------------------------|
+                -------------------------- Dots Indicator -------------------------|
+            */}
             <div className="flex justify-center mt-6 space-x-2">
               {loading
                 ? // Skeleton dots while loading
@@ -279,7 +246,7 @@ export default function DiscountCarousel() {
                 : highlights.map((_, index) => (
                     <button
                       key={index}
-                      onClick={() => setCurrentHighlight(index)}
+                      onClick={() => handleGoTo(index)}
                       className={`w-3 h-3 rounded-full transition-colors duration-200 ${
                         index === currentHighlight
                           ? "bg-yellow-400"
@@ -290,10 +257,9 @@ export default function DiscountCarousel() {
             </div>
           </div>
 
-          {
-            // --------------------------------------------------------------------|
-            // ----------------- Loading Indicator --------------------------------|
-          }
+          {/* --------------------------------------------------------------------|
+            ----------------- Loading Indicator --------------------------------|
+          */}
           {loading && (
             <div className="flex justify-center mt-8">
               <div className="flex items-center space-x-2 text-slate-400">
