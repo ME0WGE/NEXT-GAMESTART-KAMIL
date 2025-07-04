@@ -61,8 +61,27 @@ const AuthSlice = createSlice({
         state.isError = true;
       }
     },
+    authLogout: (state) => {
+      state.user = initialState.user;
+    },
+    authSetName: (state, action) => {
+      state.setName = action.payload;
+    },
+    authSetMail: (state, action) => {
+      state.setMail = action.payload;
+    },
+    authSetPassword: (state, action) => {
+      state.setPassword = action.payload;
+    },
   },
 });
 
-export const { authRegister, authLogin } = AuthSlice.actions;
+export const {
+  authRegister,
+  authLogin,
+  authLogout,
+  authSetName,
+  authSetMail,
+  authSetPassword,
+} = AuthSlice.actions;
 export const AuthReducer = AuthSlice.reducer;

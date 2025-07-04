@@ -4,6 +4,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { Menu, X, ShoppingCart, User, Search } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import Login from "./Login";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -93,7 +94,7 @@ export default function Navbar() {
               <ShoppingCart size={20} />
             </button>
             <button className="text-slate-300 hover:text-blue-400 hover:bg-slate-800 p-2 rounded-full transition-all duration-200">
-              <User size={20} />
+              <Login />
             </button>
           </div>
 
