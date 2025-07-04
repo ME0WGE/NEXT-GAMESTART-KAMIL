@@ -65,7 +65,7 @@ export default function PopularGames() {
                 {displayedGames.map((game) => (
                   <div
                     key={game.id}
-                    className="relative bg-slate-800 overflow-hidden h-50 w-90 hover:bg-slate-700 transition-all duration-300 cursor-pointer group">
+                    className="relative bg-slate-800 overflow-hidden h-50 w-90 hover:bg-slate-700 hover:scale-105 transition-all duration-100 cursor-pointer group">
                     {/* Game image - takes full space */}
                     <div className="relative w-full h-full">
                       <img
