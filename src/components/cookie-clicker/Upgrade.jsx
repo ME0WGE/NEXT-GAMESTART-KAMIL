@@ -1,4 +1,4 @@
-export default function Upgrade({
+function UpgradeComponent({
   cookies,
   handleBuyUpgrade,
   upgrade_name,
@@ -27,6 +27,24 @@ export default function Upgrade({
           Acheter ({upgrade_price} cookies)
         </button>
       </div>
+    </>
+  );
+}
+
+export default function Upgrade({ upgrades, clicker, handleBuyUpgrade }) {
+  return (
+    <>
+      {upgrades.map((upgrade) => (
+        <UpgradeComponent
+          key={upgrade.id}
+          cookies={clicker.cookies}
+          handleBuyUpgrade={handleBuyUpgrade}
+          upgrade_name={upgrade.name}
+          upgrade_price={upgrade.price}
+          upgrade_value={upgrade.value}
+          upgrade_icon={upgrade.icon}
+        />
+      ))}
     </>
   );
 }
