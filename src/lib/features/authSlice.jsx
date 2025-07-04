@@ -1,6 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
+  // --------------------------------------------------------------------|
+  // --------------------- Array of registered users --------------------|
   users: [
     {
       name: "admin",
@@ -10,6 +12,8 @@ const initialState = {
       isConnected: false,
     },
   ],
+  // --------------------------------------------------------------------|
+  // ------------------------- user object ------------------------------|
   user: {
     name: "",
     mail: "",
@@ -26,10 +30,13 @@ const initialState = {
     login: "Adresse mail ou mot de passe invalide",
   },
 };
+
 const AuthSlice = createSlice({
   name: "auth",
   initialState,
 
+  // --------------------------------------------------------------------|
+  // --------------------------- Reducers -------------------------------|
   reducers: {
     authRegister: (state) => {
       const user = state.users.find((u) => u.mail === state.setMail);
@@ -79,6 +86,8 @@ const AuthSlice = createSlice({
   },
 });
 
+// --------------------------------------------------------------------|
+// ---------------------------- Exports -------------------------------|
 export const {
   authRegister,
   authLogin,

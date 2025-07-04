@@ -8,10 +8,11 @@ import {
   authSetName,
   authSetPassword,
 } from "@/lib/features/authSlice";
-import { Cross, CrossIcon, User, X, XCircle } from "lucide-react";
+import { User, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
+// Toast Message
 function Toast({ message, type, onClose }) {
   return (
     <div
@@ -29,6 +30,7 @@ function Toast({ message, type, onClose }) {
   );
 }
 
+// Main function
 export default function Login() {
   const auth = useSelector((state) => state.auth);
   const dispatch = useDispatch();
@@ -48,11 +50,12 @@ export default function Login() {
     setToggle(!toggle);
   };
 
+  // If user is connected, close modal
   useEffect(() => {
     setModal(false);
   }, [auth.user.isConnected]);
 
-  // Fermer le modal si clic en dehors
+  // Close modal if clicked outside of its body
   useEffect(() => {
     if (!modal) return;
     function handleClickOutside(e) {
@@ -64,7 +67,7 @@ export default function Login() {
     return () => window.removeEventListener("mousedown", handleClickOutside);
   }, [modal]);
 
-  // Affiche le toast de bienvenue lors de la connexion
+  // Display welcome toast when user has succesfully connected
   useEffect(() => {
     if (auth.user.isConnected) {
       setToast({
@@ -80,7 +83,7 @@ export default function Login() {
     return () => clearTimeout(toastTimeout.current);
   }, [auth.user.isConnected]);
 
-  // Affiche le toast d'erreur lors d'une erreur
+  // Display error toast
   useEffect(() => {
     if (auth.isError && (auth.error.login || auth.error.register)) {
       setToast({
@@ -118,7 +121,7 @@ export default function Login() {
             <User size={20} onClick={handleModal} />
           </button>
           {modal &&
-            (toggle ? (
+            (toggle ? ( // Inscription Modal
               <div
                 ref={modalRef}
                 className="fixed inset-0 z-50 w-full min-h-screen h-full bg-slate-900 flex flex-col justify-center p-4 rounded-none shadow-none sm:bg-slate-900/90 sm:absolute sm:left-1/2 sm:top-12 sm:-translate-x-1/2 sm:w-80 sm:h-auto sm:max-h-[90vh] sm:rounded-xl sm:shadow-lg sm:p-6 sm:border border-gray-700 sm:min-h-[45vh] sm:justify-start gap-3">
@@ -200,6 +203,7 @@ export default function Login() {
                 )}
               </div>
             ) : (
+              // Connexion Modal
               <div
                 ref={modalRef}
                 className="fixed inset-0 z-50 w-full min-h-screen h-full bg-slate-900 flex flex-col justify-center p-4 rounded-none shadow-none sm:bg-slate-900/90 sm:absolute sm:left-1/2 sm:top-12 sm:-translate-x-1/2 sm:w-80 sm:h-auto sm:max-h-[90vh] sm:rounded-xl sm:shadow-lg sm:p-6 sm:border border-gray-700 sm:min-h-[40vh] sm:justify-start gap-3">
@@ -264,11 +268,6 @@ export default function Login() {
                   }}>
                   Inscrivez-vous
                 </span>
-                {auth.isError ? (
-                  <p className="text-red-400 text-center">{auth.error.login}</p>
-                ) : (
-                  ""
-                )}
               </div>
             ))}
         </>

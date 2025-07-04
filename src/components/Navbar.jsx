@@ -19,6 +19,7 @@ export default function Navbar() {
     setIsSearchOpen((prev) => !prev);
   };
 
+  // Close SearchBar when click outside of its body
   useEffect(() => {
     if (isSearchOpen && searchInputRef.current) {
       searchInputRef.current.focus();
@@ -35,7 +36,7 @@ export default function Navbar() {
         <div className="flex justify-between items-center h-12">
           {/* Logo/Company Name */}
           <div className="flex-shrink-0">
-            {/* <h1 className="text-2xl font-bold text-white">GameStart</h1> */}
+            {/* Company Logo */}
             <Image
               src="/gamestart-2.png"
               width={80}

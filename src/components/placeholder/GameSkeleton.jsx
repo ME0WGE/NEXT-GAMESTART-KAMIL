@@ -1,4 +1,6 @@
-// Composant Skeleton pour les éléments de chargement
+// --------------------------------------------------------------------|
+// ------------- Skeleton component for loading elements --------------|
+
 export const GameSkeleton = ({ className = "", size = "default" }) => {
   const sizeClasses = {
     small: {
