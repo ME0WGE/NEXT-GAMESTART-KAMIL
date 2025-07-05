@@ -10,9 +10,10 @@ import {
   authSetPassword,
 } from "@/lib/features/authSlice";
 import { User, X } from "lucide-react";
-import { signIn, signOut } from "next-auth/react";
+import { signIn, signOut, useSession } from "next-auth/react";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import Image from "next/image";
 
 // Toast Message
 function Toast({ message, type, onClose }) {
@@ -36,6 +37,7 @@ function Toast({ message, type, onClose }) {
 export default function Login() {
   const auth = useSelector((state) => state.auth);
   const dispatch = useDispatch();
+  const { data: session, status } = useSession();
 
   const [modal, setModal] = useState(false);
   const [profileModal, setProfileModal] = useState(false);
@@ -47,6 +49,7 @@ export default function Login() {
   });
   const toastTimeout = useRef();
   const modalRef = useRef(null);
+  const profileRef = useRef(null);
 
   const handleModal = () => {
     setModal(true);
@@ -70,9 +73,31 @@ export default function Login() {
     return () => window.removeEventListener("mousedown", handleClickOutside);
   }, [modal]);
 
+  // Close profile dropdown if clicked outside
+  useEffect(() => {
+    if (!profileModal) return;
+    function handleClickOutside(e) {
+      if (profileRef.current && !profileRef.current.contains(e.target)) {
+        setProfileModal(false);
+      }
+    }
+    window.addEventListener("mousedown", handleClickOutside);
+    return () => window.removeEventListener("mousedown", handleClickOutside);
+  }, [profileModal]);
+
   // Display welcome toast when user has succesfully connected
   useEffect(() => {
-    if (auth.user.isConnected) {
+    if (session?.user) {
+      setToast({
+        show: true,
+        message: `Bienvenue, ${session.user.name || session.user.username}`,
+        type: "success",
+      });
+      toastTimeout.current = setTimeout(
+        () => setToast((t) => ({ ...t, show: false })),
+        3000
+      );
+    } else if (auth.user.isConnected) {
       setToast({
         show: true,
         message: `Bienvenue, ${auth.user.name}`,
@@ -84,7 +109,7 @@ export default function Login() {
       );
     }
     return () => clearTimeout(toastTimeout.current);
-  }, [auth.user.isConnected]);
+  }, [session?.user, auth.user.isConnected]);
 
   // Display error toast
   useEffect(() => {
@@ -102,6 +127,141 @@ export default function Login() {
     return () => clearTimeout(toastTimeout.current);
   }, [auth.isError, auth.error.login, auth.error.register]);
 
+  // If user is authenticated with NextAuth (GitHub)
+  if (session?.user) {
+    return (
+      <>
+        {toast.show && (
+          <Toast
+            message={toast.message}
+            type={toast.type}
+            onClose={() => setToast((t) => ({ ...t, show: false }))}
+          />
+        )}
+        <div className="relative" ref={profileRef}>
+          <div
+            className="flex items-center text-slate-300 hover:text-blue-400 hover:bg-slate-800 p-2 rounded-full transition-all duration-200 cursor-pointer"
+            onClick={() => setProfileModal(!profileModal)}>
+            {/* Profile Picture */}
+            {session.user.avatar_url ? (
+              <Image
+                src={session.user.avatar_url}
+                alt="Profile"
+                width={32}
+                height={32}
+                className="rounded-full mr-2"
+              />
+            ) : (
+              <User size={20} className="mr-2" />
+            )}
+
+            {/* Username */}
+            <span className="font-bold text-white">
+              {session.user.username || session.user.name}
+            </span>
+          </div>
+
+          {/* Profile Dropdown */}
+          {profileModal && (
+            <div className="absolute top-12 right-0 bg-slate-800 border border-slate-700 rounded-lg shadow-lg p-2 min-w-48 z-50">
+              <div className="flex items-center p-2 border-b border-slate-700 mb-2">
+                {session.user.avatar_url ? (
+                  <Image
+                    src={session.user.avatar_url}
+                    alt="Profile"
+                    width={40}
+                    height={40}
+                    className="rounded-full mr-3"
+                  />
+                ) : (
+                  <User size={20} className="mr-3" />
+                )}
+                <div>
+                  <p className="font-bold text-white">{session.user.name}</p>
+                  <p className="text-sm text-gray-400">
+                    @{session.user.username}
+                  </p>
+                </div>
+              </div>
+              <ul className="space-y-1">
+                <li className="cursor-pointer px-2 py-1 hover:bg-slate-700 rounded text-sm">
+                  Mon Profil
+                </li>
+                <li className="cursor-pointer px-2 py-1 hover:bg-slate-700 rounded text-sm">
+                  Ma Bibliothèque
+                </li>
+                <li
+                  className="cursor-pointer px-2 py-1 hover:bg-slate-700 rounded text-sm text-red-400 hover:text-red-300"
+                  onClick={() => {
+                    signOut();
+                    setProfileModal(false);
+                  }}>
+                  Déconnexion
+                </li>
+              </ul>
+            </div>
+          )}
+        </div>
+      </>
+    );
+  }
+
+  // If user is authenticated with email/password
+  if (auth.user.isConnected) {
+    return (
+      <>
+        {toast.show && (
+          <Toast
+            message={toast.message}
+            type={toast.type}
+            onClose={() => setToast((t) => ({ ...t, show: false }))}
+          />
+        )}
+        <div className="relative" ref={profileRef}>
+          <div
+            className="flex items-center text-slate-300 hover:text-blue-400 hover:bg-slate-800 p-2 rounded-full transition-all duration-200 cursor-pointer"
+            onClick={() => setProfileModal(!profileModal)}>
+            {/* Profile Icon */}
+            <User size={20} className="mr-2" />
+
+            {/* Username */}
+            <span className="font-bold text-white">{auth.user.name}</span>
+          </div>
+
+          {/* Profile Dropdown */}
+          {profileModal && (
+            <div className="absolute top-12 right-0 bg-slate-800 border border-slate-700 rounded-lg shadow-lg p-2 min-w-48 z-50">
+              <div className="flex items-center p-2 border-b border-slate-700 mb-2">
+                <User size={20} className="mr-3" />
+                <div>
+                  <p className="font-bold text-white">{auth.user.name}</p>
+                  <p className="text-sm text-gray-400">{auth.user.mail}</p>
+                </div>
+              </div>
+              <ul className="space-y-1">
+                <li className="cursor-pointer px-2 py-1 hover:bg-slate-700 rounded text-sm">
+                  Mon Profil
+                </li>
+                <li className="cursor-pointer px-2 py-1 hover:bg-slate-700 rounded text-sm">
+                  Ma Bibliothèque
+                </li>
+                <li
+                  className="cursor-pointer px-2 py-1 hover:bg-slate-700 rounded text-sm text-red-400 hover:text-red-300"
+                  onClick={() => {
+                    dispatch(authLogout());
+                    setProfileModal(false);
+                  }}>
+                  Déconnexion
+                </li>
+              </ul>
+            </div>
+          )}
+        </div>
+      </>
+    );
+  }
+
+  // If user is not authenticated
   return (
     <>
       {toast.show && (
@@ -111,202 +271,166 @@ export default function Login() {
           onClose={() => setToast((t) => ({ ...t, show: false }))}
         />
       )}
-      {auth.user.isConnected ? (
-        <div
-          className="flex text-slate-300 hover:text-blue-400 hover:bg-slate-800 p-2 rounded-full transition-all duration-200 cursor-default"
-          onClick={() => setProfileModal(!profileModal)}>
-          {profileModal ? (
-            <>
-              <button>
-                <User size={20} />
+      <button className="text-slate-300 hover:text-blue-400 hover:bg-slate-800 p-2 rounded-full transition-all duration-200">
+        <User size={20} onClick={handleModal} />
+      </button>
+      {modal &&
+        (toggle ? ( // Inscription Modal
+          <div
+            ref={modalRef}
+            className="fixed inset-0 z-50 w-full min-h-screen h-full bg-slate-900 flex flex-col justify-center p-4 rounded-none shadow-none sm:bg-slate-900/90 sm:absolute sm:left-1/2 sm:top-12 sm:-translate-x-1/2 sm:w-80 sm:h-auto sm:max-h-[90vh] sm:rounded-xl sm:shadow-lg sm:p-6 sm:border border-gray-700 sm:min-h-[45vh] sm:justify-start gap-3">
+            <span
+              onClick={() => setModal(false)}
+              className="absolute top-3 right-3 cursor-pointer text-gray-400 hover:text-gray-200">
+              <X size={20} />
+            </span>
+            <h2 className="text-xl font-semibold mb-4 text-center text-gray-100">
+              Inscription
+            </h2>
+            <form
+              className="flex flex-col gap-3"
+              onSubmit={(e) => {
+                e.preventDefault();
+                dispatch(authRegister());
+              }}>
+              <input
+                className="border border-gray-700 bg-gray-800 text-gray-100 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400"
+                required
+                type="text"
+                placeholder="Nom"
+                value={auth.setName}
+                onChange={(e) => dispatch(authSetName(e.target.value))}
+              />
+              <input
+                className="border border-gray-700 bg-gray-800 text-gray-100 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400"
+                required
+                type="email"
+                placeholder="Mail"
+                value={auth.setMail}
+                onChange={(e) => dispatch(authSetMail(e.target.value))}
+              />
+              <input
+                className="border border-gray-700 bg-gray-800 text-gray-100 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400"
+                required
+                type="password"
+                placeholder="Password"
+                value={auth.setPassword}
+                onChange={(e) => dispatch(authSetPassword(e.target.value))}
+              />
+              <button
+                className="bg-blue-600 text-white rounded py-2 mt-2 hover:bg-blue-700 transition"
+                type="submit">
+                S'inscrire
               </button>
-              <h1 className="font-bold text-white self-center">
-                {auth.user.name}
-              </h1>
-              <ul className="absolute top-13 right-87 bg-slate-800 p-2 rounded-md">
-                <li className="cursor-pointer">Profil</li>
-                <li className="cursor-pointer">Ma bibliothèque</li>
-                <li
-                  className="cursor-pointer"
-                  onClick={() => {
-                    dispatch(authLogout());
-                    setProfileModal(false);
-                    signOut();
-                  }}>
-                  Déconnexion
-                </li>
-              </ul>
-            </>
-          ) : (
-            <>
-              <button>
-                <User size={20} />
-              </button>
-              <h1 className="font-bold text-white self-center">
-                {auth.user.name}
-              </h1>
-            </>
-          )}
-        </div>
-      ) : (
-        <>
-          <button className="text-slate-300 hover:text-blue-400 hover:bg-slate-800 p-2 rounded-full transition-all duration-200">
-            <User size={20} onClick={handleModal} />
-          </button>
-          {modal &&
-            (toggle ? ( // Inscription Modal
-              <div
-                ref={modalRef}
-                className="fixed inset-0 z-50 w-full min-h-screen h-full bg-slate-900 flex flex-col justify-center p-4 rounded-none shadow-none sm:bg-slate-900/90 sm:absolute sm:left-1/2 sm:top-12 sm:-translate-x-1/2 sm:w-80 sm:h-auto sm:max-h-[90vh] sm:rounded-xl sm:shadow-lg sm:p-6 sm:border border-gray-700 sm:min-h-[45vh] sm:justify-start gap-3">
-                <span
-                  onClick={() => setModal(false)}
-                  className="absolute top-3 right-3 cursor-pointer text-gray-400 hover:text-gray-200">
-                  <X size={20} />
-                </span>
-                <h2 className="text-xl font-semibold mb-4 text-center text-gray-100">
-                  Inscription
-                </h2>
-                <form
-                  className="flex flex-col gap-3"
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    dispatch(authRegister());
-                  }}>
-                  <input
-                    className="border border-gray-700 bg-gray-800 text-gray-100 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400"
-                    required
-                    type="text"
-                    placeholder="Nom"
-                    value={auth.setName}
-                    onChange={(e) => dispatch(authSetName(e.target.value))}
-                  />
-                  <input
-                    className="border border-gray-700 bg-gray-800 text-gray-100 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400"
-                    required
-                    type="email"
-                    placeholder="Mail"
-                    value={auth.setMail}
-                    onChange={(e) => dispatch(authSetMail(e.target.value))}
-                  />
-                  <input
-                    className="border border-gray-700 bg-gray-800 text-gray-100 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400"
-                    required
-                    type="password"
-                    placeholder="Password"
-                    value={auth.setPassword}
-                    onChange={(e) => dispatch(authSetPassword(e.target.value))}
-                  />
-                  <button
-                    className="bg-blue-600 text-white rounded py-2 mt-2 hover:bg-blue-700 transition"
-                    type="submit">
-                    S'inscrire
-                  </button>
-                </form>
-                <p className="text-center text-gray-400 text-sm">
-                  ou inscrivez-vous avec
-                </p>
-                <div className="flex justify-center gap-2">
-                  <span className="cursor-pointer hover:text-blue-400 text-gray-300">
-                    Google
-                  </span>
-                  <span className="cursor-pointer hover:text-blue-400 text-gray-300">
-                    Facebook
-                  </span>
-                  <span
-                    className="cursor-pointer hover:text-blue-400 text-gray-300"
-                    onClick={() => signIn("github")}>
-                    Github
-                  </span>
-                </div>
-                <p className="text-center text-gray-400 text-sm">
-                  Vous avez déjà un compte?
-                </p>
-                <span
-                  className="cursor-pointer text-blue-400 hover:underline text-center"
-                  onClick={() => {
-                    dispatch(authResetError());
-                    setToggle(false);
-                  }}>
-                  Connectez-vous
-                </span>
-                {auth.isError ? (
-                  <p className="text-red-400 text-center">
-                    {auth.error.register}
-                  </p>
-                ) : (
-                  ""
-                )}
-              </div>
+            </form>
+            <p className="text-center text-gray-400 text-sm">
+              ou inscrivez-vous avec
+            </p>
+            <div className="flex justify-center gap-2">
+              <span className="cursor-pointer hover:text-blue-400 text-gray-300">
+                Google
+              </span>
+              <span className="cursor-pointer hover:text-blue-400 text-gray-300">
+                Facebook
+              </span>
+              <span
+                className="cursor-pointer hover:text-blue-400 text-gray-300"
+                onClick={() => signIn("github")}>
+                Github
+              </span>
+            </div>
+            <p className="text-center text-gray-400 text-sm">
+              Vous avez déjà un compte?
+            </p>
+            <span
+              className="cursor-pointer text-blue-400 hover:underline text-center"
+              onClick={() => {
+                dispatch(authResetError());
+                setToggle(false);
+              }}>
+              Connectez-vous
+            </span>
+            {auth.isError ? (
+              <p className="text-red-400 text-center">{auth.error.register}</p>
             ) : (
-              // Connexion Modal
-              <div
-                ref={modalRef}
-                className="fixed inset-0 z-50 w-full min-h-screen h-full bg-slate-900 flex flex-col justify-center p-4 rounded-none shadow-none sm:bg-slate-900/90 sm:absolute sm:left-1/2 sm:top-12 sm:-translate-x-1/2 sm:w-80 sm:h-auto sm:max-h-[90vh] sm:rounded-xl sm:shadow-lg sm:p-6 sm:border border-gray-700 sm:min-h-[40vh] sm:justify-start gap-3">
-                <span
-                  onClick={() => setModal(false)}
-                  className="absolute top-3 right-3 cursor-pointer text-gray-400 hover:text-gray-200">
-                  <X size={20} />
-                </span>
-                <h2 className="text-xl font-semibold mb-4 text-center text-gray-100">
-                  Connexion
-                </h2>
-                <form
-                  className="flex flex-col gap-3"
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    dispatch(authLogin());
-                  }}>
-                  <input
-                    className="border border-gray-700 bg-gray-800 text-gray-100 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400"
-                    required
-                    type="email"
-                    placeholder="Mail"
-                    value={auth.setMail}
-                    onChange={(e) => dispatch(authSetMail(e.target.value))}
-                  />
-                  <input
-                    className="border border-gray-700 bg-gray-800 text-gray-100 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400"
-                    required
-                    type="password"
-                    placeholder="Password"
-                    value={auth.setPassword}
-                    onChange={(e) => dispatch(authSetPassword(e.target.value))}
-                  />
-                  <button
-                    className="bg-blue-600 text-white rounded py-2 mt-2 hover:bg-blue-700 transition"
-                    type="submit">
-                    Se connecter
-                  </button>
-                </form>
-                <p className="text-center text-gray-400 text-sm">
-                  ou connectez-vous avec
-                </p>
-                <div className="flex justify-center gap-2">
-                  <span className="cursor-pointer hover:text-blue-400 text-gray-300">
-                    Google
-                  </span>
-                  <span className="cursor-pointer hover:text-blue-400 text-gray-300">
-                    Facebook
-                  </span>
-                  <span className="cursor-pointer hover:text-blue-400 text-gray-300">
-                    Github
-                  </span>
-                </div>
-                <p className="text-center text-gray-400 text-sm">
-                  Vous n'avez pas encore de compte?
-                </p>
-                <span
-                  className="cursor-pointer text-blue-400 hover:underline text-center"
-                  onClick={() => {
-                    dispatch(authResetError());
-                    setToggle(true);
-                  }}>
-                  Inscrivez-vous
-                </span>
-              </div>
-            ))}
-        </>
-      )}
+              ""
+            )}
+          </div>
+        ) : (
+          // Connexion Modal
+          <div
+            ref={modalRef}
+            className="fixed inset-0 z-50 w-full min-h-screen h-full bg-slate-900 flex flex-col justify-center p-4 rounded-none shadow-none sm:bg-slate-900/90 sm:absolute sm:left-1/2 sm:top-12 sm:-translate-x-1/2 sm:w-80 sm:h-auto sm:max-h-[90vh] sm:rounded-xl sm:shadow-lg sm:p-6 sm:border border-gray-700 sm:min-h-[40vh] sm:justify-start gap-3">
+            <span
+              onClick={() => setModal(false)}
+              className="absolute top-3 right-3 cursor-pointer text-gray-400 hover:text-gray-200">
+              <X size={20} />
+            </span>
+            <h2 className="text-xl font-semibold mb-4 text-center text-gray-100">
+              Connexion
+            </h2>
+            <form
+              className="flex flex-col gap-3"
+              onSubmit={(e) => {
+                e.preventDefault();
+                dispatch(authLogin());
+              }}>
+              <input
+                className="border border-gray-700 bg-gray-800 text-gray-100 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400"
+                required
+                type="email"
+                placeholder="Mail"
+                value={auth.setMail}
+                onChange={(e) => dispatch(authSetMail(e.target.value))}
+              />
+              <input
+                className="border border-gray-700 bg-gray-800 text-gray-100 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400"
+                required
+                type="password"
+                placeholder="Password"
+                value={auth.setPassword}
+                onChange={(e) => dispatch(authSetPassword(e.target.value))}
+              />
+              <button
+                className="bg-blue-600 text-white rounded py-2 mt-2 hover:bg-blue-700 transition"
+                type="submit">
+                Se connecter
+              </button>
+            </form>
+            <p className="text-center text-gray-400 text-sm">
+              ou connectez-vous avec
+            </p>
+            <div className="flex justify-center gap-2">
+              <span className="cursor-pointer hover:text-blue-400 text-gray-300">
+                Google
+              </span>
+              <span className="cursor-pointer hover:text-blue-400 text-gray-300">
+                Facebook
+              </span>
+              <span
+                className="cursor-pointer hover:text-blue-400 text-gray-300"
+                onClick={() => signIn("github")}>
+                Github
+              </span>
+            </div>
+            <p className="text-center text-gray-400 text-sm">
+              Vous n'avez pas encore de compte?
+            </p>
+            <span
+              className="cursor-pointer text-blue-400 hover:underline text-center"
+              onClick={() => {
+                dispatch(authResetError());
+                setToggle(true);
+              }}>
+              Inscrivez-vous
+            </span>
+            {auth.isError ? (
+              <p className="text-red-400 text-center">{auth.error.login}</p>
+            ) : (
+              ""
+            )}
+          </div>
+        ))}
     </>
   );
 }
