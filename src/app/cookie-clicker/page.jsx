@@ -34,16 +34,26 @@ export default function CookieClicker() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-black text-white relative overflow-hidden">
-      {/* Background effects */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,193,7,0.1),transparent_50%)]"></div>
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_80%,rgba(255,165,0,0.05),transparent_50%)]"></div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-cyan-950 text-white relative overflow-hidden">
+      {/* Cyberpunk grid background */}
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(147,51,234,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(147,51,234,0.1)_1px,transparent_1px)] bg-[size:50px_50px]"></div>
+
+      {/* Animated scan lines */}
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-cyan-500/5 to-transparent animate-pulse"></div>
+
+      {/* Glitch effect overlay */}
+      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-fuchsia-500/5 to-transparent opacity-50"></div>
+
+      {/* Neon glow effects */}
+      <div className="absolute top-0 left-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl animate-pulse"></div>
+      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-fuchsia-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+      <div className="absolute top-1/2 left-0 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl animate-pulse delay-500"></div>
 
       <div className="container mx-auto px-4 py-8 pt-20 relative z-10">
         {/* Header */}
         <Header
-          title="Cookie Clicker"
-          description="Cliquez sur le cookie pour gagner des points et achetez des améliorations pour augmenter votre production !"
+          title="CYBER COOKIE"
+          description="WAKE UP • WAKE UP • WAKE UP"
         />
 
         {/* Stats Bar */}
@@ -57,8 +67,10 @@ export default function CookieClicker() {
 
         {/* Upgrades Section */}
         <div className="mb-16">
-          <h2 className="text-3xl font-bold text-center mb-8 bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent">
-            Améliorations
+          <h2 className="text-4xl font-black text-center mb-8 bg-gradient-to-r from-cyan-400 via-fuchsia-400 to-purple-400 bg-clip-text text-transparent tracking-wider uppercase">
+            <span className="text-cyan-400">[</span>
+            SYSTEM UPGRADES
+            <span className="text-purple-400">]</span>
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <Upgrade
