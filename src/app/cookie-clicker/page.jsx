@@ -34,12 +34,16 @@ export default function CookieClicker() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white">
-      <div className="container mx-auto px-4 py-8 pt-20">
+    <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-black text-white relative overflow-hidden">
+      {/* Background effects */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,193,7,0.1),transparent_50%)]"></div>
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_80%,rgba(255,165,0,0.05),transparent_50%)]"></div>
+
+      <div className="container mx-auto px-4 py-8 pt-20 relative z-10">
         {/* Header */}
         <Header
-          title="🍪 Cookie Clicker"
-          description="Cliquez sur le cookie pour gagner des points !"
+          title="Cookie Clicker"
+          description="Cliquez sur le cookie pour gagner des points et achetez des améliorations pour augmenter votre production !"
         />
 
         {/* Stats Bar */}
@@ -48,16 +52,21 @@ export default function CookieClicker() {
         {/* Main Cookie */}
         <MainButton
           handleCookieClick={handleCookieClick}
-          icon={<CookieIcon size={110} />}
+          icon={<CookieIcon size={120} />}
         />
 
         {/* Upgrades Section */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <Upgrade
-            upgrades={upgrades}
-            clicker={clicker}
-            handleBuyUpgrade={handleBuyUpgrade}
-          />
+        <div className="mb-16">
+          <h2 className="text-3xl font-bold text-center mb-8 bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent">
+            Améliorations
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <Upgrade
+              upgrades={upgrades}
+              clicker={clicker}
+              handleBuyUpgrade={handleBuyUpgrade}
+            />
+          </div>
         </div>
       </div>
     </div>

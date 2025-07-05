@@ -1,14 +1,14 @@
 [
   {
     "id": 1,
-    "name": "Test",
+    "name": "Testge",
     "price": 15,
     "value": 0.1,
     "icon": "🖱️"
   },
   {
     "id": 2,
-    "name": "TestgeTwo",
+    "name": "Testge",
     "price": 100,
     "value": 1,
     "icon": "👵"
