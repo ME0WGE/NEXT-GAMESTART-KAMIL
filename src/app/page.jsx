@@ -1,4 +1,4 @@
-import DiscountCarousel from "@/components/DiscountCarousel";
+import DiscountCarousel from "@/components/Carousel/DiscountCarousel";
 import Header from "@/components/Header";
 import PopularGames from "@/components/PopularGames";
 

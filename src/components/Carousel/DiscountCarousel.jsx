@@ -1,10 +1,10 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { GameSkeleton } from "./placeholder/GameSkeleton";
-import { useCarousel } from "@/lib/hooks/useCarousel";
-import GameCard from "./GameCard";
+import { GameSkeleton } from "@/components/Carousel/placeholder/GameSkeleton";
+import { useDiscountedGames } from "@/lib/hooks/useDiscountedGames";
+import GameCard from "@/components/Carousel/GameCard";
 
 {
   /* --------------------------------------------------------------------|
@@ -12,17 +12,40 @@ import GameCard from "./GameCard";
   */
 }
 export default function DiscountCarousel() {
-  const {
-    currentHighlight,
-    highlights,
-    loading,
-    currentGame,
-    nextGame,
-    prevGame,
-    handleNext,
-    handlePrev,
-    handleGoTo,
-  } = useCarousel();
+  const { discountedGames, loading, error } = useDiscountedGames();
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  // Auto-slide effect
+  useEffect(() => {
+    if (loading || discountedGames.length === 0) return;
+
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % discountedGames.length);
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [discountedGames.length, loading]);
+
+  // Navigation functions
+  const handleNext = () => {
+    if (loading || discountedGames.length === 0) return;
+    setCurrentIndex((prev) => (prev + 1) % discountedGames.length);
+  };
+
+  const handlePrev = () => {
+    if (loading || discountedGames.length === 0) return;
+    setCurrentIndex(
+      (prev) => (prev - 1 + discountedGames.length) % discountedGames.length
+    );
+  };
+
+  // Computed values
+  const currentGame = discountedGames[currentIndex];
+  const nextGame = discountedGames[(currentIndex + 1) % discountedGames.length];
+  const prevGame =
+    discountedGames[
+      (currentIndex - 1 + discountedGames.length) % discountedGames.length
+    ];
 
   return (
     <>
@@ -209,65 +232,30 @@ export default function DiscountCarousel() {
               {/* --------------------------------------------------------------------|
                   ----------------- Desktop Navigation Arrows ----------------------|
             */}
-              <button
-                onClick={handlePrev}
-                disabled={loading}
-                className={`absolute left-4 top-1/2 -translate-y-1/2 text-white p-2 rounded-full transition-colors duration-200 z-20 ${
-                  loading
-                    ? "bg-slate-700 cursor-not-allowed"
-                    : "bg-black/50 hover:bg-black/70"
-                }`}>
-                <ChevronLeft size={24} />
-              </button>
-              <button
-                onClick={handleNext}
-                disabled={loading}
-                className={`absolute right-4 top-1/2 -translate-y-1/2 text-white p-2 rounded-full transition-colors duration-200 z-20 ${
-                  loading
-                    ? "bg-slate-700 cursor-not-allowed"
-                    : "bg-black/50 hover:bg-black/70"
-                }`}>
-                <ChevronRight size={24} />
-              </button>
-            </div>
-
-            {/* --------------------------------------------------------------------|
-                -------------------------- Dots Indicator -------------------------|
-            */}
-            <div className="flex justify-center mt-6 space-x-2">
-              {loading
-                ? // Skeleton dots while loading
-                  Array.from({ length: 4 }).map((_, index) => (
-                    <div
-                      key={index}
-                      className="w-3 h-3 rounded-full bg-slate-600 animate-pulse"
-                    />
-                  ))
-                : highlights.map((_, index) => (
-                    <button
-                      key={index}
-                      onClick={() => handleGoTo(index)}
-                      className={`w-3 h-3 rounded-full transition-colors duration-200 ${
-                        index === currentHighlight
-                          ? "bg-yellow-400"
-                          : "bg-slate-600"
-                      }`}
-                    />
-                  ))}
-            </div>
-          </div>
-
-          {/* --------------------------------------------------------------------|
-            ----------------- Loading Indicator --------------------------------|
-          */}
-          {loading && (
-            <div className="flex justify-center mt-8">
-              <div className="flex items-center space-x-2 text-slate-400">
-                <div className="w-4 h-4 border-2 border-slate-400 border-t-transparent rounded-full animate-spin"></div>
-                <span>Connecting to the Matrix...</span>
+              <div className="absolute inset-0 flex items-center justify-between pointer-events-none z-20">
+                <button
+                  onClick={handlePrev}
+                  disabled={loading}
+                  className={`pointer-events-auto text-white p-4 rounded-full transition-colors duration-200 transform -translate-x-2 ${
+                    loading
+                      ? "bg-slate-700 cursor-not-allowed"
+                      : "bg-black/50 hover:bg-black/70"
+                  }`}>
+                  <ChevronLeft size={24} />
+                </button>
+                <button
+                  onClick={handleNext}
+                  disabled={loading}
+                  className={`pointer-events-auto text-white p-4 rounded-full transition-colors duration-200 transform translate-x-2 ${
+                    loading
+                      ? "bg-slate-700 cursor-not-allowed"
+                      : "bg-black/50 hover:bg-black/70"
+                  }`}>
+                  <ChevronRight size={24} />
+                </button>
               </div>
             </div>
-          )}
+          </div>
         </div>
       </div>
     </>

@@ -8,8 +8,9 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   currentHighlight: 0,
   highlights: [],
-  loading: true,
+  loading: false,
   autoSlideInterval: null,
+  error: null,
 };
 
 {
@@ -36,6 +37,9 @@ const CarouselSlice = createSlice({
     setAutoSlideInterval: (state, action) => {
       state.autoSlideInterval = action.payload;
     },
+    setError: (state, action) => {
+      state.error = action.payload;
+    },
 
     // --------------------------------------------------------------------|
     // --------------------------- Actions ---------------------------|
@@ -57,6 +61,9 @@ const CarouselSlice = createSlice({
         state.currentHighlight = index;
       }
     },
+    clearError: (state) => {
+      state.error = null;
+    },
   },
 });
 
@@ -73,6 +80,9 @@ export const {
   prevHighlight,
   goToHighlight,
   setAutoSlideInterval,
+  setDiscountedGames,
+  setError,
+  clearError,
 } = CarouselSlice.actions;
 
 export const CarouselReducer = CarouselSlice.reducer;

@@ -51,7 +51,7 @@ export default function GameCard({
         {/* Game Image */}
         <div className={`relative ${sizeClasses[size]} w-full`}>
           <Image
-            src={game.image}
+            src={game.thumbnail}
             alt={game.title}
             fill
             className="object-cover"

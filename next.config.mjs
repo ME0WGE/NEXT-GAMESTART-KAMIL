@@ -9,6 +9,18 @@ const nextConfig = {
       },
     ];
   },
+
+  // Configure images to allow external domains
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "www.freetogame.com",
+        port: "",
+        pathname: "/**",
+      },
+    ],
+  },
 };
 
 export default nextConfig;

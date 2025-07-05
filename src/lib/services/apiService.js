@@ -86,4 +86,23 @@ export const apiService = {
       throw error;
     }
   },
+
+  // Get discounted games (random selection)
+  async getDiscountedGames(limit = 6) {
+    try {
+      const response = await api.get("");
+      const games = response.data;
+
+      // Shuffle the array and take the first games
+      const shuffled = games.sort(() => 0.5 - Math.random());
+      return shuffled.slice(0, limit);
+    } catch (error) {
+      console.error(
+        "Erreur lors de la récupération des jeux en promotion:",
+        error
+      );
+      // In case of error, throw the error to keep the loading active
+      throw error;
+    }
+  },
 };
