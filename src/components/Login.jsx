@@ -2,6 +2,7 @@
 
 import {
   authLogin,
+  authLogout,
   authRegister,
   authResetError,
   authSetMail,
@@ -9,6 +10,7 @@ import {
   authSetPassword,
 } from "@/lib/features/authSlice";
 import { User, X } from "lucide-react";
+import { signIn, signOut } from "next-auth/react";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -36,6 +38,7 @@ export default function Login() {
   const dispatch = useDispatch();
 
   const [modal, setModal] = useState(false);
+  const [profileModal, setProfileModal] = useState(false);
   const [toggle, setToggle] = useState(false);
   const [toast, setToast] = useState({
     show: false,
@@ -109,11 +112,41 @@ export default function Login() {
         />
       )}
       {auth.user.isConnected ? (
-        <div className="flex text-slate-300 hover:text-blue-400 hover:bg-slate-800 p-2 rounded-full transition-all duration-200 cursor-default">
-          <button>
-            <User size={20} />
-          </button>
-          <h1 className="font-bold text-white self-center">{auth.user.name}</h1>
+        <div
+          className="flex text-slate-300 hover:text-blue-400 hover:bg-slate-800 p-2 rounded-full transition-all duration-200 cursor-default"
+          onClick={() => setProfileModal(!profileModal)}>
+          {profileModal ? (
+            <>
+              <button>
+                <User size={20} />
+              </button>
+              <h1 className="font-bold text-white self-center">
+                {auth.user.name}
+              </h1>
+              <ul className="absolute top-13 right-87 bg-slate-800 p-2 rounded-md">
+                <li className="cursor-pointer">Profil</li>
+                <li className="cursor-pointer">Ma bibliothèque</li>
+                <li
+                  className="cursor-pointer"
+                  onClick={() => {
+                    dispatch(authLogout());
+                    setProfileModal(false);
+                    signOut();
+                  }}>
+                  Déconnexion
+                </li>
+              </ul>
+            </>
+          ) : (
+            <>
+              <button>
+                <User size={20} />
+              </button>
+              <h1 className="font-bold text-white self-center">
+                {auth.user.name}
+              </h1>
+            </>
+          )}
         </div>
       ) : (
         <>
@@ -179,7 +212,9 @@ export default function Login() {
                   <span className="cursor-pointer hover:text-blue-400 text-gray-300">
                     Facebook
                   </span>
-                  <span className="cursor-pointer hover:text-blue-400 text-gray-300">
+                  <span
+                    className="cursor-pointer hover:text-blue-400 text-gray-300"
+                    onClick={() => signIn("github")}>
                     Github
                   </span>
                 </div>

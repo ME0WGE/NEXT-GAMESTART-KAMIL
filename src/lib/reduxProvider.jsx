@@ -6,8 +6,8 @@ import { store } from "./store/store";
 
 export default function ReduxProvider({ children }) {
   return (
-    // <SessionProvider>
-    <Provider store={store}>{children}</Provider>
-    // </SessionProvider>
+    <SessionProvider>
+      <Provider store={store}>{children}</Provider>
+    </SessionProvider>
   );
 }
