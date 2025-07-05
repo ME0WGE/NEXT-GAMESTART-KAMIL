@@ -33,13 +33,18 @@ export default function PopularGames() {
 
   return (
     <>
-      <div className="bg-slate-900 text-white py-12">
+      <div className="text-white py-12 relative">
         <div className="container mx-auto relative">
           {/* Header of the section */}
-          <div className="flex items-center gap-3 mb-8">
-            <TrendingUp className="text-yellow-400" size={32} />
-            <h2 className="text-3xl md:text-4xl font-bold text-yellow-400">
-              Les plus joués du moment
+          <div className="flex items-center justify-center gap-3 mb-8">
+            <TrendingUp
+              className="text-cyan-400 animate-neon-flicker"
+              size={32}
+            />
+            <h2 className="text-3xl md:text-4xl font-black bg-gradient-to-r from-cyan-400 via-fuchsia-400 to-purple-400 bg-clip-text text-transparent tracking-wider uppercase neon-text">
+              <span className="text-cyan-400">[</span>
+              TOP CYBER GAMES
+              <span className="text-purple-400">]</span>
             </h2>
           </div>
 
@@ -50,11 +55,11 @@ export default function PopularGames() {
               {Array.from({ length: 8 }).map((_, index) => (
                 <div
                   key={index}
-                  className="bg-slate-800 rounded-xl h-48 animate-pulse">
-                  <div className="w-full h-32 bg-slate-700 rounded-t-xl"></div>
+                  className="bg-slate-900/90 backdrop-blur-xl rounded-xl h-48 animate-pulse border border-cyan-500/30">
+                  <div className="w-full h-32 bg-slate-800 rounded-t-xl"></div>
                   <div className="p-4">
-                    <div className="h-4 bg-slate-700 rounded mb-2"></div>
-                    <div className="h-3 bg-slate-700 rounded w-2/3"></div>
+                    <div className="h-4 bg-slate-800 rounded mb-2"></div>
+                    <div className="h-3 bg-slate-800 rounded w-2/3"></div>
                   </div>
                 </div>
               ))}
@@ -65,7 +70,11 @@ export default function PopularGames() {
                 {displayedGames.map((game) => (
                   <div
                     key={game.id}
-                    className="relative bg-slate-800 overflow-hidden h-50 w-90 hover:bg-slate-700 hover:scale-105 transition-all duration-100 cursor-pointer group">
+                    className="relative bg-slate-900/90 backdrop-blur-xl overflow-hidden h-50 w-90 hover:bg-slate-800/90 hover:scale-105 transition-all duration-300 cursor-pointer group border border-cyan-500/30 hover:border-fuchsia-500/50 rounded-lg">
+                    {/* Cyberpunk background effects */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 to-fuchsia-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div className="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(147,51,234,0.1)_25%,rgba(147,51,234,0.1)_75%,transparent_75%)] bg-[size:15px_15px] opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+
                     {/* Game image - takes full space */}
                     <div className="relative w-full h-full">
                       <img
@@ -90,16 +99,16 @@ export default function PopularGames() {
                       </div>
 
                       {/* Overlay with game information - slides up from bottom */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg">
+                      <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg">
                         <div className="absolute bottom-0 left-0 right-0 p-4 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                          <h3 className="font-bold text-lg text-white mb-2 truncate">
+                          <h3 className="font-black text-lg text-cyan-300 mb-2 truncate tracking-wider">
                             {game.title}
                           </h3>
-                          <div className="flex items-center justify-between text-sm text-gray-300 mb-3">
-                            <span className="bg-blue-600 px-2 py-1 rounded text-xs font-medium">
+                          <div className="flex items-center justify-between text-sm text-cyan-200 mb-3">
+                            <span className="bg-cyan-600 px-2 py-1 rounded text-xs font-mono tracking-wider">
                               {game.genre}
                             </span>
-                            <span>{game.platform}</span>
+                            <span className="font-mono">{game.platform}</span>
                           </div>
 
                           {/* Add to Cart Button */}
@@ -108,9 +117,9 @@ export default function PopularGames() {
                               e.stopPropagation();
                               handleAddToCart(game);
                             }}
-                            className="w-full bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-bold py-2 px-3 rounded-lg transition-all duration-200 hover:scale-105 shadow-lg flex items-center justify-center gap-2 text-sm">
+                            className="w-full bg-gradient-to-r from-cyan-500 to-fuchsia-500 hover:from-cyan-400 hover:to-fuchsia-400 text-slate-900 font-black py-2 px-3 rounded-lg transition-all duration-200 hover:scale-105 shadow-lg flex items-center justify-center gap-2 text-sm tracking-wider border border-cyan-300/50">
                             <ShoppingCart size={16} />
-                            Ajouter au panier
+                            HACK GAME
                           </button>
                         </div>
                       </div>
@@ -124,12 +133,12 @@ export default function PopularGames() {
                 <div className="text-center">
                   <button
                     onClick={() => setShowAll(!showAll)}
-                    className="bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-bold py-3 px-8 rounded-lg transition-all duration-200 hover:scale-105 shadow-lg">
+                    className="bg-gradient-to-r from-cyan-500 to-fuchsia-500 hover:from-cyan-400 hover:to-fuchsia-400 text-slate-900 font-black py-3 px-8 rounded-lg transition-all duration-200 hover:scale-105 shadow-lg border border-cyan-300/50 tracking-wider uppercase">
                     {showAll
-                      ? "Afficher moins"
-                      : `Afficher plus (${
+                      ? "HIDE MORE"
+                      : `LOAD MORE (${
                           mostPlayedGames.length - initialGamesCount
-                        } autres)`}
+                        } CYBER GAMES)`}
                   </button>
                 </div>
               )}
