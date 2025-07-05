@@ -14,6 +14,12 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Image from "next/image";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faGoogle,
+  faFacebook,
+  faGithub,
+} from "@fortawesome/free-brands-svg-icons";
 
 // Toast Message
 function Toast({ message, type, onClose }) {
@@ -28,6 +34,37 @@ function Toast({ message, type, onClose }) {
         onClick={onClose}
         aria-label="Fermer le toast">
         ×
+      </button>
+    </div>
+  );
+}
+
+// Social Login Buttons
+function SocialLoginButtons() {
+  return (
+    <div className="flex flex-col gap-3">
+      {/* Google Button */}
+      <button
+        className="flex items-center justify-center gap-3 w-full py-3 px-4 bg-white text-gray-700 rounded-lg border border-gray-300 hover:bg-gray-50 hover:shadow-md transition-all duration-200 font-medium"
+        onClick={() => console.log("Google login not implemented yet")}>
+        <FontAwesomeIcon icon={faGoogle} className="text-red-500 text-lg" />
+        <span>Continuer avec Google</span>
+      </button>
+
+      {/* Facebook Button */}
+      <button
+        className="flex items-center justify-center gap-3 w-full py-3 px-4 bg-[#1877F2] text-white rounded-lg hover:bg-[#166FE5] hover:shadow-md transition-all duration-200 font-medium"
+        onClick={() => console.log("Facebook login not implemented yet")}>
+        <FontAwesomeIcon icon={faFacebook} className="text-white text-lg" />
+        <span>Continuer avec Facebook</span>
+      </button>
+
+      {/* GitHub Button */}
+      <button
+        className="flex items-center justify-center gap-3 w-full py-3 px-4 bg-gray-900 text-white rounded-lg hover:bg-gray-800 hover:shadow-md transition-all duration-200 font-medium border border-gray-700"
+        onClick={() => signIn("github")}>
+        <FontAwesomeIcon icon={faGithub} className="text-white text-lg" />
+        <span>Continuer avec GitHub</span>
       </button>
     </div>
   );
@@ -278,7 +315,7 @@ export default function Login() {
         (toggle ? ( // Inscription Modal
           <div
             ref={modalRef}
-            className="fixed inset-0 z-50 w-full min-h-screen h-full bg-slate-900 flex flex-col justify-center p-4 rounded-none shadow-none sm:bg-slate-900/90 sm:absolute sm:left-1/2 sm:top-12 sm:-translate-x-1/2 sm:w-80 sm:h-auto sm:max-h-[90vh] sm:rounded-xl sm:shadow-lg sm:p-6 sm:border border-gray-700 sm:min-h-[45vh] sm:justify-start gap-3">
+            className="fixed inset-0 z-50 w-full min-h-screen h-full bg-slate-900 flex flex-col justify-center p-4 rounded-none shadow-none sm:bg-slate-900/95 sm:absolute sm:left-1/2 sm:top-12 sm:-translate-x-1/2 sm:w-80 sm:h-auto sm:max-h-[90vh] sm:rounded-xl sm:shadow-lg sm:p-6 sm:border border-gray-700 sm:min-h-[55vh] sm:justify-start gap-3">
             <span
               onClick={() => setModal(false)}
               className="absolute top-3 right-3 cursor-pointer text-gray-400 hover:text-gray-200">
@@ -323,22 +360,8 @@ export default function Login() {
                 S'inscrire
               </button>
             </form>
-            <p className="text-center text-gray-400 text-sm">
-              ou inscrivez-vous avec
-            </p>
-            <div className="flex justify-center gap-2">
-              <span className="cursor-pointer hover:text-blue-400 text-gray-300">
-                Google
-              </span>
-              <span className="cursor-pointer hover:text-blue-400 text-gray-300">
-                Facebook
-              </span>
-              <span
-                className="cursor-pointer hover:text-blue-400 text-gray-300"
-                onClick={() => signIn("github")}>
-                Github
-              </span>
-            </div>
+            <p className="text-center text-gray-400 text-sm">ou</p>
+            <SocialLoginButtons />
             <p className="text-center text-gray-400 text-sm">
               Vous avez déjà un compte?
             </p>
@@ -360,7 +383,7 @@ export default function Login() {
           // Connexion Modal
           <div
             ref={modalRef}
-            className="fixed inset-0 z-50 w-full min-h-screen h-full bg-slate-900 flex flex-col justify-center p-4 rounded-none shadow-none sm:bg-slate-900/90 sm:absolute sm:left-1/2 sm:top-12 sm:-translate-x-1/2 sm:w-80 sm:h-auto sm:max-h-[90vh] sm:rounded-xl sm:shadow-lg sm:p-6 sm:border border-gray-700 sm:min-h-[40vh] sm:justify-start gap-3">
+            className="fixed inset-0 z-50 w-full min-h-screen h-full bg-slate-900 flex flex-col justify-center p-4 rounded-none shadow-none sm:bg-slate-900/95 sm:absolute sm:left-1/2 sm:top-12 sm:-translate-x-1/2 sm:w-80 sm:h-auto sm:max-h-[90vh] sm:rounded-xl sm:shadow-lg sm:p-6 sm:border border-gray-700 sm:min-h-[50vh] sm:justify-start gap-3">
             <span
               onClick={() => setModal(false)}
               className="absolute top-3 right-3 cursor-pointer text-gray-400 hover:text-gray-200">
@@ -397,22 +420,8 @@ export default function Login() {
                 Se connecter
               </button>
             </form>
-            <p className="text-center text-gray-400 text-sm">
-              ou connectez-vous avec
-            </p>
-            <div className="flex justify-center gap-2">
-              <span className="cursor-pointer hover:text-blue-400 text-gray-300">
-                Google
-              </span>
-              <span className="cursor-pointer hover:text-blue-400 text-gray-300">
-                Facebook
-              </span>
-              <span
-                className="cursor-pointer hover:text-blue-400 text-gray-300"
-                onClick={() => signIn("github")}>
-                Github
-              </span>
-            </div>
+            <p className="text-center text-gray-400 text-sm">ou</p>
+            <SocialLoginButtons />
             <p className="text-center text-gray-400 text-sm">
               Vous n'avez pas encore de compte?
             </p>
