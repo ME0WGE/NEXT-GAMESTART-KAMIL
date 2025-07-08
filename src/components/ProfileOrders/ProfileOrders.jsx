@@ -1,7 +1,7 @@
 export default function ProfileOrders() {
   return (
-    <section className="profile-orders-section">
-      <h3 className="profile-orders-title text-xl font-semibold mb-4 text-neutral-100">
+    <section className="profile-orders-section bg-neutral-900 rounded-lg p-4 shadow-inner">
+      <h3 className="profile-orders-title text-lg font-semibold mb-3 text-neutral-100">
         Orders
       </h3>
       <ul className="profile-orders-list space-y-3">
