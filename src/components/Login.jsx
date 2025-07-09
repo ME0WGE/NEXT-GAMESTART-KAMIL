@@ -366,7 +366,7 @@ export default function Login() {
               Vous avez déjà un compte?
             </p>
             <span
-              className="cursor-pointer text-rosy hover:text-pine hover:underline text-center self-center max-w-fit"
+              className="cursor-pointer text-rosy hover:text-plum hover:underline text-center self-center max-w-fit"
               onClick={() => {
                 dispatch(authResetError());
                 setToggle(false);
@@ -426,7 +426,7 @@ export default function Login() {
               Vous n'avez pas encore de compte?
             </p>
             <span
-              className="cursor-pointer text-rosy hover:text-pine hover:underline text-center self-center max-w-fit"
+              className="cursor-pointer text-rosy hover:text-plum hover:underline text-center self-center max-w-fit"
               onClick={() => {
                 dispatch(authResetError());
                 setToggle(true);
