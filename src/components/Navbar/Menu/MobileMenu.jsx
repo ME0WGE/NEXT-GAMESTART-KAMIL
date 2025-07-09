@@ -10,7 +10,7 @@ function MobileMenu({ toggleMenu, isMenuOpen }) {
   return (
     <>
       {/* Shopping Cart */}
-      <button className="text-slate-300 hover:text-blue-400 hover:bg-slate-700 p-2 rounded-full transition-all duration-200">
+      <button className="text-slate-300 hover:text-pine hover:bg-rosy p-2 rounded-full transition-all duration-200 cursor-pointer">
         <ShoppingCart size={20} />
       </button>
 
@@ -20,7 +20,7 @@ function MobileMenu({ toggleMenu, isMenuOpen }) {
       {/* Menu Button */}
       <button
         onClick={toggleMenu}
-        className="text-slate-300 hover:text-blue-400 hover:bg-slate-800 p-2 rounded-md transition-all duration-200">
+        className="text-slate-300 hover:text-pine hover:bg-rosy p-2 rounded-md transition-all duration-200 cursor-pointer">
         {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
       </button>
     </>
@@ -57,8 +57,8 @@ export function MobileMenuNavLinks({ links, toggleMenu }) {
   return (
     <>
       {/* Mobile Menu Links */}
-      <div className="md:hidden">
-        <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-slate-800/50 rounded-lg mt-2">
+      <div className="md:hidden w-auto">
+        <div className=" pt-2 pb-3 space-y-1 sm:px-3 bg-midnight rounded-lg mt-2 text-center">
           {links.map((link) => (
             <NavbarNavLinksComponent
               key={link.name}
@@ -69,10 +69,10 @@ export function MobileMenuNavLinks({ links, toggleMenu }) {
           ))}
 
           {/* Search */}
-          <div className="flex items-center gap-2 mt-4">
+          <div className="flex items-center gap-2 mt-4 mx-4">
             <Search
               size={20}
-              className="text-blue-400"
+              className="text-slate-300 hover:text-pine rounded-full transition-all duration-200 cursor-pointer"
               onClick={handleSearchClick}
               aria-label="Rechercher"
             />
@@ -80,7 +80,7 @@ export function MobileMenuNavLinks({ links, toggleMenu }) {
               ref={searchInputRef}
               type="text"
               placeholder="Rechercher..."
-              className="bg-slate-800 text-white px-3 py-2 rounded-md border border-slate-700 focus:outline-none focus:border-blue-800 w-full text-sm"
+              className="bg-midnight text-white px-3 py-2 rounded-md border border-slate-700 focus:outline-none focus:border-pine w-full text-sm"
               onBlur={handleSearchBlur}
             />
           </div>

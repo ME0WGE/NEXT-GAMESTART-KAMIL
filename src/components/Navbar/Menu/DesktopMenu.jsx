@@ -14,9 +14,9 @@ export default function DesktopMenu({
       <div className="relative flex items-center">
         {/* Search Button */}
         <button
-          className={`text-slate-300 hover:text-blue-400 hover:bg-slate-800 p-2 rounded-full transition-all duration-200 focus:outline-none ${
-            isSearchOpen ? "bg-slate-800" : ""
-          }`}
+          className={`text-slate-300 hover:text-pine hover:bg-rosy p-2 rounded-full transition-all duration-200 focus:outline-none ${
+            isSearchOpen ? "bg-rosy" : ""
+          } cursor-pointer`}
           onClick={handleSearchClick}
           aria-label="Rechercher">
           <Search size={20} />
@@ -31,14 +31,14 @@ export default function DesktopMenu({
             ref={searchInputRef}
             type="text"
             placeholder="Rechercher..."
-            className="bg-slate-800 text-white px-3 py-1 rounded-md border border-slate-700 focus:outline-none focus:border-blue-800 w-full text-sm"
+            className="bg-midnight text-white px-3 py-1 rounded-md border border-pine focus:outline-none focus:border-rosy w-full text-sm"
             onBlur={handleSearchBlur}
           />
         </div>
       </div>
 
       {/* Shopping Cart */}
-      <button className="text-slate-300 hover:text-blue-400 hover:bg-slate-800 p-2 rounded-full transition-all duration-200">
+      <button className="text-slate-300 hover:text-pine hover:bg-rosy p-2 rounded-full transition-all duration-200 cursor-pointer">
         <ShoppingCart size={20} />
       </button>
 

@@ -20,7 +20,8 @@ export default function Newsletter({ handleNewsletter, newsletterSuccess }) {
           />
           <button
             type="submit"
-            className="rounded-lg bg-yellow-400 hover:bg-yellow-500 text-white font-semibold px-4 py-2 text-sm transition-all duration-200 relative overflow-hidden focus:outline-none focus:ring-2 focus:ring-yellow-400 animate-pulse-once flex-shrink-0 min-w-[90px] max-w-full">
+            className="bg-rosy hover:bg-pine text-white px-4 py-2 rounded-r-sm rounded-l-sm transition-all duration-200 cursor-pointer hover:rounded-l-2sm hover:rounded-r-2xl relative overflow-hidden focus:outline-none focus:ring-4 focus:ring-pine/70 animate-pulse-once flex-shrink-0 min-w-[90px] 
+            max-w-full">
             <span className="relative z-10">S'inscrire</span>
           </button>
         </form>

@@ -76,7 +76,7 @@ export default function GameCard({
               <div className="flex items-center gap-2 mt-1">
                 {/* Discount */}
                 {showDiscount && game.discount && (
-                  <div className="flex items-center gap-1 bg-red-600 px-2 py-1 rounded text-xs font-bold">
+                  <div className="flex items-center gap-1 bg-pine text-white px-2 py-1 rounded text-xs font-bold">
                     <Percent size={12} />-{game.discount}%
                   </div>
                 )}

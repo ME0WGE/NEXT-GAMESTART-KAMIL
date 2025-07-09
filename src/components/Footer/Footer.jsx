@@ -17,7 +17,7 @@ export default function Footer() {
 
   return (
     <>
-      <footer className="bg-gradient-to-t from-yellow-50 via-white to-white dark:from-gray-900 dark:via-gray-900 dark:to-gray-800 transition-colors duration-500">
+      <footer className="bg-midnight">
         <div className="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8">
           <div className="md:flex md:justify-between">
             <div className="mb-6 md:mb-0 pr-12 transition-all duration-100 translate-y-8">

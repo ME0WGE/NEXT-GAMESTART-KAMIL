@@ -10,7 +10,7 @@ function FooterNavLinksComponent({ section_name, links }) {
         {links.map((link) => (
           <li key={link.name} className="mb-4">
             <Link href={link.url} className="inline-block group">
-              <p className="relative inline-block after:content-[''] after:block after:absolute after:left-0 after:bottom-0 after:h-[2px] after:bg-yellow-400 after:w-0 after:transition-all after:duration-300 group-hover:after:w-full">
+              <p className="relative inline-block after:content-[''] after:block after:absolute after:left-0 after:bottom-0 after:h-[2px] after:bg-rosy after:w-0 after:transition-all after:duration-300 group-hover:after:w-full">
                 {link.name}
               </p>
             </Link>

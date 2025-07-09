@@ -26,7 +26,7 @@ function Toast({ message, type, onClose }) {
   return (
     <div
       className={`fixed top-6 left-1/2 -translate-x-1/2 z-[100] px-6 py-3 rounded shadow-lg text-white text-center transition-all duration-300
-        ${type === "success" ? "bg-green-600" : "bg-red-600"}`}
+        ${type === "success" ? "bg-pine" : "bg-red-600"}`}
       role="alert">
       {message}
       <button
@@ -177,7 +177,7 @@ export default function Login() {
         )}
         <div className="relative" ref={profileRef}>
           <div
-            className="flex items-center text-slate-300 hover:text-blue-400 hover:bg-slate-800 p-2 rounded-full transition-all duration-200 cursor-pointer"
+            className="flex items-center text-slate-300 hover:text-pine hover:bg-midnight p-2 rounded-full transition-all duration-200 cursor-pointer"
             onClick={() => setProfileModal(!profileModal)}>
             {/* Profile Picture */}
             {session.user.avatar_url ? (
@@ -186,21 +186,21 @@ export default function Login() {
                 alt="Profile"
                 width={32}
                 height={32}
-                className="rounded-full mr-2"
+                className="rounded-full mr-2 border-2 border-pine"
               />
             ) : (
               <User size={20} className="mr-2" />
             )}
 
             {/* Username */}
-            <span className="font-bold text-white">
+            <span className="font-bold text-rosy">
               {session.user.username || session.user.name}
             </span>
           </div>
 
           {/* Profile Dropdown */}
           {profileModal && (
-            <div className="absolute top-12 right-0 bg-slate-800 border border-slate-700 rounded-lg shadow-lg p-2 min-w-48 z-50">
+            <div className="absolute top-12 right-0 bg-midnight border border-slate-700 rounded-lg shadow-lg p-2 min-w-48 z-50">
               <div className="flex items-center p-2 border-b border-slate-700 mb-2">
                 {session.user.avatar_url ? (
                   <Image
@@ -220,15 +220,15 @@ export default function Login() {
                   </p>
                 </div>
               </div>
-              <ul className="space-y-1">
-                <li className="cursor-pointer px-2 py-1 hover:bg-slate-700 rounded text-sm">
+              <ul className="space-y-1 text-white">
+                <li className="cursor-pointer px-2 py-1 hover:bg-pine rounded text-sm transition-all duration-100">
                   Mon Profil
                 </li>
-                <li className="cursor-pointer px-2 py-1 hover:bg-slate-700 rounded text-sm">
+                <li className="cursor-pointer px-2 py-1 hover:bg-pine rounded text-sm transition-all duration-100">
                   Ma Bibliothèque
                 </li>
                 <li
-                  className="cursor-pointer px-2 py-1 hover:bg-slate-700 rounded text-sm text-red-400 hover:text-red-300"
+                  className="cursor-pointer px-2 py-1 hover:bg-pine rounded text-sm text-red-400 hover:text-red-300 font-bold transition-all duration-100"
                   onClick={() => {
                     signOut();
                     setProfileModal(false);
@@ -256,34 +256,34 @@ export default function Login() {
         )}
         <div className="relative" ref={profileRef}>
           <div
-            className="flex items-center text-slate-300 hover:text-blue-400 hover:bg-slate-800 p-2 rounded-full transition-all duration-200 cursor-pointer"
+            className="flex items-center text-slate-300 hover:text-pine hover:bg-midnight p-2 rounded-full transition-all duration-200 cursor-pointer"
             onClick={() => setProfileModal(!profileModal)}>
             {/* Profile Icon */}
-            <User size={20} className="mr-2" />
+            <User size={20} className="rounded-full mr-2 border-2 border-pine" />
 
             {/* Username */}
-            <span className="font-bold text-white">{auth.user.name}</span>
+            <span className="font-bold text-rosy">{auth.user.name}</span>
           </div>
 
           {/* Profile Dropdown */}
           {profileModal && (
-            <div className="absolute top-12 right-0 bg-slate-800 border border-slate-700 rounded-lg shadow-lg p-2 min-w-48 z-50">
+            <div className="absolute top-12 right-0 bg-midnight border border-slate-700 rounded-lg shadow-lg p-2 min-w-48 z-50">
               <div className="flex items-center p-2 border-b border-slate-700 mb-2">
-                <User size={20} className="mr-3" />
+                <User size={20} className="mr-3 text-white" />
                 <div>
                   <p className="font-bold text-white">{auth.user.name}</p>
-                  <p className="text-sm text-gray-400">{auth.user.mail}</p>
+                  <p className="text-sm text-white/60">{auth.user.mail}</p>
                 </div>
               </div>
-              <ul className="space-y-1">
-                <li className="cursor-pointer px-2 py-1 hover:bg-slate-700 rounded text-sm">
+              <ul className="space-y-1 text-white">
+                <li className="cursor-pointer px-2 py-1 hover:bg-pine rounded text-sm transition-all duration-100">
                   Mon Profil
                 </li>
-                <li className="cursor-pointer px-2 py-1 hover:bg-slate-700 rounded text-sm">
+                <li className="cursor-pointer px-2 py-1 hover:bg-pine rounded text-sm transition-all duration-100">
                   Ma Bibliothèque
                 </li>
                 <li
-                  className="cursor-pointer px-2 py-1 hover:bg-slate-700 rounded text-sm text-red-400 hover:text-red-300"
+                  className="cursor-pointer px-2 py-1 hover:bg-pine rounded text-sm text-red-400 hover:text-red-300 font-bold transition-all duration-100"
                   onClick={() => {
                     dispatch(authLogout());
                     setProfileModal(false);
@@ -308,14 +308,14 @@ export default function Login() {
           onClose={() => setToast((t) => ({ ...t, show: false }))}
         />
       )}
-      <button className="text-slate-300 hover:text-blue-400 hover:bg-slate-800 p-2 rounded-full transition-all duration-200">
+      <button className="text-slate-300 hover:text-pine hover:bg-rosy p-2 rounded-full transition-all duration-200 cursor-pointer">
         <User size={20} onClick={handleModal} />
       </button>
       {modal &&
-        (toggle ? ( // Inscription Modal
+        (toggle ? ( // Inscription Modal3
           <div
             ref={modalRef}
-            className="fixed inset-0 z-50 w-full min-h-screen h-full bg-slate-900 flex flex-col justify-center p-4 rounded-none shadow-none sm:bg-slate-900/95 sm:absolute sm:left-1/2 sm:top-12 sm:-translate-x-1/2 sm:w-80 sm:h-auto sm:max-h-[90vh] sm:rounded-xl sm:shadow-lg sm:p-6 sm:border border-gray-700 sm:min-h-[55vh] sm:justify-start gap-3">
+            className="fixed inset-0 z-50 w-full min-h-screen h-full bg-midnight flex flex-col justify-center p-4 rounded-none shadow-none sm:bg-midnight/95 sm:absolute sm:left-1/2 sm:top-12 sm:-translate-x-1/2 sm:w-80 sm:h-auto sm:max-h-[90vh] sm:rounded-xl sm:shadow-lg sm:p-6 sm:border border-gray-700 sm:min-h-[55vh] sm:justify-start gap-3">
             <span
               onClick={() => setModal(false)}
               className="absolute top-3 right-3 cursor-pointer text-gray-400 hover:text-gray-200">
@@ -331,7 +331,7 @@ export default function Login() {
                 dispatch(authRegister());
               }}>
               <input
-                className="border border-gray-700 bg-gray-800 text-gray-100 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400"
+                className="border border-gray-700 bg-gray-800 text-gray-100 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-pine placeholder-gray-400"
                 required
                 type="text"
                 placeholder="Nom"
@@ -339,7 +339,7 @@ export default function Login() {
                 onChange={(e) => dispatch(authSetName(e.target.value))}
               />
               <input
-                className="border border-gray-700 bg-gray-800 text-gray-100 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400"
+                className="border border-gray-700 bg-gray-800 text-gray-100 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-pine placeholder-gray-400"
                 required
                 type="email"
                 placeholder="Mail"
@@ -347,7 +347,7 @@ export default function Login() {
                 onChange={(e) => dispatch(authSetMail(e.target.value))}
               />
               <input
-                className="border border-gray-700 bg-gray-800 text-gray-100 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400"
+                className="border border-gray-700 bg-gray-800 text-gray-100 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-pine placeholder-gray-400"
                 required
                 type="password"
                 placeholder="Password"
@@ -355,7 +355,7 @@ export default function Login() {
                 onChange={(e) => dispatch(authSetPassword(e.target.value))}
               />
               <button
-                className="bg-blue-600 text-white rounded py-2 mt-2 hover:bg-blue-700 transition"
+                className="bg-pine text-white rounded py-2 mt-2 hover:bg-pine/85 transition"
                 type="submit">
                 S'inscrire
               </button>
@@ -366,7 +366,7 @@ export default function Login() {
               Vous avez déjà un compte?
             </p>
             <span
-              className="cursor-pointer text-blue-400 hover:underline text-center"
+              className="cursor-pointer text-rosy hover:text-pine hover:underline text-center self-center max-w-fit"
               onClick={() => {
                 dispatch(authResetError());
                 setToggle(false);
@@ -383,7 +383,7 @@ export default function Login() {
           // Connexion Modal
           <div
             ref={modalRef}
-            className="fixed inset-0 z-50 w-full min-h-screen h-full bg-slate-900 flex flex-col justify-center p-4 rounded-none shadow-none sm:bg-slate-900/95 sm:absolute sm:left-1/2 sm:top-12 sm:-translate-x-1/2 sm:w-80 sm:h-auto sm:max-h-[90vh] sm:rounded-xl sm:shadow-lg sm:p-6 sm:border border-gray-700 sm:min-h-[50vh] sm:justify-start gap-3">
+            className="fixed inset-0 z-50 w-full min-h-screen h-full bg-midnight flex flex-col justify-center p-4 rounded-none shadow-none sm:bg-midnight/95 sm:absolute sm:left-1/2 sm:top-12 sm:-translate-x-1/2 sm:w-80 sm:h-auto sm:max-h-[90vh] sm:rounded-xl sm:shadow-lg sm:p-6 sm:border border-gray-700 sm:min-h-[50vh] sm:justify-start gap-3">
             <span
               onClick={() => setModal(false)}
               className="absolute top-3 right-3 cursor-pointer text-gray-400 hover:text-gray-200">
@@ -399,7 +399,7 @@ export default function Login() {
                 dispatch(authLogin());
               }}>
               <input
-                className="border border-gray-700 bg-gray-800 text-gray-100 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400"
+                className="border border-gray-700 bg-gray-800 text-gray-100 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-pine placeholder-gray-400"
                 required
                 type="email"
                 placeholder="Mail"
@@ -407,7 +407,7 @@ export default function Login() {
                 onChange={(e) => dispatch(authSetMail(e.target.value))}
               />
               <input
-                className="border border-gray-700 bg-gray-800 text-gray-100 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400"
+                className="border border-gray-700 bg-gray-800 text-gray-100 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-pine placeholder-gray-400"
                 required
                 type="password"
                 placeholder="Password"
@@ -415,7 +415,7 @@ export default function Login() {
                 onChange={(e) => dispatch(authSetPassword(e.target.value))}
               />
               <button
-                className="bg-blue-600 text-white rounded py-2 mt-2 hover:bg-blue-700 transition"
+                className="bg-pine text-white rounded py-2 mt-2 hover:bg-pine/85 transition"
                 type="submit">
                 Se connecter
               </button>
@@ -426,7 +426,7 @@ export default function Login() {
               Vous n'avez pas encore de compte?
             </p>
             <span
-              className="cursor-pointer text-blue-400 hover:underline text-center"
+              className="cursor-pointer text-rosy hover:text-pine hover:underline text-center self-center max-w-fit"
               onClick={() => {
                 dispatch(authResetError());
                 setToggle(true);

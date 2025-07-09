@@ -6,13 +6,13 @@ export function NavbarNavLinksComponent({ name, url, toggleMenu }) {
       href={url}
       key={name}
       onClick={toggleMenu}
-      className="text-slate-300 hover:text-blue-400 hover:bg-slate-800 px-3 py-2 rounded-md text-sm font-medium transition-all duration-200">
+      className="text-slate-300 hover:text-pine hover:bg-midnight lg:px-3 px-2 py-2 rounded-md text-sm font-medium transition-all duration-200">
       {name}
     </Link>
   );
 }
 export function NavbarNavLinks({ links, toggleMenu }) {
-  // Vérification de sécurité pour éviter l'erreur si links est undefined
+  // Security check to avoid errors if links is undefined
   if (!links || !Array.isArray(links)) {
     return null;
   }

@@ -11,7 +11,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="fr">
-      <body className={`antialiased bg-gray-900`}>
+      <body className="antialiased bg-rosy">
         <ReduxProvider>
           <Navbar />
           {children}
