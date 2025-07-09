@@ -20,13 +20,13 @@ export default function Newsletter({ handleNewsletter, newsletterSuccess }) {
           />
           <button
             type="submit"
-            className="bg-rosy hover:bg-pine text-white px-4 py-2 rounded-r-sm rounded-l-sm transition-all duration-200 cursor-pointer hover:rounded-l-2sm hover:rounded-r-2xl relative overflow-hidden focus:outline-none focus:ring-4 focus:ring-pine/70 animate-pulse-once flex-shrink-0 min-w-[90px] 
+            className="bg-rosy hover:bg-pine text-white px-4 py-2 rounded-r-sm rounded-l-sm transition-all duration-200 cursor-pointer hover:rounded-tl-3xl hover:rounded-br-3xl hover:scale-103 relative overflow-hidden focus:outline-none focus:ring-4 focus:ring-pine/70 animate-pulse-once flex-shrink-0 min-w-[90px] 
             max-w-full">
             <span className="relative z-10">S'inscrire</span>
           </button>
         </form>
         {newsletterSuccess && (
-          <div className="mt-3 px-4 py-2 bg-blue-500 text-white rounded-lg shadow-lg animate-toast-in text-sm font-semibold inline-block absolute lg:top-[8rem] left-0">
+          <div className="mt-3 px-4 py-2 bg-pine text-white rounded-lg shadow-lg animate-toast-in text-sm font-semibold inline-block absolute lg:top-[8rem] left-0">
             Inscription réussie !
           </div>
         )}

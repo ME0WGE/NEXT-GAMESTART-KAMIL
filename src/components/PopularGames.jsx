@@ -37,8 +37,8 @@ export default function PopularGames() {
         <div className="container mx-auto relative">
           {/* Header of the section */}
           <div className="flex items-center gap-3 mb-8">
-            <TrendingUp className="text-yellow-400" size={32} />
-            <h2 className="text-3xl md:text-4xl font-bold text-yellow-400">
+            <TrendingUp className="text-copper" size={32} />
+            <h2 className="text-3xl md:text-4xl font-bold text-ivory">
               Les plus joués du moment
             </h2>
           </div>
@@ -71,11 +71,11 @@ export default function PopularGames() {
                       <img
                         src={game.thumbnail}
                         alt={game.title}
-                        className="w-full h-full object-contain rounded-lg group-hover:scale-110 transition-transform duration-300"
+                        className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
                       />
 
                       {/* Video overlay - appears on hover */}
-                      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 group-hover:scale-110 transition-opacity duration-300">
+                      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 group-hover:scale-110 transition-opacity duration-0">
                         <video
                           src={`https://www.freetogame.com//g/${game.id}/videoplayback.webm`}
                           className="w-full h-full object-contain rounded-lg"
@@ -92,11 +92,11 @@ export default function PopularGames() {
                       {/* Overlay with game information - slides up from bottom */}
                       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg">
                         <div className="absolute bottom-0 left-0 right-0 p-4 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                          <h3 className="font-bold text-lg text-white mb-2 truncate">
+                          <h3 className="font-bold text-lg text-ivory mb-2 truncate">
                             {game.title}
                           </h3>
                           <div className="flex items-center justify-between text-sm text-gray-300 mb-3">
-                            <span className="bg-blue-600 px-2 py-1 rounded text-xs font-medium">
+                            <span className="bg-slate px-2 py-1 rounded text-xs font-medium">
                               {game.genre}
                             </span>
                             <span>{game.platform}</span>
@@ -108,7 +108,7 @@ export default function PopularGames() {
                               e.stopPropagation();
                               handleAddToCart(game);
                             }}
-                            className="w-full bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-bold py-2 px-3 rounded-lg transition-all duration-200 hover:scale-105 shadow-lg flex items-center justify-center gap-2 text-sm">
+                            className="w-full bg-moss hover:bg-pine text-slate font-bold py-2 px-3 rounded-lg transition-all duration-200 hover:scale-103 hover:text-ivory shadow-lg flex items-center justify-center gap-2 text-sm cursor-pointer">
                             <ShoppingCart size={16} />
                             Ajouter au panier
                           </button>
@@ -124,7 +124,11 @@ export default function PopularGames() {
                 <div className="text-center">
                   <button
                     onClick={() => setShowAll(!showAll)}
-                    className="bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-bold py-3 px-8 rounded-lg transition-all duration-200 hover:scale-105 shadow-lg">
+                    className={
+                      showAll
+                        ? "bg-rosy hover:bg-plum text-ivory font-bold py-3 px-8 rounded-lg transition-all duration-200 hover:scale-103 hover:rounded-t-3xl cursor-pointer shadow-lg"
+                        : "bg-rosy hover:bg-plum text-ivory font-bold py-3 px-8 rounded-lg transition-all duration-200 hover:scale-103 hover:rounded-b-3xl cursor-pointer shadow-lg"
+                    }>
                     {showAll
                       ? "Afficher moins"
                       : `Afficher plus (${
