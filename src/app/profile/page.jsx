@@ -1,7 +1,20 @@
+"use client";
+
 import ProfileInfo from "@/components/ProfileInfo/ProfileInfo";
 import ProfileOrders from "@/components/ProfileOrders/ProfileOrders";
+import { useSession } from "next-auth/react";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function ProfilePage() {
+  const user = useSelector((state) => state.auth.user);
+  // const description = useSelector((state) => state.auth.description);
+  const dispatch = useDispatch();
+  const { data: session, status } = useSession();
+
+  // useEffect(() => {
+  //   dispatch(authGetUser(user));
+  // }, [dispatch]);
+
   return (
     <div className="profile-page min-h-screen bg-neutral-900 text-neutral-100 flex flex-col pt-16">
       <div className="max-w-5xl mx-auto w-full px-8">
@@ -13,10 +26,10 @@ export default function ProfilePage() {
                 <div className="avatar w-28 h-28 rounded-md border-4 border-neutral-950 bg-neutral-700 shadow-lg overflow-hidden" />
                 <div className="user-details flex flex-col gap-1">
                   <h2 className="username text-3xl font-semibold leading-tight">
-                    Username
+                    {user.name || session?.user.name || "Username"}
                   </h2>
                   <p className="country text-neutral-400 text-lg">
-                    Description
+                    {user.description || "Description"}
                   </p>
                 </div>
               </div>

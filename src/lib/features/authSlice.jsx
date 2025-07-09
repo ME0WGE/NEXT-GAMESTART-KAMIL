@@ -18,12 +18,14 @@ const initialState = {
     name: "",
     mail: "",
     password: "",
+    description: "",
     games: [],
     isConnected: false,
   },
   setMail: "",
   setPassword: "",
   setName: "",
+  setDescription: "",
   isError: false,
   error: {
     register: "Cette adresse mail est déjà utilisée.",
@@ -68,11 +70,17 @@ const AuthSlice = createSlice({
         state.isError = true;
       }
     },
-    authLogout: (state) => {
-      state.user = initialState.user;
+    authGetUser: (state) => {
+      state.user = state.users.find((u) => u.isConnected === true);
+    },
+    authSetDescription: (state, action) => {
+      state.user.description = action.payload;
     },
     authSetName: (state, action) => {
-      state.setName = action.payload;
+      state.user.name = action.payload;
+    },
+    authLogout: (state) => {
+      state.user = initialState.user;
     },
     authSetMail: (state, action) => {
       state.setMail = action.payload;
@@ -92,9 +100,11 @@ export const {
   authRegister,
   authLogin,
   authLogout,
-  authSetName,
   authSetMail,
   authSetPassword,
   authResetError,
+  authGetUser,
+  authSetDescription,
+  authSetName,
 } = AuthSlice.actions;
 export const AuthReducer = AuthSlice.reducer;
