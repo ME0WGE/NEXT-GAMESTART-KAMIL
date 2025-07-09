@@ -22,7 +22,7 @@ export default function Footer() {
           <div className="md:flex md:justify-between">
             <div className="mb-6 md:mb-0 pr-12 transition-all duration-100 translate-y-8">
               <Link href={"/"} className="flex items-center">
-                <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
+                <span className="self-center text-2xl font-semibold whitespace-nowrap text-ivory">
                   GameStart
                 </span>
               </Link>

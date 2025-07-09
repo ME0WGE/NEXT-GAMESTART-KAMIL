@@ -164,12 +164,13 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    background: linear-gradient(45deg, #06b6d4, #ec4899);
-    border-radius: 4px;
+    background: #bf988a;
+
+    border-radius: 5px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(45deg, #0891b2, #db2777);
+    background: #7c5e6a;
   }
 
   /* Glass morphism effect - Cyberpunk */
