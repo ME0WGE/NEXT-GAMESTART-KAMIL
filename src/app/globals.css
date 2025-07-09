@@ -1,5 +1,11 @@
 @import "tailwindcss";
 
+@theme {
+  --color-rosy: #bf988a;
+  --color-pine: #247c6d;
+  --color-midnight: #031c26;
+}
+
 @layer utilities {
   @keyframes toast-in {
     from {
