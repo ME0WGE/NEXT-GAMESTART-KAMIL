@@ -4,8 +4,8 @@ import SearchBar from "@/components/SearchBar/SearchBar";
 export default function Library() {
   return (
     <>
-      <div className="flex flex-row pt-40 justify-center h-screen bg-slate">
-        <SearchBar />
+      <div className="flex flex-row pt-40 px-5 justify-start h-screen bg-slate">
+        <FilterSideBar />
       </div>
     </>
   );
