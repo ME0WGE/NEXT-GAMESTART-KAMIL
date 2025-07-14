@@ -349,7 +349,7 @@ export default function Login() {
               <input
                 className="border border-gray-700 bg-gray-800 text-gray-100 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-pine placeholder-gray-400"
                 required
-                type="password"
+                type="current-password"
                 placeholder="Password"
                 value={auth.setPassword}
                 onChange={(e) => dispatch(authSetPassword(e.target.value))}
@@ -409,7 +409,7 @@ export default function Login() {
               <input
                 className="border border-gray-700 bg-gray-800 text-gray-100 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-pine placeholder-gray-400"
                 required
-                type="password"
+                type="current-password"
                 placeholder="Password"
                 value={auth.setPassword}
                 onChange={(e) => dispatch(authSetPassword(e.target.value))}
