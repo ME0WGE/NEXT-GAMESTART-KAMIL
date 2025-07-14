@@ -20,21 +20,10 @@ export default function SearchBar() {
 
   const handleSearch = () => {};
   // ------------
-  const [showAll, setShowAll] = useState(false);
-  const { loading, allGames, error } = useAllGames();
-
-  const gamesPerRow = 1;
-  const initialGamesCount = 10 * gamesPerRow;
-  const displayedGames = showAll
-    ? allGames
-    : allGames.slice(0, initialGamesCount);
-  const handleAddToCart = (game) => {
-    console.log("Ajout au panier:", game.title);
-  };
 
   return (
     <>
-      <div>
+      <div className="flex w-1/2">
         <input
           type="text"
           name="search"
@@ -51,16 +40,6 @@ export default function SearchBar() {
         <button className="bg-rosy text-ivory inline-block px-4 py-1 rounded-b-lg rounded-t-lg hover:bg-pine transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-rosy/70">
           Search
         </button>
-      </div>
-      <div>
-        {displayedGames.map((game) => (
-          <div key={game.id}>
-            <div>
-              <img src={game.thumbnail} alt={game.title} />
-              {game.title}
-            </div>
-          </div>
-        ))}
       </div>
     </>
   );

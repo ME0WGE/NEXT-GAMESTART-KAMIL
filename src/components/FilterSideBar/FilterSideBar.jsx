@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import SearchBar from "../SearchBar/SearchBar";
 import { useDispatch, useSelector } from "react-redux";
+import AllGames from "../AllGames/AllGames";
 
 export default function FilterSideBar() {
   const dispatch = useDispatch();
@@ -21,7 +22,7 @@ export default function FilterSideBar() {
 
   return (
     <>
-      <div className="text-center text-ivory">
+      <div className="flex flex-col text-start text-ivory">
         <SearchBar />
         <span>Filter</span>
         <ul className="flex flex-col w-max gap-2">
@@ -29,6 +30,9 @@ export default function FilterSideBar() {
           <li className="text-start cursor-pointer">Genre</li>
           <li className="text-start cursor-pointer">Publisher</li>
         </ul>
+      </div>
+      <div>
+        <AllGames />
       </div>
     </>
   );
