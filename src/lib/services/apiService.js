@@ -27,6 +27,8 @@ export const apiService = {
       return response.data;
     } catch (error) {
       console.error("Erreur lors de la récupération des jeux:", error);
+
+      // In case of error, throw the error to keep the loading active
       throw error;
     }
   },
@@ -38,6 +40,8 @@ export const apiService = {
       return response.data;
     } catch (error) {
       console.error(`Erreur lors de la récupération du jeu ${id}:`, error);
+
+      // In case of error, throw the error to keep the loading active
       throw error;
     }
   },
@@ -52,6 +56,8 @@ export const apiService = {
         `Erreur lors de la récupération des jeux ${platform}:`,
         error
       );
+
+      // In case of error, throw the error to keep the loading active
       throw error;
     }
   },
@@ -63,6 +69,8 @@ export const apiService = {
       return response.data;
     } catch (error) {
       console.error(`Erreur lors de la récupération des jeux ${genre}:`, error);
+
+      // In case of error, throw the error to keep the loading active
       throw error;
     }
   },
@@ -86,6 +94,23 @@ export const apiService = {
       throw error;
     }
   },
+  // Set random price of all games
+  async getRandomPriceOfAllGames() {
+    try {
+      const response = await api.get("");
+      const games = response.data;
+
+      return games.map((game) => ({
+        ...game,
+        price: `${Math.floor(Math.random() * 96) + 5}`,
+      }));
+    } catch (error) {
+      console.error("Erreur lors de la récupération des prix des jeux:", error);
+
+      // In case of error, throw the error to keep the loading active
+      throw error;
+    }
+  },
 
   // Get discounted games (random selection)
   async getDiscountedGames(limit = 6) {
@@ -101,6 +126,7 @@ export const apiService = {
         "Erreur lors de la récupération des jeux en promotion:",
         error
       );
+
       // In case of error, throw the error to keep the loading active
       throw error;
     }
