@@ -14,3 +14,11 @@ https://www.freetogame.com//g/{id}/videoplayback.webm
 --color-copper: #b87333;
 --color-midnight: #031c26;
 --color-slate: #475569;
+
+## API Endpoints
+
+/games: Retrieve a list of all free-to-play games.
+/game?id={game_id}: Retrieve details of a specific game by its ID.
+/games?category={category_name}: Retrieve a list of all available games from a specific genre.
+/games?platform={platform_name}: Retrieve a list of all available games from a specific platform.
+/games?sort-by={sort_name}: Sort games by release date, alphabetical or relevance.
