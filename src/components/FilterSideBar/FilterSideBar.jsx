@@ -4,15 +4,104 @@ import SearchBar from "../SearchBar/SearchBar";
 import { useDispatch, useSelector } from "react-redux";
 import AllGames from "../AllGames/AllGames";
 import CouponSection from "../CouponSection/CouponSection";
-import { setFilterCategory } from "@/lib/features/searchSlice";
+import {
+  setFilterCategory,
+  setFilteredGames,
+  addActiveFilter,
+} from "@/lib/features/searchSlice";
+import { useState, useEffect } from "react";
+import { ChevronRight, ChevronDown } from "lucide-react";
+import { useAllGames } from "@/lib/hooks/useAllGames";
 
 export default function FilterSideBar() {
   const dispatch = useDispatch();
-  const { searchQuery, filterCategory, filteredGames, isSearchActive } =
-    useSelector((state) => state.search);
+  const {
+    searchQuery,
+    filterCategory,
+    filteredGames,
+    isSearchActive,
+    activeFilters,
+  } = useSelector((state) => state.search);
+  const { randomPriceOfAllGames } = useAllGames();
+
+  const [hoveredCategory, setHoveredCategory] = useState(null);
+  const [availableGenres, setAvailableGenres] = useState([]);
+  const [availablePublishers, setAvailablePublishers] = useState([]);
+
+  // Extract unique genres and publishers from games data
+  useEffect(() => {
+    if (randomPriceOfAllGames && randomPriceOfAllGames.length > 0) {
+      // Extract unique genres
+      const genreSet = new Set();
+      randomPriceOfAllGames.forEach((game) => {
+        if (game.genre) genreSet.add(game.genre);
+      });
+      setAvailableGenres(Array.from(genreSet).sort());
+
+      // Extract unique publishers
+      const publisherSet = new Set();
+      randomPriceOfAllGames.forEach((game) => {
+        if (game.publisher) publisherSet.add(game.publisher);
+      });
+      setAvailablePublishers(Array.from(publisherSet).sort());
+    }
+  }, [randomPriceOfAllGames]);
 
   const handleFilterCategory = (category) => {
     dispatch(setFilterCategory(category));
+  };
+
+  const handleAddFilter = (type, value) => {
+    dispatch(addActiveFilter({ type, value }));
+
+    // Filter games based on active filters
+    filterGamesByActiveFilters();
+  };
+
+  // Filter games based on active filters and search query
+  const filterGamesByActiveFilters = () => {
+    if (!randomPriceOfAllGames) return;
+
+    // Create updated filters with the new one
+    const updatedFilters = [...activeFilters];
+
+    let filteredResults = [...randomPriceOfAllGames];
+
+    // Apply genre filters
+    const genreFilters = updatedFilters
+      .filter((f) => f.type === "genre")
+      .map((f) => f.value);
+    if (genreFilters.length > 0) {
+      filteredResults = filteredResults.filter(
+        (game) => game.genre && genreFilters.includes(game.genre)
+      );
+    }
+
+    // Apply publisher filters
+    const publisherFilters = updatedFilters
+      .filter((f) => f.type === "publisher")
+      .map((f) => f.value);
+    if (publisherFilters.length > 0) {
+      filteredResults = filteredResults.filter(
+        (game) => game.publisher && publisherFilters.includes(game.publisher)
+      );
+    }
+
+    // Apply search query if exists
+    if (searchQuery) {
+      const lowercaseQuery = searchQuery.toLowerCase();
+      filteredResults = filteredResults.filter((game) =>
+        game.title.toLowerCase().includes(lowercaseQuery)
+      );
+    }
+
+    // Add match type for display grouping
+    filteredResults = filteredResults.map((game) => ({
+      ...game,
+      matchType: "title", // Default to title for filter results
+    }));
+
+    dispatch(setFilteredGames(filteredResults));
   };
 
   // Group filtered games by their match type
@@ -42,23 +131,95 @@ export default function FilterSideBar() {
             onClick={() => handleFilterCategory("title")}>
             Title
           </li>
+
+          {/* Genre category with hover expansion */}
           <li
-            className={`text-start cursor-pointer px-3 py-1 rounded ${
-              filterCategory === "genre"
-                ? "bg-rosy text-white"
-                : "hover:bg-midnight/50"
-            }`}
-            onClick={() => handleFilterCategory("genre")}>
-            Genre
+            className="relative"
+            onMouseEnter={() => setHoveredCategory("genre")}
+            onMouseLeave={() => setHoveredCategory(null)}>
+            <div
+              className={`text-start cursor-pointer px-3 py-1 rounded flex items-center justify-between ${
+                filterCategory === "genre"
+                  ? "bg-rosy text-white"
+                  : "hover:bg-midnight/50"
+              }`}
+              onClick={() => handleFilterCategory("genre")}>
+              <span>Genre</span>
+              {hoveredCategory === "genre" ? (
+                <ChevronDown size={16} />
+              ) : (
+                <ChevronRight size={16} />
+              )}
+            </div>
+
+            {/* Expanded genre list */}
+            {hoveredCategory === "genre" && (
+              <div className="absolute top-full left-0 bg-midnight/90 border border-ivory/20 rounded-md p-3 z-10 w-[20vw] max-h-80 overflow-y-auto shadow-lg backdrop-blur-sm">
+                <h4 className="font-medium mb-2 pb-1 border-b border-ivory/20">
+                  All Genres
+                </h4>
+                <ul className="grid grid-cols-2 gap-x-4 gap-y-2">
+                  {availableGenres.slice(0, 10).map((genre) => (
+                    <li
+                      key={genre}
+                      className="cursor-pointer text-sm hover:text-rosy truncate"
+                      onClick={() => handleAddFilter("genre", genre)}>
+                      {genre}
+                    </li>
+                  ))}
+                </ul>
+                {availableGenres.length > 10 && (
+                  <div className="mt-2 pt-2 border-t border-ivory/10 text-sm text-ivory/60">
+                    +{availableGenres.length - 10} more genres
+                  </div>
+                )}
+              </div>
+            )}
           </li>
+
+          {/* Publisher category with hover expansion */}
           <li
-            className={`text-start cursor-pointer px-3 py-1 rounded ${
-              filterCategory === "publisher"
-                ? "bg-rosy text-white"
-                : "hover:bg-midnight/50"
-            }`}
-            onClick={() => handleFilterCategory("publisher")}>
-            Publisher
+            className="relative"
+            onMouseEnter={() => setHoveredCategory("publisher")}
+            onMouseLeave={() => setHoveredCategory(null)}>
+            <div
+              className={`text-start cursor-pointer px-3 py-1 rounded flex items-center justify-between ${
+                filterCategory === "publisher"
+                  ? "bg-rosy text-white"
+                  : "hover:bg-midnight/50"
+              }`}
+              onClick={() => handleFilterCategory("publisher")}>
+              <span>Publisher</span>
+              {hoveredCategory === "publisher" ? (
+                <ChevronDown size={16} />
+              ) : (
+                <ChevronRight size={16} />
+              )}
+            </div>
+
+            {/* Expanded publisher list */}
+            {hoveredCategory === "publisher" && (
+              <div className="absolute top-full left-0 bg-midnight/90 border border-ivory/20 rounded-md p-3 z-10 w-[20vw] max-h-80 overflow-y-auto shadow-lg backdrop-blur-sm">
+                <h4 className="font-medium mb-2 pb-1 border-b border-ivory/20">
+                  All Publishers
+                </h4>
+                <ul className="grid grid-cols-2 gap-x-4 gap-y-2">
+                  {availablePublishers.slice(0, 10).map((publisher) => (
+                    <li
+                      key={publisher}
+                      className="cursor-pointer text-sm hover:text-rosy truncate"
+                      onClick={() => handleAddFilter("publisher", publisher)}>
+                      {publisher}
+                    </li>
+                  ))}
+                </ul>
+                {availablePublishers.length > 10 && (
+                  <div className="mt-2 pt-2 border-t border-ivory/10 text-sm text-ivory/60">
+                    +{availablePublishers.length - 10} more publishers
+                  </div>
+                )}
+              </div>
+            )}
           </li>
         </ul>
 
