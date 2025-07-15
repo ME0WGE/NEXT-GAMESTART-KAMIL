@@ -20,6 +20,7 @@ import {
   faFacebook,
   faGithub,
 } from "@fortawesome/free-brands-svg-icons";
+import Google from "next-auth/providers/google";
 
 // Toast Message
 function Toast({ message, type, onClose }) {
@@ -46,7 +47,7 @@ function SocialLoginButtons() {
       {/* Google Button */}
       <button
         className="flex items-center justify-center gap-3 w-full py-3 px-4 bg-white text-gray-700 rounded-lg border border-gray-300 hover:bg-gray-50 hover:shadow-md transition-all duration-200 font-medium"
-        onClick={() => console.log("Google login not implemented yet")}>
+        onClick={() => signIn(Google)}>
         <FontAwesomeIcon icon={faGoogle} className="text-red-500 text-lg" />
         <span>Continuer avec Google</span>
       </button>
@@ -259,7 +260,10 @@ export default function Login() {
             className="flex items-center text-slate-300 hover:text-pine hover:bg-midnight p-2 rounded-full transition-all duration-200 cursor-pointer"
             onClick={() => setProfileModal(!profileModal)}>
             {/* Profile Icon */}
-            <User size={20} className="rounded-full mr-2 border-2 border-pine" />
+            <User
+              size={20}
+              className="rounded-full mr-2 border-2 border-pine"
+            />
 
             {/* Username */}
             <span className="font-bold text-rosy">{auth.user.name}</span>
