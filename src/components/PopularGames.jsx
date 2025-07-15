@@ -1,12 +1,19 @@
 "use client";
 
-import { useState, useRef } from "react";
-import { TrendingUp, ShoppingCart } from "lucide-react";
+import { useState } from "react";
+import { TrendingUp, ShoppingCart, Trash2, View } from "lucide-react";
 import { useMostPlayedGames } from "@/lib/hooks/useMostPlayedGames";
+import { useDispatch, useSelector } from "react-redux";
+import { addToCart, removeFromCart } from "@/lib/features/gameDetailsSlice";
+import Link from "next/link";
 
 export default function PopularGames() {
   const [showAll, setShowAll] = useState(false);
   const { loading, mostPlayedGames, error } = useMostPlayedGames();
+  const dispatch = useDispatch();
+  const { addingToCart, cartItems } = useSelector((state) => state.gameDetails);
+  const [addingGameId, setAddingGameId] = useState(null);
+  const [removingGameId, setRemovingGameId] = useState(null);
 
   {
     /* --------------------------------------------------------------------|
@@ -25,10 +32,39 @@ export default function PopularGames() {
   // Check if there are more games to display
   const hasMoreGames = mostPlayedGames.length > initialGamesCount;
 
+  // Check if a game is in the cart
+  const isInCart = (gameId) => {
+    return cartItems.some((item) => item.id === gameId);
+  };
+
   // Handle add to cart
-  const handleAddToCart = (game) => {
-    console.log("Ajout au panier:", game.title);
-    // TODO: Implement cart functionality
+  const handleAddToCart = async (game) => {
+    try {
+      setAddingGameId(game.id);
+      // Add price if not present
+      const gameWithPrice = {
+        ...game,
+        price: game.price || `${Math.floor(Math.random() * 96) + 5}.99`,
+      };
+      await dispatch(addToCart(gameWithPrice)).unwrap();
+    } catch (error) {
+      console.error("Failed to add to cart:", error);
+    } finally {
+      setAddingGameId(null);
+    }
+  };
+
+  // Handle remove from cart
+  const handleRemoveFromCart = async (gameId, e) => {
+    try {
+      e.stopPropagation();
+      setRemovingGameId(gameId);
+      await dispatch(removeFromCart(gameId)).unwrap();
+    } catch (error) {
+      console.error("Failed to remove from cart:", error);
+    } finally {
+      setRemovingGameId(null);
+    }
   };
 
   return (
@@ -101,17 +137,48 @@ export default function PopularGames() {
                             </span>
                             <span>{game.platform}</span>
                           </div>
+                          <div className="flex items-center justify-between">
+                            {isInCart(game.id) ? (
+                              ""
+                            ) : (
+                              <Link href={`/game/${game.id}`}>
+                                <button className="w-full bg-moss hover:bg-pine text-slate font-bold py-2 px-2 rounded-lg transition-all duration-200 hover:scale-103 hover:text-ivory shadow-lg flex items-center justify-center gap-2 text-sm cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">
+                                  <span>Voir plus</span>
+                                </button>
+                              </Link>
+                            )}
+                            {/* Add to Cart Button */}
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleAddToCart(game);
+                              }}
+                              disabled={
+                                addingToCart ||
+                                addingGameId === game.id ||
+                                isInCart(game.id)
+                              }
+                              className="not-disabled:w-3/4 w-3/4 bg-moss hover:bg-pine text-slate font-bold py-2 px-3 rounded-lg transition-all duration-200 not-disabled:hover:scale-103 hover:text-ivory shadow-lg flex items-center justify-center gap-2 text-sm cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">
+                              <ShoppingCart size={16} />
+                              {addingGameId === game.id
+                                ? "Patientez..."
+                                : isInCart(game.id)
+                                ? "Dans le panier"
+                                : "Ajouter au panier"}
+                            </button>
 
-                          {/* Add to Cart Button */}
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleAddToCart(game);
-                            }}
-                            className="w-full bg-moss hover:bg-pine text-slate font-bold py-2 px-3 rounded-lg transition-all duration-200 hover:scale-103 hover:text-ivory shadow-lg flex items-center justify-center gap-2 text-sm cursor-pointer">
-                            <ShoppingCart size={16} />
-                            Ajouter au panier
-                          </button>
+                            {/* Remove from Cart Button */}
+                            {isInCart(game.id) && (
+                              <button
+                                onClick={(e) =>
+                                  handleRemoveFromCart(game.id, e)
+                                }
+                                disabled={removingGameId === game.id}
+                                className="w-1/4 bg-red-400 hover:bg-red-500 text-slate font-bold py-2 px-3 rounded-lg transition-all duration-200 hover:scale-103 hover:text-ivory shadow-lg flex items-center justify-center gap-2 text-sm cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">
+                                <Trash2 size={16} />
+                              </button>
+                            )}
+                          </div>
                         </div>
                       </div>
                     </div>
