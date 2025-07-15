@@ -5,14 +5,29 @@ import { Search } from "lucide-react";
 import Login from "../../Login";
 import { NavbarNavLinksComponent } from "../NavLinks/NavbarNavLinks";
 import { useState, useRef, useEffect } from "react";
+import { useSelector } from "react-redux";
 
-function MobileMenu({ toggleMenu, isMenuOpen }) {
+function MobileMenu({ toggleMenu, isMenuOpen, toggleCart }) {
+  const { cartItems } = useSelector((state) => state.gameDetails);
+  const cartItemCount = cartItems?.length || 0;
+
   return (
     <>
       {/* Shopping Cart */}
-      <button className="text-slate-300 hover:text-pine hover:bg-rosy p-2 rounded-full transition-all duration-200 cursor-pointer">
-        <ShoppingCart size={20} />
-      </button>
+      <div className="relative">
+        <button
+          onClick={toggleCart}
+          className="text-slate-300 hover:text-pine hover:bg-rosy p-2 rounded-full transition-all duration-200 cursor-pointer">
+          <ShoppingCart size={20} />
+        </button>
+
+        {/* Cart Counter Badge */}
+        {cartItemCount > 0 && (
+          <span className="absolute -top-1 -right-1 bg-rosy text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+            {cartItemCount}
+          </span>
+        )}
+      </div>
 
       {/* Login */}
       <Login />

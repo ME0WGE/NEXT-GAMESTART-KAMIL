@@ -7,6 +7,7 @@ import { NavbarNavLinks } from "./NavLinks/NavbarNavLinks";
 import navbar_data from "./data.json";
 import DesktopMenu from "./Menu/DesktopMenu";
 import MobileMenu, { MobileMenuNavLinks } from "./Menu/MobileMenu";
+import CartModal from "../CartModal/CartModal";
 
 export default function Navbar() {
   // Menu
@@ -16,6 +17,9 @@ export default function Navbar() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const searchInputRef = useRef(null);
 
+  // Cart Modal
+  const [isCartOpen, setIsCartOpen] = useState(false);
+
   // Toggle Menu
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -24,6 +28,11 @@ export default function Navbar() {
   // Toggle Search
   const handleSearchClick = () => {
     setIsSearchOpen((prev) => !prev);
+  };
+
+  // Toggle Cart
+  const toggleCart = () => {
+    setIsCartOpen((prev) => !prev);
   };
 
   // Focus on search input when search is open
@@ -70,12 +79,17 @@ export default function Navbar() {
                 handleSearchClick={handleSearchClick}
                 handleSearchBlur={handleSearchBlur}
                 searchInputRef={searchInputRef}
+                toggleCart={toggleCart}
               />
             </div>
 
             {/* Mobile Menu */}
             <div className="md:hidden">
-              <MobileMenu toggleMenu={toggleMenu} isMenuOpen={isMenuOpen} />
+              <MobileMenu
+                toggleMenu={toggleMenu}
+                isMenuOpen={isMenuOpen}
+                toggleCart={toggleCart}
+              />
             </div>
           </div>
 
@@ -88,6 +102,9 @@ export default function Navbar() {
           )}
         </div>
       </nav>
+
+      {/* Cart Modal */}
+      <CartModal isOpen={isCartOpen} onClose={toggleCart} />
     </>
   );
 }

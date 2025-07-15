@@ -1,13 +1,18 @@
 import { Search } from "lucide-react";
 import { ShoppingCart } from "lucide-react";
 import Login from "../../Login";
+import { useSelector } from "react-redux";
 
 export default function DesktopMenu({
   isSearchOpen,
   handleSearchClick,
   handleSearchBlur,
   searchInputRef,
+  toggleCart,
 }) {
+  const { cartItems } = useSelector((state) => state.gameDetails);
+  const cartItemCount = cartItems?.length || 0;
+
   return (
     <>
       {/* Search */}
@@ -38,9 +43,20 @@ export default function DesktopMenu({
       </div>
 
       {/* Shopping Cart */}
-      <button className="text-slate-300 hover:text-pine hover:bg-rosy p-2 rounded-full transition-all duration-200 cursor-pointer">
-        <ShoppingCart size={20} />
-      </button>
+      <div className="relative">
+        <button
+          onClick={toggleCart}
+          className="text-slate-300 hover:text-pine hover:bg-rosy p-2 rounded-full transition-all duration-200 cursor-pointer">
+          <ShoppingCart size={20} />
+        </button>
+
+        {/* Cart Counter Badge */}
+        {cartItemCount > 0 && (
+          <span className="absolute -top-1 -right-1 bg-moss text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+            {cartItemCount}
+          </span>
+        )}
+      </div>
 
       {/* Login */}
       <Login />
