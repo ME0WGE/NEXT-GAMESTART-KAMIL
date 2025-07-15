@@ -111,7 +111,7 @@ export default function CartModal({ isOpen, onClose }) {
             <div className="text-center py-8 text-ivory">
               <ShoppingBag className="mx-auto mb-4 opacity-30" size={48} />
               <p>Votre panier est vide</p>
-              <Link href="/library">
+              <Link href="/games">
                 <button
                   onClick={onClose}
                   className="mt-4 bg-rosy text-ivory px-4 py-2 rounded-lg hover:bg-plum transition-colors">

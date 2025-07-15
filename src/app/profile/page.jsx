@@ -5,7 +5,7 @@ import ProfileOrders from "@/components/ProfileOrders/ProfileOrders";
 import { useSession } from "next-auth/react";
 import { useDispatch, useSelector } from "react-redux";
 
-export default function ProfilePage() {
+export default function Profile() {
   const user = useSelector((state) => state.auth.user);
   // const description = useSelector((state) => state.auth.description);
   const dispatch = useDispatch();

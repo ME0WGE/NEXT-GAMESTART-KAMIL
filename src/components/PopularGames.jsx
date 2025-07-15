@@ -142,7 +142,7 @@ export default function PopularGames() {
                             {isInCart(game.id) ? (
                               ""
                             ) : (
-                              <Link href={`/game/${game.id}`}>
+                              <Link href={`/games/${game.id}`}>
                                 <button className="w-full bg-moss hover:bg-pine text-slate font-bold py-2 px-2 rounded-lg transition-all duration-200 hover:scale-103 hover:text-ivory shadow-lg flex items-center justify-center gap-2 text-sm cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">
                                   <span>Voir plus</span>
                                 </button>

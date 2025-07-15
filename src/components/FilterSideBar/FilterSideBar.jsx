@@ -297,7 +297,7 @@ export default function FilterSideBar() {
                       key={`title-${game.id}`}
                       className="mb-2 hover:text-rosy">
                       <a
-                        href={`/game/${game.id}`}
+                        href={`/games/${game.id}`}
                         className="flex items-center gap-2">
                         <img
                           src={game.thumbnail}
@@ -334,7 +334,7 @@ export default function FilterSideBar() {
                       key={`genre-${game.id}`}
                       className="mb-2 hover:text-rosy">
                       <a
-                        href={`/game/${game.id}`}
+                        href={`/games/${game.id}`}
                         className="flex items-center gap-2">
                         <img
                           src={game.thumbnail}
@@ -375,7 +375,7 @@ export default function FilterSideBar() {
                         key={`publisher-${game.id}`}
                         className="mb-2 hover:text-rosy">
                         <a
-                          href={`/game/${game.id}`}
+                          href={`/games/${game.id}`}
                           className="flex items-center gap-2">
                           <img
                             src={game.thumbnail}
