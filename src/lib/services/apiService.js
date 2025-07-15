@@ -1,8 +1,8 @@
 import axios from "axios";
 
-// Configuration axios
+// Configuration Axios
 const api = axios.create({
-  baseURL: "/api/games", // Use the Next.js proxy
+  baseURL: "/api", // Prepend "/api" to all requests, which then get handled by Next.js built-in API routes system
   timeout: 15000,
   headers: {
     "Content-Type": "application/json",
@@ -23,10 +23,10 @@ export const apiService = {
   // Get all games
   async getAllGames() {
     try {
-      const response = await api.get("");
+      const response = await api.get("/games");
       return response.data;
     } catch (error) {
-      console.error("Erreur lors de la récupération des jeux:", error);
+      console.error("Error while fetching games:", error);
 
       // In case of error, throw the error to keep the loading active
       throw error;
@@ -36,10 +36,10 @@ export const apiService = {
   // Get a game by ID
   async getGameById(id) {
     try {
-      const response = await api.get(`/game?id=${id}`);
+      const response = await api.get(`/games/game?id=${id}`);
       return response.data;
     } catch (error) {
-      console.error(`Erreur lors de la récupération du jeu ${id}:`, error);
+      console.error(`Error while fetching game ${id}:`, error);
 
       // In case of error, throw the error to keep the loading active
       throw error;
@@ -49,13 +49,10 @@ export const apiService = {
   // Get games by platform
   async getGamesByPlatform(platform) {
     try {
-      const response = await api.get(`?platform=${platform}`);
+      const response = await api.get(`/games?platform=${platform}`);
       return response.data;
     } catch (error) {
-      console.error(
-        `Erreur lors de la récupération des jeux ${platform}:`,
-        error
-      );
+      console.error(`Error while fetching games ${platform}:`, error);
 
       // In case of error, throw the error to keep the loading active
       throw error;
@@ -65,10 +62,10 @@ export const apiService = {
   // Get games by genre
   async getGamesByGenre(genre) {
     try {
-      const response = await api.get(`?category=${genre}`);
+      const response = await api.get(`/games?category=${genre}`);
       return response.data;
     } catch (error) {
-      console.error(`Erreur lors de la récupération des jeux ${genre}:`, error);
+      console.error(`Error while fetching games ${genre}:`, error);
 
       // In case of error, throw the error to keep the loading active
       throw error;
@@ -78,26 +75,23 @@ export const apiService = {
   // Get popular games (random selection)
   async getPopularGames(limit = 16) {
     try {
-      const response = await api.get("");
+      const response = await api.get("/games");
       const games = response.data;
 
       // Shuffle the array and take the first games
       const shuffled = games.sort(() => 0.5 - Math.random());
       return shuffled.slice(0, limit);
     } catch (error) {
-      console.error(
-        "Erreur lors de la récupération des jeux populaires:",
-        error
-      );
+      console.error("Error while fetching popular games:", error);
 
       // In case of error, throw the error to keep the loading active
       throw error;
     }
   },
-  // Set random price of all games
+  // Get random price of all games
   async getRandomPriceOfAllGames() {
     try {
-      const response = await api.get("");
+      const response = await api.get("/games");
       const games = response.data;
 
       return games.map((game) => ({
@@ -105,7 +99,7 @@ export const apiService = {
         price: `${Math.floor(Math.random() * 96) + 5}`,
       }));
     } catch (error) {
-      console.error("Erreur lors de la récupération des prix des jeux:", error);
+      console.error("Error while fetching games prices:", error);
 
       // In case of error, throw the error to keep the loading active
       throw error;
@@ -115,17 +109,53 @@ export const apiService = {
   // Get discounted games (random selection)
   async getDiscountedGames(limit = 6) {
     try {
-      const response = await api.get("");
+      const response = await api.get("/games");
       const games = response.data;
 
       // Shuffle the array and take the first games
       const shuffled = games.sort(() => 0.5 - Math.random());
       return shuffled.slice(0, limit);
     } catch (error) {
-      console.error(
-        "Erreur lors de la récupération des jeux en promotion:",
-        error
-      );
+      console.error("Error while fetching discounted games:", error);
+
+      // In case of error, throw the error to keep the loading active
+      throw error;
+    }
+  },
+
+  // Add to cart
+  async addToCart(game) {
+    try {
+      const response = await api.post("/cart/add", game);
+      return response.data;
+    } catch (error) {
+      console.error("Error adding to cart:", error);
+
+      // In case of error, throw the error to keep the loading active
+      throw error;
+    }
+  },
+
+  // Remove from cart
+  async removeFromCart(gameId) {
+    try {
+      const response = await api.delete(`/cart/remove?gameId=${gameId}`);
+      return response.data;
+    } catch (error) {
+      console.error("Error removing from cart:", error);
+
+      // In case of error, throw the error to keep the loading active
+      throw error;
+    }
+  },
+
+  // Get cart
+  async getCart() {
+    try {
+      const response = await api.get("/cart");
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching cart:", error);
 
       // In case of error, throw the error to keep the loading active
       throw error;

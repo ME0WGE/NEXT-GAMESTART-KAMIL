@@ -1,3 +1,7 @@
+"use client";
+
+import Link from "next/link";
+
 export default function Game() {
   return (
     <>
@@ -5,7 +9,10 @@ export default function Game() {
         <h1>
           Découvrez nos promotions LUNAIRES et notre sélection des jeux vidéos!
         </h1>
-        <button>Cliquez-moi!</button>
+        or contact support
+        <Link href={"/"}>
+          <button>Cliquez-moi!</button>
+        </Link>
       </div>
     </>
   );
