@@ -71,9 +71,13 @@ export default function AllGames() {
           displayedGames.map((game) => (
             <div
               key={game.id}
-              className="bg-midnight/50 text-ivory p-4 rounded-sm flex flex-col gap-2 backdrop-blur-sm border border-ivory/10 hover:border-ivory/20 hover:bg-midnight/70 hover:rounded-bl-4xl hover:rounded-tr-4xl transition-all duration-200">
+              className="bg-midnight/50 text-ivory p-3 rounded-sm flex flex-col gap-2 backdrop-blur-sm border border-ivory/10 hover:border-ivory/20 hover:bg-midnight/70 hover:rounded-bl-4xl hover:rounded-tr-4xl hover:scale-101 transition-all duration-200">
               <div className="flex flex-row gap-2">
-                <img src={game.thumbnail} alt={game.title} className="w-1/5" />
+                <img
+                  src={game.thumbnail}
+                  alt={game.title}
+                  className="w-1/9 rounded-bl-xl rounded-tr-xl"
+                />
                 <div className="flex flex-row justify-between gap-2 w-full items-center">
                   <h2 className="text-sm text-ivory font-bold">{game.title}</h2>
                   <span className="text-sm text-ivory">
@@ -85,10 +89,10 @@ export default function AllGames() {
                       onClick={(e) => handleRemoveFromCart(game.id, e)}
                       disabled={removingGameId === game.id}>
                       {removingGameId === game.id ? (
-                        "Patientez..."
+                        "..."
                       ) : (
                         <>
-                          <Trash2 size={16} /> Retirer
+                          <Trash2 size={16} />
                         </>
                       )}
                     </button>
@@ -98,10 +102,10 @@ export default function AllGames() {
                       onClick={(e) => handleAddToCart(game, e)}
                       disabled={addingToCart || addingGameId === game.id}>
                       {addingGameId === game.id ? (
-                        "Patientez..."
+                        "..."
                       ) : (
                         <>
-                          <ShoppingCart size={16} /> Ajouter au panier
+                          <ShoppingCart size={16} />
                         </>
                       )}
                     </button>
