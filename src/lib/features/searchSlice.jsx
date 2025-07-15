@@ -1,22 +1,41 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const category = {
-  title: "",
-  genre: "",
-  publisher: "",
+const initialState = {
+  searchQuery: "",
+  filterCategory: "", // title, genre, or publisher
+  filteredGames: [],
+  isSearchActive: false,
 };
 
 const SearchSlice = createSlice({
   name: "search",
-  initialState: category,
+  initialState,
 
   reducers: {
-    setCategory: (state, action) => {
-      state.category = action.payload;
+    setSearchQuery: (state, action) => {
+      state.searchQuery = action.payload;
+      state.isSearchActive = action.payload.length > 0;
+    },
+    setFilterCategory: (state, action) => {
+      state.filterCategory = action.payload;
+    },
+    setFilteredGames: (state, action) => {
+      state.filteredGames = action.payload;
+    },
+    clearSearch: (state) => {
+      state.searchQuery = "";
+      state.filterCategory = "";
+      state.filteredGames = [];
+      state.isSearchActive = false;
     },
   },
 });
 
-export const { setCategory } = SearchSlice.actions;
+export const {
+  setSearchQuery,
+  setFilterCategory,
+  setFilteredGames,
+  clearSearch,
+} = SearchSlice.actions;
 
 export default SearchSlice.reducer;
