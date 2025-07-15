@@ -43,11 +43,11 @@ export const {
   setGames,
   setLoading,
   setMostPlayedGames,
+  setAllGames,
   setDiscountedGames,
+  setRandomPriceOfAllGames,
   setError,
   clearError,
-  setAllGames,
-  setRandomPriceOfAllGames,
 } = GameSlice.actions;
 
-export const GameReducer = GameSlice.reducer;
+export default GameSlice.reducer;

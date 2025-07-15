@@ -2,8 +2,9 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { X, Trash2, ShoppingBag, ShoppingCart } from "lucide-react";
+import { X, Trash2, ShoppingBag, ShoppingCart, Tag } from "lucide-react";
 import { removeFromCart, addToCart } from "@/lib/features/gameDetailsSlice";
+import { calculateCouponDiscount } from "@/lib/features/couponSlice";
 import Link from "next/link";
 
 export default function CartModal({ isOpen, onClose }) {
@@ -12,6 +13,9 @@ export default function CartModal({ isOpen, onClose }) {
   const modalRef = useRef(null);
   const [addingGameId, setAddingGameId] = useState(null);
   const [removingGameId, setRemovingGameId] = useState(null);
+
+  // Calculate coupon discount
+  const couponInfo = calculateCouponDiscount(cartItems);
 
   // Close modal when clicking outside
   useEffect(() => {
@@ -64,11 +68,15 @@ export default function CartModal({ isOpen, onClose }) {
     }
   };
 
-  // Calculate total price
-  const totalPrice = cartItems.reduce((total, item) => {
+  // Calculate total price (with coupon discount)
+  const subtotal = cartItems.reduce((total, item) => {
     const price = parseFloat(item.price || "0");
     return total + price;
   }, 0);
+
+  // Apply coupon discount if applicable
+  const discount = couponInfo.isApplicable ? couponInfo.discountAmount : 0;
+  const totalPrice = subtotal - discount;
 
   // If modal is not open, don't render anything
   if (!isOpen) return null;
@@ -112,50 +120,111 @@ export default function CartModal({ isOpen, onClose }) {
               </Link>
             </div>
           ) : (
-            <ul className="divide-y divide-ivory">
-              {cartItems.map((item) => (
-                <li key={item.id} className="py-4 flex">
-                  {/* Game Thumbnail */}
-                  <div className="h-16 w-28 flex-shrink-0">
-                    <img
-                      src={item.thumbnail}
-                      alt={item.title}
-                      className="h-full w-full object-cover rounded-md"
-                    />
+            <>
+              {/* Coupon Info - If close to qualifying or already qualified */}
+              {cartItems.length >= 3 && cartItems.length < 5 && (
+                <div className="bg-midnight/80 mb-4 p-3 rounded-lg border border-pine/20">
+                  <div className="flex items-center">
+                    <Tag className="text-pine mr-2" size={18} />
+                    <p className="text-sm text-ivory">
+                      <span className="font-bold text-pine">
+                        {5 - cartItems.length} jeux de plus
+                      </span>{" "}
+                      pour bénéficier du coupon "4+1 gratuit"!
+                    </p>
                   </div>
+                </div>
+              )}
 
-                  {/* Game Info */}
-                  <div className="ml-4 flex-1">
-                    <div className="flex justify-between">
-                      <h3 className="text-ivory font-medium">{item.title}</h3>
-                      <button
-                        onClick={() => handleRemoveFromCart(item.id)}
-                        disabled={removingGameId === item.id}
-                        className="text-red-400 hover:text-red-300 p-1 disabled:opacity-50">
-                        {removingGameId === item.id ? (
-                          <span className="animate-pulse">...</span>
-                        ) : (
-                          <Trash2 size={18} />
-                        )}
-                      </button>
+              <ul className="divide-y divide-ivory">
+                {cartItems.map((item) => (
+                  <li
+                    key={item.id}
+                    className={`py-4 flex ${
+                      couponInfo.isApplicable &&
+                      couponInfo.cheapestGame?.id === item.id
+                        ? "bg-pine/10 rounded-lg -mx-2 px-2"
+                        : ""
+                    }`}>
+                    {/* Game Thumbnail */}
+                    <div className="h-16 w-28 flex-shrink-0">
+                      <img
+                        src={item.thumbnail}
+                        alt={item.title}
+                        className="h-full w-full object-cover rounded-md"
+                      />
                     </div>
-                    <p className="text-ivory font-bold">{item.price}€</p>
-                  </div>
-                </li>
-              ))}
-            </ul>
+
+                    {/* Game Info */}
+                    <div className="ml-4 flex-1">
+                      <div className="flex justify-between">
+                        <h3 className="text-ivory font-medium">{item.title}</h3>
+                        <button
+                          onClick={() => handleRemoveFromCart(item.id)}
+                          disabled={removingGameId === item.id}
+                          className="text-red-400 hover:text-red-300 p-1 disabled:opacity-50">
+                          {removingGameId === item.id ? (
+                            <span className="animate-pulse">...</span>
+                          ) : (
+                            <Trash2 size={18} />
+                          )}
+                        </button>
+                      </div>
+                      <div className="flex items-center">
+                        {couponInfo.isApplicable &&
+                        couponInfo.cheapestGame?.id === item.id ? (
+                          <>
+                            <p className="line-through text-slate-400 mr-2">
+                              {item.price}€
+                            </p>
+                            <p className="text-moss font-bold">GRATUIT</p>
+                            <span className="bg-pine/20 text-pine text-xs px-2 py-1 rounded ml-2">
+                              Coupon 4+1
+                            </span>
+                          </>
+                        ) : (
+                          <p className="text-ivory font-bold">{item.price}€</p>
+                        )}
+                      </div>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </>
           )}
         </div>
 
         {/* Footer - Total & Checkout */}
         {cartItems.length > 0 && (
           <div className="absolute bottom-0 left-0 right-0 bg-slate-800 p-4 border-t border-ivory">
+            {/* Subtotal and Discount */}
+            <div className="space-y-2 mb-3">
+              <div className="flex justify-between items-center text-sm">
+                <span className="text-ivory">Sous-total</span>
+                <span className="text-ivory">{subtotal.toFixed(2)}€</span>
+              </div>
+
+              {couponInfo.isApplicable && (
+                <div className="flex justify-between items-center text-sm">
+                  <span className="flex items-center text-moss">
+                    <Tag size={14} className="mr-1" />
+                    Coupon "4+1 gratuit"
+                  </span>
+                  <span className="text-moss">-{discount.toFixed(2)}€</span>
+                </div>
+              )}
+
+              <div className="border-t border-slate-700 pt-2 mt-2"></div>
+            </div>
+
+            {/* Total */}
             <div className="flex justify-between items-center mb-4">
               <span className="text-ivory">Total</span>
               <span className="text-ivory font-bold text-xl">
                 {totalPrice.toFixed(2)}€
               </span>
             </div>
+
             <Link href="/checkout" className="w-full block">
               <button
                 onClick={onClose}

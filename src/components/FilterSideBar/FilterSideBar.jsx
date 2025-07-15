@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import SearchBar from "../SearchBar/SearchBar";
 import { useDispatch, useSelector } from "react-redux";
 import AllGames from "../AllGames/AllGames";
+import CouponSection from "../CouponSection/CouponSection";
 
 export default function FilterSideBar() {
   const dispatch = useDispatch();
@@ -30,6 +31,7 @@ export default function FilterSideBar() {
           <li className="text-start cursor-pointer">Genre</li>
           <li className="text-start cursor-pointer">Publisher</li>
         </ul>
+        <CouponSection />
       </div>
       <div>
         <AllGames />

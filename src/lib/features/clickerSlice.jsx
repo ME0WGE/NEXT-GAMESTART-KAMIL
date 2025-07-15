@@ -29,4 +29,5 @@ const ClickerSlice = createSlice({
 });
 
 export const { clickCookie, upgradeCookie, buyUpgrade } = ClickerSlice.actions;
-export const ClickerReducer = ClickerSlice.reducer;
+
+export default ClickerSlice.reducer;

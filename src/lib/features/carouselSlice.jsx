@@ -85,4 +85,4 @@ export const {
   clearError,
 } = CarouselSlice.actions;
 
-export const CarouselReducer = CarouselSlice.reducer;
+export default CarouselSlice.reducer;

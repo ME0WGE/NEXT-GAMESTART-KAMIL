@@ -107,4 +107,5 @@ export const {
   authSetDescription,
   authSetName,
 } = AuthSlice.actions;
-export const AuthReducer = AuthSlice.reducer;
+
+export default AuthSlice.reducer;

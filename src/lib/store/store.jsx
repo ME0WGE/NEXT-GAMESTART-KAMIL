@@ -1,18 +1,24 @@
+"use client";
+
 import { configureStore } from "@reduxjs/toolkit";
-import { AuthReducer } from "../features/authSlice";
-import { CarouselReducer } from "../features/carouselSlice";
-import { ClickerReducer } from "../features/clickerSlice";
-import { GameReducer } from "../features/gameSlice";
-import { SearchReducer } from "../features/searchSlice";
+import authReducer from "../features/authSlice";
+import carouselReducer from "../features/carouselSlice";
 import gameDetailsReducer from "../features/gameDetailsSlice";
+import searchReducer from "../features/searchSlice";
+import clickerReducer from "../features/clickerSlice";
+import gameReducer from "../features/gameSlice";
+import couponReducer from "../features/couponSlice";
 
 export const store = configureStore({
   reducer: {
-    auth: AuthReducer,
-    carousel: CarouselReducer,
-    clicker: ClickerReducer,
-    game: GameReducer,
-    search: SearchReducer,
+    auth: authReducer,
+    carousel: carouselReducer,
     gameDetails: gameDetailsReducer,
+    search: searchReducer,
+    clicker: clickerReducer,
+    game: gameReducer,
+    coupon: couponReducer,
   },
 });
+
+export default store;
