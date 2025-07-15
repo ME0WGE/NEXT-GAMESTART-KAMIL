@@ -10,11 +10,13 @@ import {
   addActiveFilter,
 } from "@/lib/features/searchSlice";
 import { useState, useEffect } from "react";
-import { ChevronRight, ChevronDown } from "lucide-react";
+import { ChevronRight, ChevronDown, ArrowRight } from "lucide-react";
 import { useAllGames } from "@/lib/hooks/useAllGames";
+import { useRouter } from "next/navigation";
 
 export default function FilterSideBar() {
   const dispatch = useDispatch();
+  const router = useRouter();
   const {
     searchQuery,
     filterCategory,
@@ -27,6 +29,10 @@ export default function FilterSideBar() {
   const [hoveredCategory, setHoveredCategory] = useState(null);
   const [availableGenres, setAvailableGenres] = useState([]);
   const [availablePublishers, setAvailablePublishers] = useState([]);
+  const [showAllItems, setShowAllItems] = useState({
+    genres: false,
+    publishers: false,
+  });
 
   // Extract unique genres and publishers from games data
   useEffect(() => {
@@ -56,6 +62,26 @@ export default function FilterSideBar() {
 
     // Filter games based on active filters
     filterGamesByActiveFilters();
+  };
+
+  // Function to handle "show all" clicks
+  const handleShowAllItems = (category) => {
+    setShowAllItems((prev) => ({
+      ...prev,
+      [category]: !prev[category],
+    }));
+  };
+
+  // Handle showing all search results for a specific category
+  const handleViewAllCategoryResults = (category) => {
+    // Set filter category to the specific category
+    dispatch(setFilterCategory(category));
+
+    // If there are specific games to filter by (like games of a specific genre),
+    // we could set those here. For now, we're just changing the category view.
+
+    // Could also navigate to a dedicated search results page
+    // router.push(`/search?category=${category}`);
   };
 
   // Filter games based on active filters and search query
@@ -158,8 +184,11 @@ export default function FilterSideBar() {
                 <h4 className="font-medium mb-2 pb-1 border-b border-ivory/20">
                   All Genres
                 </h4>
-                <ul className="grid grid-cols-2 gap-x-4 gap-y-2">
-                  {availableGenres.slice(0, 10).map((genre) => (
+                <ul className="grid grid-cols-3 gap-x-4 gap-y-2">
+                  {(showAllItems.genres
+                    ? availableGenres
+                    : availableGenres.slice(0, 20)
+                  ).map((genre) => (
                     <li
                       key={genre}
                       className="cursor-pointer text-sm hover:text-rosy truncate"
@@ -168,9 +197,19 @@ export default function FilterSideBar() {
                     </li>
                   ))}
                 </ul>
-                {availableGenres.length > 10 && (
-                  <div className="mt-2 pt-2 border-t border-ivory/10 text-sm text-ivory/60">
-                    +{availableGenres.length - 10} more genres
+                {availableGenres.length > 10 && !showAllItems.genres && (
+                  <div
+                    className="mt-2 pt-2 border-t border-ivory/10 text-sm text-ivory/60 cursor-pointer hover:text-rosy flex items-center"
+                    onClick={() => handleShowAllItems("genres")}>
+                    <span>+{availableGenres.length - 10} more genres</span>
+                    <ArrowRight size={12} className="ml-1" />
+                  </div>
+                )}
+                {showAllItems.genres && (
+                  <div
+                    className="mt-2 pt-2 border-t border-ivory/10 text-sm text-ivory/60 cursor-pointer hover:text-rosy flex items-center"
+                    onClick={() => handleShowAllItems("genres")}>
+                    <span>Show less</span>
                   </div>
                 )}
               </div>
@@ -199,12 +238,15 @@ export default function FilterSideBar() {
 
             {/* Expanded publisher list */}
             {hoveredCategory === "publisher" && (
-              <div className="absolute top-full left-0 bg-midnight/90 border border-ivory/20 rounded-md p-3 z-10 w-[20vw] max-h-80 overflow-y-auto shadow-lg backdrop-blur-sm">
+              <div className="absolute top-full left-0 bg-midnight/90 border border-ivory/20 rounded-md p-3 z-10 w-[30vw] max-h-80 overflow-y-auto shadow-lg backdrop-blur-sm">
                 <h4 className="font-medium mb-2 pb-1 border-b border-ivory/20">
                   All Publishers
                 </h4>
-                <ul className="grid grid-cols-2 gap-x-4 gap-y-2">
-                  {availablePublishers.slice(0, 10).map((publisher) => (
+                <ul className="grid grid-cols-3 gap-x-4 gap-y-2">
+                  {(showAllItems.publishers
+                    ? availablePublishers
+                    : availablePublishers.slice(0, 20)
+                  ).map((publisher) => (
                     <li
                       key={publisher}
                       className="cursor-pointer text-sm hover:text-rosy truncate"
@@ -213,9 +255,22 @@ export default function FilterSideBar() {
                     </li>
                   ))}
                 </ul>
-                {availablePublishers.length > 10 && (
-                  <div className="mt-2 pt-2 border-t border-ivory/10 text-sm text-ivory/60">
-                    +{availablePublishers.length - 10} more publishers
+                {availablePublishers.length > 10 &&
+                  !showAllItems.publishers && (
+                    <div
+                      className="mt-2 pt-2 border-t border-ivory/10 text-sm text-ivory/60 cursor-pointer hover:text-rosy flex items-center"
+                      onClick={() => handleShowAllItems("publishers")}>
+                      <span>
+                        +{availablePublishers.length - 10} more publishers
+                      </span>
+                      <ArrowRight size={12} className="ml-1" />
+                    </div>
+                  )}
+                {showAllItems.publishers && (
+                  <div
+                    className="mt-2 pt-2 border-t border-ivory/10 text-sm text-ivory/60 cursor-pointer hover:text-rosy flex items-center"
+                    onClick={() => handleShowAllItems("publishers")}>
+                    <span>Show less</span>
                   </div>
                 )}
               </div>
@@ -254,8 +309,13 @@ export default function FilterSideBar() {
                     </li>
                   ))}
                   {groupedResults.title.length > 5 && (
-                    <li className="text-sm text-ivory/70">
-                      +{groupedResults.title.length - 5} more matches
+                    <li
+                      className="text-sm text-ivory/70 hover:text-rosy cursor-pointer flex items-center"
+                      onClick={() => handleViewAllCategoryResults("title")}>
+                      <span>
+                        +{groupedResults.title.length - 5} more titles
+                      </span>
+                      <ArrowRight size={12} className="ml-1" />
                     </li>
                   )}
                 </ul>
@@ -289,8 +349,13 @@ export default function FilterSideBar() {
                     </li>
                   ))}
                   {groupedResults.genre.length > 5 && (
-                    <li className="text-sm text-ivory/70">
-                      +{groupedResults.genre.length - 5} more matches
+                    <li
+                      className="text-sm text-ivory/70 hover:text-rosy cursor-pointer flex items-center"
+                      onClick={() => handleViewAllCategoryResults("genre")}>
+                      <span>
+                        +{groupedResults.genre.length - 5} more genres
+                      </span>
+                      <ArrowRight size={12} className="ml-1" />
                     </li>
                   )}
                 </ul>
@@ -325,8 +390,15 @@ export default function FilterSideBar() {
                       </li>
                     ))}
                     {groupedResults.publisher.length > 5 && (
-                      <li className="text-sm text-ivory/70">
-                        +{groupedResults.publisher.length - 5} more matches
+                      <li
+                        className="text-sm text-ivory/70 hover:text-rosy cursor-pointer flex items-center"
+                        onClick={() =>
+                          handleViewAllCategoryResults("publisher")
+                        }>
+                        <span>
+                          +{groupedResults.publisher.length - 5} more publishers
+                        </span>
+                        <ArrowRight size={12} className="ml-1" />
                       </li>
                     )}
                   </ul>
