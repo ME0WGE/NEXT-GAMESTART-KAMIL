@@ -15,11 +15,7 @@ import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faGoogle,
-  faFacebook,
-  faGithub,
-} from "@fortawesome/free-brands-svg-icons";
+import { faGoogle, faGithub } from "@fortawesome/free-brands-svg-icons";
 import Google from "next-auth/providers/google";
 
 // Toast Message
@@ -50,14 +46,6 @@ function SocialLoginButtons() {
         onClick={() => signIn(Google)}>
         <FontAwesomeIcon icon={faGoogle} className="text-red-500 text-lg" />
         <span>Continuer avec Google</span>
-      </button>
-
-      {/* Facebook Button */}
-      <button
-        className="flex items-center justify-center gap-3 w-full py-3 px-4 bg-[#1877F2] text-white rounded-lg hover:bg-[#166FE5] hover:shadow-md transition-all duration-200 font-medium"
-        onClick={() => console.log("Facebook login not implemented yet")}>
-        <FontAwesomeIcon icon={faFacebook} className="text-white text-lg" />
-        <span>Continuer avec Facebook</span>
       </button>
 
       {/* GitHub Button */}
