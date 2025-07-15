@@ -1,5 +1,4 @@
 import FilterSideBar from "@/components/FilterSideBar/FilterSideBar";
-import SearchBar from "@/components/SearchBar/SearchBar";
 
 export default function Library() {
   return (
@@ -10,10 +9,3 @@ export default function Library() {
     </>
   );
 }
-
-/**
- * Layout:
- * 1. Filter side bar
- * 2. SearchBar
- * 3. Game cards section
- */

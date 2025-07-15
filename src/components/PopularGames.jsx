@@ -38,8 +38,9 @@ export default function PopularGames() {
   };
 
   // Handle add to cart
-  const handleAddToCart = async (game) => {
+  const handleAddToCart = async (game, e) => {
     try {
+      e.stopPropagation();
       setAddingGameId(game.id);
       // Add price if not present
       const gameWithPrice = {
@@ -151,7 +152,7 @@ export default function PopularGames() {
                             <button
                               onClick={(e) => {
                                 e.stopPropagation();
-                                handleAddToCart(game);
+                                handleAddToCart(game, e);
                               }}
                               disabled={
                                 addingToCart ||

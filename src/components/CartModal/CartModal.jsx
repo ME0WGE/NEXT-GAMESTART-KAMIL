@@ -1,15 +1,17 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { X, Trash2, ShoppingBag } from "lucide-react";
-import { removeFromCart } from "@/lib/features/gameDetailsSlice";
+import { X, Trash2, ShoppingBag, ShoppingCart } from "lucide-react";
+import { removeFromCart, addToCart } from "@/lib/features/gameDetailsSlice";
 import Link from "next/link";
 
 export default function CartModal({ isOpen, onClose }) {
   const { cartItems } = useSelector((state) => state.gameDetails);
   const dispatch = useDispatch();
   const modalRef = useRef(null);
+  const [addingGameId, setAddingGameId] = useState(null);
+  const [removingGameId, setRemovingGameId] = useState(null);
 
   // Close modal when clicking outside
   useEffect(() => {
@@ -28,12 +30,37 @@ export default function CartModal({ isOpen, onClose }) {
     };
   }, [isOpen, onClose]);
 
+  // Check if a game is in the cart
+  const isInCart = (gameId) => {
+    return cartItems.some((item) => item.id === gameId);
+  };
+
+  // Handle adding item to cart
+  const handleAddToCart = async (game) => {
+    try {
+      setAddingGameId(game.id);
+      // Add price if not present
+      const gameWithPrice = {
+        ...game,
+        price: game.price || `${Math.floor(Math.random() * 96) + 5}.99`,
+      };
+      await dispatch(addToCart(gameWithPrice)).unwrap();
+    } catch (error) {
+      console.error("Failed to add to cart:", error);
+    } finally {
+      setAddingGameId(null);
+    }
+  };
+
   // Handle removing item from cart
   const handleRemoveFromCart = async (gameId) => {
     try {
+      setRemovingGameId(gameId);
       await dispatch(removeFromCart(gameId)).unwrap();
     } catch (error) {
       console.error("Failed to remove from cart:", error);
+    } finally {
+      setRemovingGameId(null);
     }
   };
 
@@ -103,8 +130,13 @@ export default function CartModal({ isOpen, onClose }) {
                       <h3 className="text-ivory font-medium">{item.title}</h3>
                       <button
                         onClick={() => handleRemoveFromCart(item.id)}
-                        className="text-red-400 hover:text-red-300 p-1">
-                        <Trash2 size={18} />
+                        disabled={removingGameId === item.id}
+                        className="text-red-400 hover:text-red-300 p-1 disabled:opacity-50">
+                        {removingGameId === item.id ? (
+                          <span className="animate-pulse">...</span>
+                        ) : (
+                          <Trash2 size={18} />
+                        )}
                       </button>
                     </div>
                     <p className="text-ivory font-bold">{item.price}€</p>
