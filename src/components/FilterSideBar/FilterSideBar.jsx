@@ -124,12 +124,12 @@ export default function FilterSideBar() {
     <div className="text-ivory">
       <div className="flex items-center gap-2 mb-4 text-rosy">
         <Filter size={18} />
-        <h2 className="text-lg font-semibold">Filters</h2>
+        <h2 className="text-lg font-semibold">Filtres</h2>
       </div>
 
       <div className="mb-5">
         <span className="text-sm text-ivory/80 font-medium mb-2 block">
-          Filter By
+          Filtrer par
         </span>
         <ul className="flex flex-col gap-1.5">
           <li
@@ -139,7 +139,7 @@ export default function FilterSideBar() {
                 : "hover:bg-midnight/50 text-ivory/90"
             }`}
             onClick={() => handleFilterCategory("title")}>
-            Title
+            Titre
           </li>
 
           {/* Genre category with hover expansion */}
@@ -166,7 +166,7 @@ export default function FilterSideBar() {
             {hoveredCategory === "genre" && (
               <div className="absolute left-full top-0 ml-2 bg-midnight/90 border border-ivory/20 rounded-md p-3 z-10 w-64 max-h-80 overflow-y-auto shadow-lg backdrop-blur-sm">
                 <h4 className="font-medium mb-2 pb-1 border-b border-ivory/20 text-sm">
-                  All Genres
+                  Tous les genres
                 </h4>
                 <ul className="grid grid-cols-1 gap-1">
                   {(showAllItems.genres
@@ -185,7 +185,7 @@ export default function FilterSideBar() {
                   <div
                     className="mt-2 pt-2 border-t border-ivory/10 text-xs text-ivory/60 cursor-pointer hover:text-rosy flex items-center"
                     onClick={() => handleShowAllItems("genres")}>
-                    <span>+{availableGenres.length - 15} more genres</span>
+                    <span>+{availableGenres.length - 15} plus de genres</span>
                     <ArrowRight size={10} className="ml-1" />
                   </div>
                 )}
@@ -193,7 +193,7 @@ export default function FilterSideBar() {
                   <div
                     className="mt-2 pt-2 border-t border-ivory/10 text-xs text-ivory/60 cursor-pointer hover:text-rosy flex items-center"
                     onClick={() => handleShowAllItems("genres")}>
-                    <span>Show less</span>
+                    <span>Afficher moins</span>
                   </div>
                 )}
               </div>
@@ -212,7 +212,7 @@ export default function FilterSideBar() {
                   : "hover:bg-midnight/50 text-ivory/90"
               }`}
               onClick={() => handleFilterCategory("publisher")}>
-              <span>Publisher</span>
+              <span>Éditeur</span>
               {hoveredCategory === "publisher" ? (
                 <ChevronDown size={14} />
               ) : (
@@ -224,7 +224,7 @@ export default function FilterSideBar() {
             {hoveredCategory === "publisher" && (
               <div className="absolute left-full top-0 ml-2 bg-midnight/90 border border-ivory/20 rounded-md p-3 z-10 w-64 max-h-80 overflow-y-auto shadow-lg backdrop-blur-sm">
                 <h4 className="font-medium mb-2 pb-1 border-b border-ivory/20 text-sm">
-                  All Publishers
+                  Tous les éditeurs
                 </h4>
                 <ul className="grid grid-cols-1 gap-1">
                   {(showAllItems.publishers
@@ -245,7 +245,7 @@ export default function FilterSideBar() {
                       className="mt-2 pt-2 border-t border-ivory/10 text-xs text-ivory/60 cursor-pointer hover:text-rosy flex items-center"
                       onClick={() => handleShowAllItems("publishers")}>
                       <span>
-                        +{availablePublishers.length - 15} more publishers
+                        +{availablePublishers.length - 15} plus d'éditeurs
                       </span>
                       <ArrowRight size={10} className="ml-1" />
                     </div>
@@ -254,7 +254,7 @@ export default function FilterSideBar() {
                   <div
                     className="mt-2 pt-2 border-t border-ivory/10 text-xs text-ivory/60 cursor-pointer hover:text-rosy flex items-center"
                     onClick={() => handleShowAllItems("publishers")}>
-                    <span>Show less</span>
+                    <span>Afficher moins</span>
                   </div>
                 )}
               </div>
@@ -267,7 +267,7 @@ export default function FilterSideBar() {
       {isSearchActive && filteredGames.length > 0 && (
         <div className="mb-6 bg-midnight/30 p-4 rounded-lg border border-ivory/10">
           <h3 className="font-semibold text-sm mb-2">
-            Search Results ({filteredGames.length})
+            Résultats de la recherche ({filteredGames.length})
           </h3>
 
           {/* Results are now displayed in the main AllGames component */}
@@ -278,7 +278,7 @@ export default function FilterSideBar() {
         filteredGames.length === 0 &&
         searchQuery.trim() !== "" && (
           <div className="bg-midnight/30 p-4 rounded-lg text-ivory/80 text-sm mb-6">
-            No results found for "{searchQuery}"
+            Aucun résultat trouvé pour "{searchQuery}"
           </div>
         )}
     </div>

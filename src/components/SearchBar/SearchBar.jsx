@@ -151,7 +151,7 @@ export default function SearchBar() {
           id="search"
           value={searchQuery}
           onChange={handleChange}
-          placeholder="Search for games, genres, publishers..."
+          placeholder="Rechercher des jeux, genres, éditeurs..."
           className={`w-full bg-midnight/70 text-ivory px-4 py-3 rounded-l-lg border ${
             isFocused
               ? "border-rosy/70 ring-2 ring-rosy/30"
@@ -175,7 +175,7 @@ export default function SearchBar() {
         <div className="mt-3 flex flex-wrap gap-2 items-center">
           <div className="flex items-center text-ivory/70">
             <Filter size={14} className="mr-1" />
-            <span className="text-sm">Active filters:</span>
+            <span className="text-sm">Filtres actifs:</span>
           </div>
 
           {activeFilters.map((filter, index) => (
@@ -198,7 +198,7 @@ export default function SearchBar() {
             <button
               onClick={handleClearSearch}
               className="text-xs text-ivory/60 hover:text-ivory underline ml-1">
-              Clear all
+              Effacer tout
             </button>
           )}
         </div>

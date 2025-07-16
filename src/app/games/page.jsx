@@ -12,10 +12,10 @@ export default function Games() {
         <div className="mb-8 text-center">
           <div className="flex items-center justify-center mb-2">
             <Gamepad className="text-rosy mr-2" size={28} />
-            <h1 className="text-3xl font-bold text-ivory">Game Catalog</h1>
+            <h1 className="text-3xl font-bold text-ivory">Catalogue de jeux</h1>
           </div>
           <p className="text-ivory/70">
-            Discover our collection of amazing games
+            Découvrez notre collection de jeux incroyables
           </p>
         </div>
 

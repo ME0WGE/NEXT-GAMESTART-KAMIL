@@ -25,11 +25,11 @@ export default function CouponSection() {
               </div>
               <div>
                 <h3 className="text-xl font-bold mb-1">
-                  Special Offer: Buy 4, Get 1 Free
+                  Offre spéciale: Achetez 4, obtenez 1 gratuit
                 </h3>
                 <p className="text-ivory/80 max-w-md">
-                  Add 5 or more games to your cart and get the cheapest one
-                  completely free!
+                  Ajoutez 5 ou plus de jeux à votre panier et obtenez le jeu le
+                  moins cher gratuitement!
                 </p>
               </div>
             </div>
@@ -42,23 +42,23 @@ export default function CouponSection() {
                 {cartItems.length < 5 ? (
                   <div className="text-center">
                     <p className="text-ivory/70 text-sm">
-                      Add{" "}
+                      Ajouter{" "}
                       <span className="font-bold text-ivory text-lg">
                         {5 - cartItems.length}
                       </span>{" "}
-                      more
+                      plus
                     </p>
-                    <p className="text-ivory/90">games to qualify</p>
+                    <p className="text-ivory/90">jeux pour être qualifié</p>
                   </div>
                 ) : (
                   <div className="text-center">
-                    <p className="text-pine font-bold">Coupon Applied!</p>
+                    <p className="text-pine font-bold">Coupon appliqué!</p>
                     <div className="flex items-center gap-2">
                       <span className="line-through text-ivory/50">
                         {couponInfo.cheapestGame?.price}€
                       </span>
                       <span className="bg-moss/20 text-moss font-bold px-2 py-0.5 rounded">
-                        FREE
+                        GRATUIT
                       </span>
                     </div>
                   </div>

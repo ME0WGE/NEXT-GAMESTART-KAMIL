@@ -96,7 +96,7 @@ export default function AllGames() {
     return (
       <div className="text-center py-12">
         <p className="text-red-400">
-          Failed to load games. Please try again later.
+          Erreur lors du chargement des jeux. Veuillez réessayer plus tard.
         </p>
       </div>
     );
@@ -106,7 +106,7 @@ export default function AllGames() {
     return (
       <div className="text-center py-12">
         <p className="text-ivory/70">
-          No games found matching your search criteria.
+          Aucun jeu correspondant à votre recherche.
         </p>
       </div>
     );
@@ -116,7 +116,7 @@ export default function AllGames() {
     <div>
       {isSearchActive && (
         <h2 className="text-xl font-semibold mb-6 text-ivory border-b border-ivory/20 pb-3">
-          Search Results ({filteredGames.length})
+          Résultats de la recherche ({filteredGames.length})
         </h2>
       )}
 
@@ -169,7 +169,7 @@ export default function AllGames() {
                         "..."
                       ) : (
                         <>
-                          <Trash2 size={14} /> Remove
+                          <Trash2 size={14} /> Retirer
                         </>
                       )}
                     </button>
@@ -182,7 +182,7 @@ export default function AllGames() {
                         "..."
                       ) : (
                         <>
-                          <ShoppingCart size={14} /> Add to cart
+                          <ShoppingCart size={14} /> Ajouter au panier
                         </>
                       )}
                     </button>
@@ -200,7 +200,7 @@ export default function AllGames() {
           <button
             onClick={handleShowMore}
             className="bg-rosy hover:bg-plum text-ivory px-5 py-2 rounded-lg transition-colors duration-300 flex items-center gap-2">
-            Show More
+            Voir Plus
           </button>
         )}
 
@@ -208,7 +208,7 @@ export default function AllGames() {
           <button
             onClick={handleShowLess}
             className="bg-midnight hover:bg-midnight/80 text-ivory border border-ivory/20 px-5 py-2 rounded-lg transition-colors duration-300">
-            Show Less
+            voir Moins
           </button>
         )}
       </div>
