@@ -4,14 +4,7 @@ import { useAllGames } from "@/lib/hooks/useAllGames";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart, removeFromCart } from "@/lib/features/gameDetailsSlice";
-import {
-  ShoppingCart,
-  Trash2,
-  Star,
-  Clock,
-  User,
-  Calendar,
-} from "lucide-react";
+import { ShoppingCart, Trash2, User, Calendar } from "lucide-react";
 import Link from "next/link";
 
 export default function AllGames() {
@@ -87,16 +80,6 @@ export default function AllGames() {
     setDisplayCount(initialGamesCount);
   };
 
-  // Random rating generator for demonstration
-  const getRandomRating = () => {
-    return (Math.floor(Math.random() * 50) + 50) / 10; // Generate between 5.0 and 10.0
-  };
-
-  // Random release year generator
-  const getRandomYear = () => {
-    return Math.floor(Math.random() * 5) + 2019; // 2019-2023
-  };
-
   if (loading) {
     return (
       <div className="flex justify-center items-center py-12">
@@ -168,8 +151,6 @@ export default function AllGames() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {gamesToDisplay.map((game) => {
-          const rating = getRandomRating();
-          const year = getRandomYear();
           const imageState = imageLoadStates[game.id] || "loading";
 
           return (
@@ -195,27 +176,6 @@ export default function AllGames() {
 
                   {/* Gradient Overlay */}
                   <div className="absolute inset-0 bg-gradient-to-t from-midnight/80 via-transparent to-transparent"></div>
-
-                  {/* Rating Badge */}
-                  <div className="absolute top-4 left-4 bg-midnight/90 backdrop-blur-sm px-3 py-1 rounded-full border border-ivory/20">
-                    <div className="flex items-center gap-1">
-                      <Star
-                        size={12}
-                        className="text-amber-400 fill-amber-400"
-                      />
-                      <span className="text-ivory text-sm font-medium">
-                        {rating}
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Year Badge */}
-                  <div className="absolute top-4 right-4 bg-midnight/90 backdrop-blur-sm px-3 py-1 rounded-full border border-ivory/20">
-                    <div className="flex items-center gap-1">
-                      <Calendar size={12} className="text-ivory/60" />
-                      <span className="text-ivory text-sm">{year}</span>
-                    </div>
-                  </div>
 
                   {/* Cart Status Indicator */}
                   {isInCart(game.id) && (

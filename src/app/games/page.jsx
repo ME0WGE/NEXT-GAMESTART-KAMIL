@@ -21,29 +21,30 @@ export default function Games() {
           </p>
         </div>
 
-        {/* Search and Filter section */}
-        <div className="mb-8 sm:mb-12 flex flex-col xl:flex-row gap-6 lg:gap-8 items-start">
-          {/* Filter component */}
-          <div className="w-full xl:w-96 shrink-0">
-            <div className="bg-midnight/70 backdrop-blur-md p-6 rounded-xl border border-ivory/10 shadow-lg hover-lift">
+        {/* Search bar - Full width */}
+        <div className="mb-8 sm:mb-12">
+          <SearchBar />
+        </div>
+
+        {/* Main content area with sidebar */}
+        <div className="flex flex-col lg:flex-row gap-8">
+          {/* Sidebar with filters and coupon */}
+          <aside className="w-full lg:w-80 xl:w-96 shrink-0 space-y-6">
+            {/* Filters */}
+            <div className="bg-midnight/70 backdrop-blur-md p-6 rounded-xl border border-ivory/10 shadow-lg hover-lift sticky top-24">
               <FilterSideBar />
             </div>
-          </div>
 
-          {/* Search bar */}
+            {/* Coupon section - Under filters */}
+            <div className="lg:sticky lg:top-[500px]">
+              <CouponSection />
+            </div>
+          </aside>
+
+          {/* Games grid - Main content */}
           <div className="flex-1 min-w-0">
-            <SearchBar />
+            <AllGames />
           </div>
-        </div>
-
-        {/* Coupon banner */}
-        <div className="mb-8 sm:mb-12">
-          <CouponSection />
-        </div>
-
-        {/* Games grid - full width */}
-        <div className="w-full">
-          <AllGames />
         </div>
       </div>
     </main>
