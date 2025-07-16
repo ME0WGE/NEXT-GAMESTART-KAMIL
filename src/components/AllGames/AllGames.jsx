@@ -128,7 +128,7 @@ export default function AllGames() {
                 <img
                   src={game.thumbnail}
                   alt={game.title}
-                  className="w-full aspect-video object-cover object-center group-hover:scale-105 transition-transform duration-500"
+                  className="w-full aspect-video object-cover object-center group-hover:scale-105 transition-transform duration-200"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-midnight to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </div>
@@ -138,26 +138,17 @@ export default function AllGames() {
                   <h3 className="font-bold text-ivory group-hover:text-rosy transition-colors duration-300 line-clamp-2">
                     {game.title}
                   </h3>
-                  <div className="flex items-center bg-midnight/70 px-2 py-1 rounded-md">
-                    <Star size={14} className="text-rosy mr-1 fill-rosy" />
-                    <span className="text-xs font-medium">
-                      {getRandomRating().toFixed(1)}
-                    </span>
-                  </div>
                 </div>
 
                 <div className="flex items-center text-xs text-ivory/60 mb-4">
                   <span className="bg-plum/20 rounded px-2 py-1">
                     {game.genre}
                   </span>
-                  <span className="mx-2">•</span>
-                  <Clock size={12} className="mr-1" />
-                  <span>{Math.floor(Math.random() * 100) + 2}h</span>
                 </div>
 
                 <div className="flex justify-between items-center mt-auto pt-2">
                   <div className="font-bold text-lg text-ivory">
-                    ${game.price?.toString().replace(",", ".") || "29.99"}
+                    {game.price?.toString().replace(",", ".") || "29.99"}€
                   </div>
 
                   {isInCart(game.id) ? (

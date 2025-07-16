@@ -17,7 +17,7 @@ export default function PriceDisplay({ gameId, className = "" }) {
           </span>
         </>
       ) : (
-        <span>${price}</span>
+        <span>{price}€</span>
       )}
     </div>
   );

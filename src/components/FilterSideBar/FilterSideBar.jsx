@@ -164,14 +164,14 @@ export default function FilterSideBar() {
 
             {/* Expanded genre list */}
             {hoveredCategory === "genre" && (
-              <div className="absolute left-full top-0 ml-2 bg-midnight/90 border border-ivory/20 rounded-md p-3 z-10 w-64 max-h-80 overflow-y-auto shadow-lg backdrop-blur-sm">
+              <div className="absolute left-full top-0 bg-midnight/90 border border-ivory/20 rounded-md p-3 z-10 w-80 max-h-[400px] overflow-y-auto shadow-lg backdrop-blur-sm">
                 <h4 className="font-medium mb-2 pb-1 border-b border-ivory/20 text-sm">
                   Tous les genres
                 </h4>
-                <ul className="grid grid-cols-1 gap-1">
+                <ul className="grid grid-cols-2 gap-x-3 gap-y-1">
                   {(showAllItems.genres
                     ? availableGenres
-                    : availableGenres.slice(0, 15)
+                    : availableGenres.slice(0, 30)
                   ).map((genre) => (
                     <li
                       key={genre}
@@ -181,11 +181,11 @@ export default function FilterSideBar() {
                     </li>
                   ))}
                 </ul>
-                {availableGenres.length > 15 && !showAllItems.genres && (
+                {availableGenres.length > 30 && !showAllItems.genres && (
                   <div
                     className="mt-2 pt-2 border-t border-ivory/10 text-xs text-ivory/60 cursor-pointer hover:text-rosy flex items-center"
                     onClick={() => handleShowAllItems("genres")}>
-                    <span>+{availableGenres.length - 15} plus de genres</span>
+                    <span>+{availableGenres.length - 30} plus de genres</span>
                     <ArrowRight size={10} className="ml-1" />
                   </div>
                 )}
@@ -222,14 +222,14 @@ export default function FilterSideBar() {
 
             {/* Expanded publisher list */}
             {hoveredCategory === "publisher" && (
-              <div className="absolute left-full top-0 ml-2 bg-midnight/90 border border-ivory/20 rounded-md p-3 z-10 w-64 max-h-80 overflow-y-auto shadow-lg backdrop-blur-sm">
+              <div className="absolute left-full top-0 bg-midnight/90 border border-ivory/20 rounded-md p-3 z-10 w-80 max-h-[400px] overflow-y-auto shadow-lg backdrop-blur-sm">
                 <h4 className="font-medium mb-2 pb-1 border-b border-ivory/20 text-sm">
                   Tous les éditeurs
                 </h4>
-                <ul className="grid grid-cols-1 gap-1">
+                <ul className="grid grid-cols-2 gap-x-3 gap-y-1">
                   {(showAllItems.publishers
                     ? availablePublishers
-                    : availablePublishers.slice(0, 15)
+                    : availablePublishers.slice(0, 30)
                   ).map((publisher) => (
                     <li
                       key={publisher}
@@ -239,13 +239,13 @@ export default function FilterSideBar() {
                     </li>
                   ))}
                 </ul>
-                {availablePublishers.length > 15 &&
+                {availablePublishers.length > 30 &&
                   !showAllItems.publishers && (
                     <div
                       className="mt-2 pt-2 border-t border-ivory/10 text-xs text-ivory/60 cursor-pointer hover:text-rosy flex items-center"
                       onClick={() => handleShowAllItems("publishers")}>
                       <span>
-                        +{availablePublishers.length - 15} plus d'éditeurs
+                        +{availablePublishers.length - 30} plus d'éditeurs
                       </span>
                       <ArrowRight size={10} className="ml-1" />
                     </div>
