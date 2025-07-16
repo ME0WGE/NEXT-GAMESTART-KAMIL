@@ -21,23 +21,30 @@ export default function Games() {
           </p>
         </div>
 
-        {/* Search bar - Full width */}
-        <div className="mb-8 sm:mb-12">
+        {/* Search bar - Mobile only, hidden on desktop */}
+        <div className="mb-8 sm:mb-12 lg:hidden">
           <SearchBar />
         </div>
 
-        {/* Main content area with sidebar */}
+        {/* Main content area with sticky sidebar */}
         <div className="flex flex-col lg:flex-row gap-8">
-          {/* Sidebar with filters and coupon */}
-          <aside className="w-full lg:w-80 xl:w-96 shrink-0 space-y-6">
-            {/* Filters */}
-            <div className="bg-midnight/70 backdrop-blur-md p-6 rounded-xl border border-ivory/10 shadow-lg hover-lift sticky top-24">
-              <FilterSideBar />
-            </div>
+          {/* Sticky sidebar with search, filters and coupon */}
+          <aside className="w-full lg:w-80 xl:w-96 shrink-0">
+            <div className="sticky top-22 space-y-6 max-h-[calc(100vh-2rem)] overflow-y-auto custom-scrollbar">
+              {/* Search bar - Desktop only, at top of sticky sidebar */}
+              <div className="hidden lg:block">
+                <SearchBar />
+              </div>
 
-            {/* Coupon section - Under filters */}
-            <div className="lg:sticky lg:top-[500px]">
-              <CouponSection />
+              {/* Filters */}
+              <div className="bg-midnight/70 backdrop-blur-md p-6 rounded-xl border border-ivory/10 shadow-lg hover-lift">
+                <FilterSideBar />
+              </div>
+
+              {/* Coupon section */}
+              <div>
+                <CouponSection />
+              </div>
             </div>
           </aside>
 
