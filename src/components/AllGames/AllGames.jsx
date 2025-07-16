@@ -106,7 +106,7 @@ export default function AllGames() {
     return (
       <div className="text-center py-12">
         <p className="text-ivory/70">
-          Aucun jeu correspondant à votre recherche.
+          Aucun jeu ne correspond à votre recherche.
         </p>
       </div>
     );

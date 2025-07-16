@@ -9,7 +9,7 @@ import {
   clearSearch,
   removeActiveFilter,
 } from "@/lib/features/searchSlice";
-import { Search, X, Filter } from "lucide-react";
+import { Search, X, Filter, Sparkles } from "lucide-react";
 
 export default function SearchBar() {
   const dispatch = useDispatch();
@@ -17,6 +17,7 @@ export default function SearchBar() {
     (state) => state.search
   );
   const [isFocused, setIsFocused] = useState(false);
+  const [isSearching, setIsSearching] = useState(false);
   const { randomPriceOfAllGames } = useAllGames();
 
   // Keep the input focused as long as there's at least 1 char
@@ -26,7 +27,14 @@ export default function SearchBar() {
 
   useEffect(() => {
     if (activeFilters.length > 0 || searchQuery) {
-      filterGames();
+      setIsSearching(true);
+      const debounceTimer = setTimeout(() => {
+        filterGames();
+        setIsSearching(false);
+      }, 300);
+      return () => clearTimeout(debounceTimer);
+    } else {
+      setIsSearching(false);
     }
   }, [activeFilters, searchQuery]);
 
@@ -37,6 +45,16 @@ export default function SearchBar() {
     if (value.trim() === "" && activeFilters.length === 0) {
       dispatch(clearSearch());
       return;
+    }
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      filterGames();
+    }
+    if (e.key === "Escape") {
+      dispatch(clearSearch());
     }
   };
 
@@ -125,6 +143,7 @@ export default function SearchBar() {
 
   const handleClearSearch = () => {
     dispatch(clearSearch());
+    setIsFocused(false);
   };
 
   const handleRemoveFilter = (type, value) => {
@@ -134,73 +153,146 @@ export default function SearchBar() {
   const getFilterColor = (type) => {
     switch (type) {
       case "genre":
-        return "bg-moss/90 text-ivory";
+        return "bg-moss/20 text-moss border border-moss/30 hover:bg-moss/30";
       case "publisher":
-        return "bg-plum/90 text-ivory";
+        return "bg-plum/20 text-plum border border-plum/30 hover:bg-plum/30";
       default:
-        return "bg-rosy/90 text-ivory";
+        return "bg-rosy/20 text-rosy border border-rosy/30 hover:bg-rosy/30";
+    }
+  };
+
+  const getSearchPlaceholder = () => {
+    switch (filterCategory) {
+      case "title":
+        return "Rechercher par titre...";
+      case "genre":
+        return "Rechercher par genre...";
+      case "publisher":
+        return "Rechercher par éditeur...";
+      default:
+        return "Rechercher des jeux, genres, éditeurs...";
     }
   };
 
   return (
-    <div className="w-full">
-      <div className="relative flex">
-        <input
-          type="text"
-          name="search"
-          id="search"
-          value={searchQuery}
-          onChange={handleChange}
-          placeholder="Rechercher des jeux, genres, éditeurs..."
-          className={`w-full bg-midnight/70 text-ivory px-4 py-3 rounded-l-lg border ${
+    <div className="w-full space-y-4">
+      {/* Search Input */}
+      <div className="relative">
+        <div
+          className={`relative flex items-center rounded-xl overflow-hidden transition-all duration-300 ${
             isFocused
-              ? "border-rosy/70 ring-2 ring-rosy/30"
-              : "border-ivory/20 focus:border-rosy/70 focus:ring-2 focus:ring-rosy/30"
-          } placeholder-ivory/50 focus:outline-none transition-all duration-300`}
-        />
-        {searchQuery && (
+              ? "ring-2 ring-rosy/50 shadow-lg shadow-rosy/10"
+              : "hover:shadow-md hover:shadow-midnight/20"
+          }`}>
+          <div className="absolute left-4 z-10">
+            {isSearching ? (
+              <div className="animate-spin">
+                <Sparkles size={20} className="text-rosy" />
+              </div>
+            ) : (
+              <Search size={20} className="text-ivory/60" />
+            )}
+          </div>
+
+          <input
+            type="text"
+            name="search"
+            id="search"
+            value={searchQuery}
+            onChange={handleChange}
+            onKeyDown={handleKeyDown}
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setIsFocused(searchQuery.length > 0)}
+            placeholder={getSearchPlaceholder()}
+            className={`w-full bg-midnight/80 text-ivory pl-12 pr-24 py-4 text-lg placeholder-ivory/50 focus:outline-none transition-all duration-300 ${
+              isFocused ? "bg-midnight/90" : ""
+            }`}
+          />
+
+          {/* Clear button */}
+          {searchQuery && (
+            <button
+              onClick={handleClearSearch}
+              className="absolute right-16 top-1/2 transform -translate-y-1/2 text-ivory/60 hover:text-ivory transition-colors duration-200 p-2 hover:bg-midnight/50 rounded-full"
+              aria-label="Effacer la recherche">
+              <X size={18} />
+            </button>
+          )}
+
+          {/* Search button */}
           <button
-            onClick={handleClearSearch}
-            className="absolute right-16 top-1/2 transform -translate-y-1/2 text-ivory/70 hover:text-ivory">
-            <X size={16} />
+            onClick={filterGames}
+            disabled={isSearching}
+            className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-rosy hover:bg-pine transition-colors duration-300 text-ivory px-4 py-2 rounded-lg flex items-center justify-center disabled:opacity-50 shadow-lg">
+            {isSearching ? (
+              <div className="animate-pulse">
+                <Search size={18} />
+              </div>
+            ) : (
+              <Search size={18} />
+            )}
           </button>
+        </div>
+
+        {/* Search category indicator */}
+        {filterCategory !== "title" && (
+          <div className="absolute -top-2 left-4 bg-midnight px-2 py-1 rounded-md text-xs text-ivory/80">
+            Recherche par {filterCategory === "genre" ? "genre" : "éditeur"}
+          </div>
         )}
-        <button className="bg-rosy hover:bg-pine transition-colors duration-300 text-ivory px-5 py-3 rounded-r-lg flex items-center justify-center">
-          <Search size={18} />
-        </button>
       </div>
 
       {/* Active filters */}
       {activeFilters.length > 0 && (
-        <div className="mt-3 flex flex-wrap gap-2 items-center">
-          <div className="flex items-center text-ivory/70">
-            <Filter size={14} className="mr-1" />
-            <span className="text-sm">Filtres actifs:</span>
+        <div className="space-y-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center text-ivory/70">
+              <Filter size={16} className="mr-2" />
+              <span className="text-sm font-medium">Filtres actifs</span>
+              <span className="ml-2 text-xs bg-rosy/10 text-rosy px-2 py-1 rounded-full">
+                {activeFilters.length}
+              </span>
+            </div>
+
+            {activeFilters.length > 1 && (
+              <button
+                onClick={handleClearSearch}
+                className="text-xs text-ivory/60 hover:text-ivory underline transition-colors">
+                Effacer tout
+              </button>
+            )}
           </div>
 
-          {activeFilters.map((filter, index) => (
-            <div
-              key={`${filter.type}-${filter.value}-${index}`}
-              className={`${getFilterColor(
-                filter.type
-              )} px-3 py-1 rounded-md text-xs flex items-center gap-2 shadow-sm`}>
-              <span className="font-medium capitalize">{filter.type}:</span>
-              <span>{filter.value}</span>
-              <button
-                onClick={() => handleRemoveFilter(filter.type, filter.value)}
-                className="hover:text-ivory/80 transition-colors ml-1">
-                <X size={14} />
-              </button>
-            </div>
-          ))}
+          <div className="flex flex-wrap gap-2">
+            {activeFilters.map((filter, index) => (
+              <div
+                key={`${filter.type}-${filter.value}-${index}`}
+                className={`${getFilterColor(
+                  filter.type
+                )} px-3 py-2 rounded-lg text-sm flex items-center gap-2 shadow-sm transition-all duration-200`}>
+                <span className="font-medium capitalize">{filter.type}:</span>
+                <span className="truncate max-w-32">{filter.value}</span>
+                <button
+                  onClick={() => handleRemoveFilter(filter.type, filter.value)}
+                  className="hover:bg-red-500/20 hover:text-red-400 p-1 rounded-full transition-colors ml-1"
+                  aria-label={`Supprimer le filtre ${filter.type}: ${filter.value}`}>
+                  <X size={14} />
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
-          {activeFilters.length > 0 && (
-            <button
-              onClick={handleClearSearch}
-              className="text-xs text-ivory/60 hover:text-ivory underline ml-1">
-              Effacer tout
-            </button>
-          )}
+      {/* Search tips */}
+      {isFocused && !searchQuery && activeFilters.length === 0 && (
+        <div className="bg-midnight/30 p-4 rounded-lg border border-ivory/10 text-ivory/70 text-sm">
+          <p className="mb-2 font-medium">💡 Astuces de recherche:</p>
+          <ul className="space-y-1 text-xs">
+            <li>• Tapez le nom d'un jeu, genre ou éditeur</li>
+            <li>• Utilisez les filtres pour affiner votre recherche</li>
+            <li>• Appuyez sur Entrée pour rechercher ou Échap pour effacer</li>
+          </ul>
         </div>
       )}
     </div>
