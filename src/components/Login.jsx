@@ -43,7 +43,7 @@ function SocialLoginButtons() {
       {/* Google Button */}
       <button
         className="flex items-center justify-center gap-3 w-full py-3 px-4 bg-white text-gray-700 rounded-lg border border-gray-300 hover:bg-gray-50 hover:shadow-md transition-all duration-200 font-medium"
-        onClick={() => signIn(Google)}>
+        onClick={() => signIn("google")}>
         <FontAwesomeIcon icon={faGoogle} className="text-red-500 text-lg" />
         <span>Continuer avec Google</span>
       </button>
@@ -153,7 +153,7 @@ export default function Login() {
     return () => clearTimeout(toastTimeout.current);
   }, [auth.isError, auth.error.login, auth.error.register]);
 
-  // If user is authenticated with NextAuth (GitHub)
+  // If user is authenticated with NextAuth (Google - GitHub)
   if (session?.user) {
     return (
       <>

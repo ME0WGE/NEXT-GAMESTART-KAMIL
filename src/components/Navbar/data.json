@@ -4,12 +4,12 @@
     "url": "/"
   },
   {
-    "name": "CookieClicker",
-    "url": "/cookie-clicker"
-  },
-  {
     "name": "Tout les jeux",
     "url": "/games"
+  },
+  {
+    "name": "Ma bibliothèque",
+    "url": "/library"
   },
   {
     "name": "Profile",

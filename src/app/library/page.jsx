@@ -1,6 +1,6 @@
 "use client";
 
-export default function MyLibrary() {
+export default function Library() {
   return (
     <>
       <div className="pt-20">

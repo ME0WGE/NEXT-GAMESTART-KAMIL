@@ -1,8 +1,12 @@
 # GameStart
 
+[![wakatime](https://wakatime.com/badge/user/0c2f7862-9823-4099-98a5-9f50e857da53/project/1b6b4449-f321-44f8-b50e-0aa01621b88e.svg)](https://wakatime.com/badge/user/0c2f7862-9823-4099-98a5-9f50e857da53/project/1b6b4449-f321-44f8-b50e-0aa01621b88e)
+
 ## Videos
 
 https://www.freetogame.com//g/{id}/videoplayback.webm
+
+---
 
 ## Color Palette
 
@@ -14,6 +18,8 @@ https://www.freetogame.com//g/{id}/videoplayback.webm
 --color-copper: #b87333;
 --color-midnight: #031c26;
 --color-slate: #475569;
+
+---
 
 ## API Endpoints
 
