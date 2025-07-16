@@ -225,13 +225,24 @@ export default function CartModal({ isOpen, onClose }) {
               </span>
             </div>
 
-            <Link href="/checkout" className="w-full block">
+            <div className="space-y-3">
+              <Link href="/checkout" className="w-full block">
+                <button
+                  onClick={onClose}
+                  className="w-full bg-moss hover:bg-pine text-ivory py-3 rounded-lg font-bold transition-colors">
+                  Passer la commande
+                </button>
+              </Link>
+
               <button
-                onClick={onClose}
-                className="w-full bg-moss hover:bg-pine text-ivory py-3 rounded-lg font-bold transition-colors">
-                Passer la commande
+                onClick={() =>
+                  cartItems.forEach((item) => handleRemoveFromCart(item.id))
+                }
+                className="w-full text-red-400 hover:text-red-300 text-sm flex items-center justify-center py-2">
+                <Trash2 size={14} className="mr-1" />
+                Vider le panier
               </button>
-            </Link>
+            </div>
           </div>
         )}
       </div>

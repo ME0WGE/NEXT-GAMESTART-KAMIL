@@ -1,20 +1,66 @@
+"use client";
+
+import { useSelector } from "react-redux";
+import Link from "next/link";
+import Image from "next/image";
+import { useSession } from "next-auth/react";
+
 export default function ProfileOrders() {
+  const { user } = useSelector((state) => state.auth);
+  const { data: session } = useSession();
+
+  const purchasedGames = user.purchasedGames || [];
+
+  if (!user.isConnected && !session) {
+    return null;
+  }
+
+  if (purchasedGames.length === 0) {
+    return (
+      <section className="profile-orders-section bg-neutral-900 rounded-lg p-6 shadow-inner">
+        <h3 className="profile-orders-title text-lg font-semibold mb-3 text-neutral-100">
+          Purchased Games
+        </h3>
+        <div className="text-neutral-400 p-4 bg-neutral-800 rounded">
+          You haven't purchased any games yet.
+        </div>
+      </section>
+    );
+  }
+
   return (
-    <section className="profile-orders-section bg-neutral-900 rounded-lg p-4 shadow-inner">
-      <h3 className="profile-orders-title text-lg font-semibold mb-3 text-neutral-100">
-        Orders
+    <section className="profile-orders-section bg-neutral-900 rounded-lg p-6 shadow-inner">
+      <h3 className="profile-orders-title text-lg font-semibold mb-4 text-neutral-100">
+        Purchased Games
       </h3>
-      <ul className="profile-orders-list space-y-3">
-        <li className="order-item bg-neutral-700 rounded px-4 py-2 text-neutral-200 shadow-sm">
-          Order #12345 - Game Title 1 - 2024-06-01
-        </li>
-        <li className="order-item bg-neutral-700 rounded px-4 py-2 text-neutral-200 shadow-sm">
-          Order #12346 - Game Title 2 - 2024-05-15
-        </li>
-        <li className="order-item bg-neutral-700 rounded px-4 py-2 text-neutral-200 shadow-sm">
-          Order #12347 - Game Title 3 - 2024-04-20
-        </li>
-      </ul>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {purchasedGames.map((game) => (
+          <Link
+            href={`/games/${game.id}`}
+            key={game.id}
+            className="game-card bg-neutral-800 rounded overflow-hidden shadow-md hover:shadow-lg transition-all hover:translate-y-[-2px]">
+            <div className="relative h-40 w-full">
+              <img
+                src={
+                  game.image ||
+                  "https://via.placeholder.com/300x180?text=Game+Image"
+                }
+                alt={game.title}
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <div className="p-3">
+              <h4 className="font-medium text-white">{game.title}</h4>
+              <div className="flex justify-between items-center mt-1">
+                <span className="text-sm text-neutral-400">Purchased</span>
+                <span className="text-sm font-medium text-pine">
+                  ${game.price}
+                </span>
+              </div>
+            </div>
+          </Link>
+        ))}
+      </div>
     </section>
   );
 }

@@ -1,17 +1,28 @@
 "use client";
 
-import { authSetDescription, authSetName } from "@/lib/features/authSlice";
+import { updateUserDescription } from "@/lib/features/authSlice";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { X } from "lucide-react";
+import { useSession } from "next-auth/react";
 
 export default function ProfileInfo() {
   const [profileModal, setProfileModal] = useState(false);
-  const [toggle, setToggle] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    description: "",
+  });
   const dispatch = useDispatch();
-  const description = useSelector((state) => state.auth.user.description);
-  const name = useSelector((state) => state.auth.user.name);
+  const user = useSelector((state) => state.auth.user);
+  const isLoading = useSelector((state) => state.auth.isLoading);
+  const { data: session } = useSession();
+
+  // Initialize form data from user when modal opens
   const handleModal = () => {
-    setToggle(!toggle);
+    setFormData({
+      name: user.name || session?.user?.name || "",
+      description: user.description || "",
+    });
     setProfileModal(!profileModal);
   };
 
@@ -22,67 +33,94 @@ export default function ProfileInfo() {
   };
 
   const handleSave = (e) => {
-    setProfileModal(!profileModal);
-    dispatch(authSetDescription(e.target.description.value));
-    dispatch(authSetName(e.target.name.value));
+    e.preventDefault();
+
+    if (!user.id) {
+      alert("Please wait for user data to synchronize");
+      return;
+    }
+
+    dispatch(
+      updateUserDescription({
+        userId: user.id,
+        name: formData.name,
+        description: formData.description,
+      })
+    ).then(() => {
+      setProfileModal(false);
+    });
   };
 
-  const handleChangeDescription = (e) => {
-    dispatch(authSetDescription(e.target.value));
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
   };
 
-  const handleChangeName = (e) => {
-    dispatch(authSetName(e.target.value));
-  };
+  const isOAuthUser = !!session && !user.id;
 
   if (profileModal) {
     return (
       <div
-        className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
+        className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
         onClick={handleClickOutside}>
-        <div className="bg-neutral-800 p-4 rounded-md">
-          <h2 className="text-neutral-100 text-lg font-semibold mb-4">
-            Edit Profile
-          </h2>
-          <form
-            className="space-y-4"
-            onSubmit={(e) => {
-              e.preventDefault();
-              handleSave(e);
-            }}>
-            <div className="flex flex-col gap-2">
-              <label htmlFor="name" className="text-neutral-300">
-                Name
-              </label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                className="bg-neutral-800 text-neutral-100 px-4 py-2 rounded-md border border-neutral-700 focus:outline-none focus:border-rosy"
-                placeholder="Enter your name"
-                onChange={handleChangeName}
-                value={name}
-              />
-            </div>
-            <div className="flex flex-col gap-2">
-              <label htmlFor="description" className="text-neutral-300">
-                Description
-              </label>
-              <textarea
-                id="description"
-                name="description"
-                className="bg-neutral-800 text-neutral-100 px-4 py-2 rounded-md border border-neutral-700 focus:outline-none focus:border-rosy"
-                placeholder="Enter your description"
-                onChange={handleChangeDescription}
-                value={description}
-              />
-            </div>
+        <div className="bg-neutral-800 p-6 rounded-md w-full max-w-md shadow-lg">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-neutral-100 text-xl font-semibold">
+              Edit Profile
+            </h2>
             <button
-              type="submit"
-              className="bg-rosy text-neutral-900 px-4 py-2 rounded-md hover:bg-rosy/80 transition-colors duration-200 text-center font-mono text-sm w-full cursor-pointer">
-              Save Changes
+              className="text-neutral-400 hover:text-neutral-100"
+              onClick={() => setProfileModal(false)}>
+              <X size={20} />
             </button>
-          </form>
+          </div>
+          {isOAuthUser ? (
+            <div className="text-neutral-300 p-4 bg-neutral-700/50 rounded-md">
+              <p>
+                Your profile is being synchronized. Please try again in a
+                moment.
+              </p>
+            </div>
+          ) : (
+            <form className="space-y-4" onSubmit={handleSave}>
+              <div className="flex flex-col gap-2">
+                <label htmlFor="name" className="text-neutral-300">
+                  Name
+                </label>
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  className="bg-neutral-700 text-neutral-100 px-4 py-2 rounded-md border border-neutral-600 focus:outline-none focus:border-rosy"
+                  placeholder="Enter your name"
+                  onChange={handleChange}
+                  value={formData.name}
+                />
+              </div>
+              <div className="flex flex-col gap-2">
+                <label htmlFor="description" className="text-neutral-300">
+                  Description
+                </label>
+                <textarea
+                  id="description"
+                  name="description"
+                  className="bg-neutral-700 text-neutral-100 px-4 py-2 rounded-md border border-neutral-600 focus:outline-none focus:border-rosy"
+                  placeholder="Enter your description"
+                  onChange={handleChange}
+                  value={formData.description}
+                  rows={4}
+                />
+              </div>
+              <button
+                type="submit"
+                disabled={isLoading}
+                className="bg-rosy text-neutral-900 px-4 py-2 rounded-md hover:bg-rosy/80 transition-colors duration-200 text-center font-mono text-sm w-full cursor-pointer">
+                {isLoading ? "Saving..." : "Save Changes"}
+              </button>
+            </form>
+          )}
         </div>
       </div>
     );

@@ -1,0 +1,37 @@
+[
+  {
+    "id": "1",
+    "name": "admin",
+    "email": "a@a.a",
+    "password": "123",
+    "description": "",
+    "purchasedGames": [
+      {
+        "id": 319,
+        "title": "Ace Online",
+        "thumbnail": "https://www.freetogame.com/g/319/thumbnail.jpg",
+        "short_description": "A free to play fast action 3D sci-fi MMO where players control space fighters jets.",
+        "game_url": "https://www.freetogame.com/open/ace-online",
+        "genre": "Shooter",
+        "platform": "PC (Windows)",
+        "publisher": "Suba Games",
+        "developer": "MasangSoft",
+        "release_date": "2008-08-29",
+        "freetogame_profile_url": "https://www.freetogame.com/ace-online",
+        "price": "40.99",
+        "quantity": 1
+      }
+    ],
+    "isConnected": true
+  },
+  {
+    "id": "1752661271688",
+    "name": "Kamil Baldyga",
+    "email": "baldygakamil@gmail.com",
+    "avatar_url": "https://lh3.googleusercontent.com/a/ACg8ocIIqXIapriwLzJTe7o4wigxVgVJrCFkTSZGO7RZCEjSKHXkew=s96-c",
+    "description": "",
+    "purchasedGames": [],
+    "isConnected": false,
+    "oauthProvider": "oauth"
+  }
+]

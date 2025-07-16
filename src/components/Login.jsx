@@ -1,13 +1,15 @@
 "use client";
 
 import {
-  authLogin,
-  authLogout,
-  authRegister,
-  authResetError,
-  authSetMail,
-  authSetName,
+  authSetEmail,
   authSetPassword,
+  authLogout,
+  authResetError,
+  authSetName,
+  fetchUserByCredentials,
+  registerUser,
+  authClearSuccessMessage,
+  authSetUserFromSession,
 } from "@/lib/features/authSlice";
 import { User, X } from "lucide-react";
 import { signIn, signOut, useSession } from "next-auth/react";
@@ -16,7 +18,8 @@ import { useDispatch, useSelector } from "react-redux";
 import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGoogle, faGithub } from "@fortawesome/free-brands-svg-icons";
-import Google from "next-auth/providers/google";
+import { useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
 // Toast Message
 function Toast({ message, type, onClose }) {
@@ -64,6 +67,9 @@ export default function Login() {
   const auth = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const { data: session, status } = useSession();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirect = searchParams.get("redirect");
 
   const [modal, setModal] = useState(false);
   const [profileModal, setProfileModal] = useState(false);
@@ -82,10 +88,16 @@ export default function Login() {
     setToggle(!toggle);
   };
 
-  // If user is connected, close modal
+  // If user is connected, close modal and redirect if needed
   useEffect(() => {
-    setModal(false);
-  }, [auth.user.isConnected]);
+    if (auth.user.isConnected || session) {
+      setModal(false);
+
+      if (redirect) {
+        router.push(redirect);
+      }
+    }
+  }, [auth.user.isConnected, session, redirect, router]);
 
   // Close modal if clicked outside of its body
   useEffect(() => {
@@ -114,6 +126,9 @@ export default function Login() {
   // Display welcome toast when user has succesfully connected
   useEffect(() => {
     if (session?.user) {
+      // Update Redux store with session user info
+      dispatch(authSetUserFromSession(session.user));
+
       setToast({
         show: true,
         message: `Bienvenue, ${session.user.name || session.user.username}`,
@@ -135,7 +150,23 @@ export default function Login() {
       );
     }
     return () => clearTimeout(toastTimeout.current);
-  }, [session?.user, auth.user.isConnected]);
+  }, [session?.user, auth.user.isConnected, dispatch]);
+
+  // Display success messages as toasts
+  useEffect(() => {
+    if (auth.successMessage) {
+      setToast({
+        show: true,
+        message: auth.successMessage,
+        type: "success",
+      });
+      toastTimeout.current = setTimeout(() => {
+        setToast((t) => ({ ...t, show: false }));
+        dispatch(authClearSuccessMessage());
+      }, 3000);
+    }
+    return () => clearTimeout(toastTimeout.current);
+  }, [auth.successMessage, dispatch]);
 
   // Display error toast
   useEffect(() => {
@@ -320,7 +351,13 @@ export default function Login() {
               className="flex flex-col gap-3"
               onSubmit={(e) => {
                 e.preventDefault();
-                dispatch(authRegister());
+                dispatch(
+                  registerUser({
+                    name: auth.setName,
+                    email: auth.setEmail,
+                    password: auth.setPassword,
+                  })
+                );
               }}>
               <input
                 className="border border-gray-700 bg-gray-800 text-gray-100 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-pine placeholder-gray-400"
@@ -335,21 +372,22 @@ export default function Login() {
                 required
                 type="email"
                 placeholder="Mail"
-                value={auth.setMail}
-                onChange={(e) => dispatch(authSetMail(e.target.value))}
+                value={auth.setEmail}
+                onChange={(e) => dispatch(authSetEmail(e.target.value))}
               />
               <input
                 className="border border-gray-700 bg-gray-800 text-gray-100 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-pine placeholder-gray-400"
                 required
-                type="current-password"
+                type="password"
                 placeholder="Password"
                 value={auth.setPassword}
                 onChange={(e) => dispatch(authSetPassword(e.target.value))}
               />
               <button
                 className="bg-pine text-white rounded py-2 mt-2 hover:bg-pine/85 transition"
-                type="submit">
-                S'inscrire
+                type="submit"
+                disabled={auth.isLoading}>
+                {auth.isLoading ? "Chargement..." : "S'inscrire"}
               </button>
             </form>
             <p className="text-center text-gray-400 text-sm">ou</p>
@@ -388,28 +426,34 @@ export default function Login() {
               className="flex flex-col gap-3"
               onSubmit={(e) => {
                 e.preventDefault();
-                dispatch(authLogin());
+                dispatch(
+                  fetchUserByCredentials({
+                    email: auth.setEmail,
+                    password: auth.setPassword,
+                  })
+                );
               }}>
               <input
                 className="border border-gray-700 bg-gray-800 text-gray-100 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-pine placeholder-gray-400"
                 required
                 type="email"
                 placeholder="Mail"
-                value={auth.setMail}
-                onChange={(e) => dispatch(authSetMail(e.target.value))}
+                value={auth.setEmail}
+                onChange={(e) => dispatch(authSetEmail(e.target.value))}
               />
               <input
                 className="border border-gray-700 bg-gray-800 text-gray-100 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-pine placeholder-gray-400"
                 required
-                type="current-password"
+                type="password"
                 placeholder="Password"
                 value={auth.setPassword}
                 onChange={(e) => dispatch(authSetPassword(e.target.value))}
               />
               <button
                 className="bg-pine text-white rounded py-2 mt-2 hover:bg-pine/85 transition"
-                type="submit">
-                Se connecter
+                type="submit"
+                disabled={auth.isLoading}>
+                {auth.isLoading ? "Chargement..." : "Se connecter"}
               </button>
             </form>
             <p className="text-center text-gray-400 text-sm">ou</p>

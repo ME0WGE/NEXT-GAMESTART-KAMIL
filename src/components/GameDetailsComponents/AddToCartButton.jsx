@@ -12,8 +12,21 @@ export default function AddToCartButton({ gameId, className = "" }) {
   const dispatch = useDispatch();
   const { currentGame, addingToCart, hasAlreadyBoughtGame, error, cartItems } =
     useSelector((state) => state.gameDetails);
+  const { user } = useSelector((state) => state.auth);
   const [showError, setShowError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isOwned, setIsOwned] = useState(false);
+
+  // Check if game is already owned
+  useEffect(() => {
+    if (user.purchasedGames && user.purchasedGames.length > 0) {
+      setIsOwned(
+        user.purchasedGames.some((game) => game.id === currentGame?.id)
+      );
+    } else {
+      setIsOwned(false);
+    }
+  }, [user.purchasedGames, currentGame]);
 
   // Initialize cart items if empty
   useEffect(() => {
@@ -58,24 +71,28 @@ export default function AddToCartButton({ gameId, className = "" }) {
 
   if (!currentGame) return null;
 
-  return (
-    <div className="flex flex-col">
-      <button
-        onClick={handleClick}
-        disabled={addingToCart || isLoading}
-        className={`bg-rosy hover:bg-pine text-white px-6 py-3 rounded-lg transition duration-200 disabled:opacity-50 ${className}`}>
-        {isLoading
-          ? "Processing..."
-          : hasAlreadyBoughtGame
-          ? "Remove from Cart"
-          : "Add to Cart"}
-      </button>
+  // If game is owned, show Owned badge instead of button
+  if (isOwned) {
+    return (
+      <div
+        className={`${className} inline-flex items-center justify-center px-4 py-2 bg-pine text-white rounded-md`}>
+        Owned
+      </div>
+    );
+  }
 
-      {showError && (
-        <div className="text-red-500 mt-2 text-sm">
-          There was an error with your cart. Please try again.
-        </div>
-      )}
-    </div>
+  const inCart = cartItems.some((item) => item.id === currentGame.id);
+
+  return (
+    <button
+      onClick={handleClick}
+      disabled={isLoading || isOwned}
+      className={`${className} ${
+        inCart ? "bg-red-500 hover:bg-red-600" : "bg-pine hover:bg-pine/90"
+      } text-white px-4 py-2 rounded-md transition-colors ${
+        isLoading ? "opacity-75 cursor-not-allowed" : ""
+      }`}>
+      {isLoading ? "Loading..." : inCart ? "Remove from Cart" : "Add to Cart"}
+    </button>
   );
 }
