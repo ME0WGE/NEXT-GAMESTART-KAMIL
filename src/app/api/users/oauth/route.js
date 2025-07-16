@@ -31,7 +31,8 @@ export async function POST(request) {
 
     // Check if the OAuth user already exists in our database (by email)
     const existingUserIndex = users.findIndex(
-      (user) => user.email === oauthUser.email
+      (user) =>
+        user.email === oauthUser.email && user.oauthProvider === "google"
     );
 
     let userId;
@@ -45,12 +46,12 @@ export async function POST(request) {
         email: oauthUser.email,
         avatar_url: oauthUser.image || existingUser.avatar_url,
         isConnected: true,
-        oauthProvider: oauthUser.provider || existingUser.oauthProvider,
+        oauthProvider: "google",
       };
 
       userId = existingUser.id;
       console.log(
-        "Updated existing OAuth user:",
+        "Updated existing Google user:",
         users[existingUserIndex].email
       );
     } else {
@@ -63,12 +64,12 @@ export async function POST(request) {
         description: "",
         purchasedGames: [],
         isConnected: true,
-        oauthProvider: oauthUser.provider || "oauth",
+        oauthProvider: "google",
       };
 
       users.push(newUser);
       userId = newUser.id;
-      console.log("Created new OAuth user:", newUser.email);
+      console.log("Created new Google user:", newUser.email);
     }
 
     // Save users to file

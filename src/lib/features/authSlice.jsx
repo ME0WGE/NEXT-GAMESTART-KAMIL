@@ -123,10 +123,10 @@ export const syncOAuthUser = createAsyncThunk(
       console.log("Performing OAuth sync for:", sessionUser.email);
 
       const oauthData = {
-        name: sessionUser.name || sessionUser.username || "User",
+        name: sessionUser.name || "User",
         email: sessionUser.email,
-        image: sessionUser.image || sessionUser.avatar_url || null,
-        provider: sessionUser.provider || "oauth",
+        image: sessionUser.image || null,
+        provider: sessionUser.provider || "google",
       };
 
       const response = await fetch("/api/users/oauth", {

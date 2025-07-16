@@ -61,8 +61,7 @@ export default function AuthProvider({ children }) {
     if (user.provider) return user.provider;
     if (!user.email) return "oauth";
 
-    if (user.email.includes("github")) return "github";
-    if (user.email.includes("google")) return "google";
+    if (user.email.includes("google") || user.picture) return "google";
     return "oauth";
   }
 

@@ -17,7 +17,7 @@ import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faGoogle, faGithub } from "@fortawesome/free-brands-svg-icons";
+import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
 
@@ -49,14 +49,6 @@ function SocialLoginButtons() {
         onClick={() => signIn("google")}>
         <FontAwesomeIcon icon={faGoogle} className="text-red-500 text-lg" />
         <span>Continuer avec Google</span>
-      </button>
-
-      {/* GitHub Button */}
-      <button
-        className="flex items-center justify-center gap-3 w-full py-3 px-4 bg-gray-900 text-white rounded-lg hover:bg-gray-800 hover:shadow-md transition-all duration-200 font-medium border border-gray-700"
-        onClick={() => signIn("github")}>
-        <FontAwesomeIcon icon={faGithub} className="text-white text-lg" />
-        <span>Continuer avec GitHub</span>
       </button>
     </div>
   );
@@ -184,7 +176,7 @@ export default function Login() {
     return () => clearTimeout(toastTimeout.current);
   }, [auth.isError, auth.error.login, auth.error.register]);
 
-  // If user is authenticated with NextAuth (Google - GitHub)
+  // If user is authenticated with NextAuth (Google)
   if (session?.user) {
     return (
       <>
