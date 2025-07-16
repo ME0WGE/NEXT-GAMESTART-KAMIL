@@ -1,16 +1,13 @@
 "use client";
 
-import SearchBar from "../SearchBar/SearchBar";
 import { useDispatch, useSelector } from "react-redux";
-import AllGames from "../AllGames/AllGames";
-import CouponSection from "../CouponSection/CouponSection";
 import {
   setFilterCategory,
   setFilteredGames,
   addActiveFilter,
 } from "@/lib/features/searchSlice";
 import { useState, useEffect } from "react";
-import { ChevronRight, ChevronDown, ArrowRight } from "lucide-react";
+import { ChevronRight, ChevronDown, ArrowRight, Filter } from "lucide-react";
 import { useAllGames } from "@/lib/hooks/useAllGames";
 import { useRouter } from "next/navigation";
 
@@ -34,7 +31,6 @@ export default function FilterSideBar() {
     publishers: false,
   });
 
-  // Extract unique genres and publishers from games data
   useEffect(() => {
     if (randomPriceOfAllGames && randomPriceOfAllGames.length > 0) {
       // Extract unique genres
@@ -76,12 +72,6 @@ export default function FilterSideBar() {
   const handleViewAllCategoryResults = (category) => {
     // Set filter category to the specific category
     dispatch(setFilterCategory(category));
-
-    // If there are specific games to filter by (like games of a specific genre),
-    // we could set those here. For now, we're just changing the category view.
-
-    // Could also navigate to a dedicated search results page
-    // router.push(`/search?category=${category}`);
   };
 
   // Filter games based on active filters and search query
@@ -130,29 +120,23 @@ export default function FilterSideBar() {
     dispatch(setFilteredGames(filteredResults));
   };
 
-  // Group filtered games by their match type
-  const groupedResults = filteredGames.reduce((acc, game) => {
-    if (!acc[game.matchType]) {
-      acc[game.matchType] = [];
-    }
-    // Only add unique games (by ID)
-    if (!acc[game.matchType].some((g) => g.id === game.id)) {
-      acc[game.matchType].push(game);
-    }
-    return acc;
-  }, {});
-
   return (
-    <>
-      <div className="flex flex-col text-start text-ivory">
-        <SearchBar />
-        <span className="mb-2 font-semibold">Filter By</span>
-        <ul className="flex flex-col w-max gap-2 mb-4">
+    <div className="text-ivory">
+      <div className="flex items-center gap-2 mb-4 text-rosy">
+        <Filter size={18} />
+        <h2 className="text-lg font-semibold">Filters</h2>
+      </div>
+
+      <div className="mb-5">
+        <span className="text-sm text-ivory/80 font-medium mb-2 block">
+          Filter By
+        </span>
+        <ul className="flex flex-col gap-1.5">
           <li
-            className={`text-start cursor-pointer px-3 py-1 rounded ${
+            className={`text-start cursor-pointer px-3 py-1.5 rounded-md text-sm transition-colors ${
               filterCategory === "title"
                 ? "bg-rosy text-white"
-                : "hover:bg-midnight/50"
+                : "hover:bg-midnight/50 text-ivory/90"
             }`}
             onClick={() => handleFilterCategory("title")}>
             Title
@@ -164,50 +148,50 @@ export default function FilterSideBar() {
             onMouseEnter={() => setHoveredCategory("genre")}
             onMouseLeave={() => setHoveredCategory(null)}>
             <div
-              className={`text-start cursor-pointer px-3 py-1 rounded flex items-center justify-between ${
+              className={`text-start cursor-pointer px-3 py-1.5 rounded-md text-sm transition-colors flex items-center justify-between ${
                 filterCategory === "genre"
                   ? "bg-rosy text-white"
-                  : "hover:bg-midnight/50"
+                  : "hover:bg-midnight/50 text-ivory/90"
               }`}
               onClick={() => handleFilterCategory("genre")}>
               <span>Genre</span>
               {hoveredCategory === "genre" ? (
-                <ChevronDown size={16} />
+                <ChevronDown size={14} />
               ) : (
-                <ChevronRight size={16} />
+                <ChevronRight size={14} />
               )}
             </div>
 
             {/* Expanded genre list */}
             {hoveredCategory === "genre" && (
-              <div className="absolute top-full left-0 bg-midnight/90 border border-ivory/20 rounded-md p-3 z-10 w-[20vw] max-h-80 overflow-y-auto shadow-lg backdrop-blur-sm">
-                <h4 className="font-medium mb-2 pb-1 border-b border-ivory/20">
+              <div className="absolute left-full top-0 ml-2 bg-midnight/90 border border-ivory/20 rounded-md p-3 z-10 w-64 max-h-80 overflow-y-auto shadow-lg backdrop-blur-sm">
+                <h4 className="font-medium mb-2 pb-1 border-b border-ivory/20 text-sm">
                   All Genres
                 </h4>
-                <ul className="grid grid-cols-3 gap-x-4 gap-y-2">
+                <ul className="grid grid-cols-1 gap-1">
                   {(showAllItems.genres
                     ? availableGenres
-                    : availableGenres.slice(0, 20)
+                    : availableGenres.slice(0, 15)
                   ).map((genre) => (
                     <li
                       key={genre}
-                      className="cursor-pointer text-sm hover:text-rosy truncate"
+                      className="cursor-pointer text-sm hover:text-rosy truncate py-1"
                       onClick={() => handleAddFilter("genre", genre)}>
                       {genre}
                     </li>
                   ))}
                 </ul>
-                {availableGenres.length > 10 && !showAllItems.genres && (
+                {availableGenres.length > 15 && !showAllItems.genres && (
                   <div
-                    className="mt-2 pt-2 border-t border-ivory/10 text-sm text-ivory/60 cursor-pointer hover:text-rosy flex items-center"
+                    className="mt-2 pt-2 border-t border-ivory/10 text-xs text-ivory/60 cursor-pointer hover:text-rosy flex items-center"
                     onClick={() => handleShowAllItems("genres")}>
-                    <span>+{availableGenres.length - 10} more genres</span>
-                    <ArrowRight size={12} className="ml-1" />
+                    <span>+{availableGenres.length - 15} more genres</span>
+                    <ArrowRight size={10} className="ml-1" />
                   </div>
                 )}
                 {showAllItems.genres && (
                   <div
-                    className="mt-2 pt-2 border-t border-ivory/10 text-sm text-ivory/60 cursor-pointer hover:text-rosy flex items-center"
+                    className="mt-2 pt-2 border-t border-ivory/10 text-xs text-ivory/60 cursor-pointer hover:text-rosy flex items-center"
                     onClick={() => handleShowAllItems("genres")}>
                     <span>Show less</span>
                   </div>
@@ -222,53 +206,53 @@ export default function FilterSideBar() {
             onMouseEnter={() => setHoveredCategory("publisher")}
             onMouseLeave={() => setHoveredCategory(null)}>
             <div
-              className={`text-start cursor-pointer px-3 py-1 rounded flex items-center justify-between ${
+              className={`text-start cursor-pointer px-3 py-1.5 rounded-md text-sm transition-colors flex items-center justify-between ${
                 filterCategory === "publisher"
                   ? "bg-rosy text-white"
-                  : "hover:bg-midnight/50"
+                  : "hover:bg-midnight/50 text-ivory/90"
               }`}
               onClick={() => handleFilterCategory("publisher")}>
               <span>Publisher</span>
               {hoveredCategory === "publisher" ? (
-                <ChevronDown size={16} />
+                <ChevronDown size={14} />
               ) : (
-                <ChevronRight size={16} />
+                <ChevronRight size={14} />
               )}
             </div>
 
             {/* Expanded publisher list */}
             {hoveredCategory === "publisher" && (
-              <div className="absolute top-full left-0 bg-midnight/90 border border-ivory/20 rounded-md p-3 z-10 w-[30vw] max-h-80 overflow-y-auto shadow-lg backdrop-blur-sm">
-                <h4 className="font-medium mb-2 pb-1 border-b border-ivory/20">
+              <div className="absolute left-full top-0 ml-2 bg-midnight/90 border border-ivory/20 rounded-md p-3 z-10 w-64 max-h-80 overflow-y-auto shadow-lg backdrop-blur-sm">
+                <h4 className="font-medium mb-2 pb-1 border-b border-ivory/20 text-sm">
                   All Publishers
                 </h4>
-                <ul className="grid grid-cols-3 gap-x-4 gap-y-2">
+                <ul className="grid grid-cols-1 gap-1">
                   {(showAllItems.publishers
                     ? availablePublishers
-                    : availablePublishers.slice(0, 20)
+                    : availablePublishers.slice(0, 15)
                   ).map((publisher) => (
                     <li
                       key={publisher}
-                      className="cursor-pointer text-sm hover:text-rosy truncate"
+                      className="cursor-pointer text-sm hover:text-rosy truncate py-1"
                       onClick={() => handleAddFilter("publisher", publisher)}>
                       {publisher}
                     </li>
                   ))}
                 </ul>
-                {availablePublishers.length > 10 &&
+                {availablePublishers.length > 15 &&
                   !showAllItems.publishers && (
                     <div
-                      className="mt-2 pt-2 border-t border-ivory/10 text-sm text-ivory/60 cursor-pointer hover:text-rosy flex items-center"
+                      className="mt-2 pt-2 border-t border-ivory/10 text-xs text-ivory/60 cursor-pointer hover:text-rosy flex items-center"
                       onClick={() => handleShowAllItems("publishers")}>
                       <span>
-                        +{availablePublishers.length - 10} more publishers
+                        +{availablePublishers.length - 15} more publishers
                       </span>
-                      <ArrowRight size={12} className="ml-1" />
+                      <ArrowRight size={10} className="ml-1" />
                     </div>
                   )}
                 {showAllItems.publishers && (
                   <div
-                    className="mt-2 pt-2 border-t border-ivory/10 text-sm text-ivory/60 cursor-pointer hover:text-rosy flex items-center"
+                    className="mt-2 pt-2 border-t border-ivory/10 text-xs text-ivory/60 cursor-pointer hover:text-rosy flex items-center"
                     onClick={() => handleShowAllItems("publishers")}>
                     <span>Show less</span>
                   </div>
@@ -277,147 +261,26 @@ export default function FilterSideBar() {
             )}
           </li>
         </ul>
+      </div>
 
-        {/* Display search results when search is active */}
-        {isSearchActive && filteredGames.length > 0 && (
-          <div className="mb-6 bg-midnight/30 p-4 rounded-lg border border-ivory/10">
-            <h3 className="font-semibold mb-2">
-              Search Results ({filteredGames.length})
-            </h3>
+      {/* Display search results when search is active */}
+      {isSearchActive && filteredGames.length > 0 && (
+        <div className="mb-6 bg-midnight/30 p-4 rounded-lg border border-ivory/10">
+          <h3 className="font-semibold text-sm mb-2">
+            Search Results ({filteredGames.length})
+          </h3>
 
-            {/* Title results */}
-            {groupedResults.title && groupedResults.title.length > 0 && (
-              <div className="mb-4">
-                <h4 className="text-sm font-medium text-ivory/80 mb-2">
-                  Title Matches
-                </h4>
-                <ul className="pl-3">
-                  {groupedResults.title.slice(0, 5).map((game) => (
-                    <li
-                      key={`title-${game.id}`}
-                      className="mb-2 hover:text-rosy">
-                      <a
-                        href={`/games/${game.id}`}
-                        className="flex items-center gap-2">
-                        <img
-                          src={game.thumbnail}
-                          alt={game.title}
-                          className="w-10 h-10 object-cover rounded"
-                        />
-                        <span>{game.title}</span>
-                      </a>
-                    </li>
-                  ))}
-                  {groupedResults.title.length > 5 && (
-                    <li
-                      className="text-sm text-ivory/70 hover:text-rosy cursor-pointer flex items-center"
-                      onClick={() => handleViewAllCategoryResults("title")}>
-                      <span>
-                        +{groupedResults.title.length - 5} more titles
-                      </span>
-                      <ArrowRight size={12} className="ml-1" />
-                    </li>
-                  )}
-                </ul>
-              </div>
-            )}
+          {/* Results are now displayed in the main AllGames component */}
+        </div>
+      )}
 
-            {/* Genre results */}
-            {groupedResults.genre && groupedResults.genre.length > 0 && (
-              <div className="mb-4">
-                <h4 className="text-sm font-medium text-ivory/80 mb-2">
-                  Genre Matches
-                </h4>
-                <ul className="pl-3">
-                  {groupedResults.genre.slice(0, 5).map((game) => (
-                    <li
-                      key={`genre-${game.id}`}
-                      className="mb-2 hover:text-rosy">
-                      <a
-                        href={`/games/${game.id}`}
-                        className="flex items-center gap-2">
-                        <img
-                          src={game.thumbnail}
-                          alt={game.title}
-                          className="w-10 h-10 object-cover rounded"
-                        />
-                        <span>{game.title}</span>
-                        <span className="text-xs text-ivory/60">
-                          ({game.genre})
-                        </span>
-                      </a>
-                    </li>
-                  ))}
-                  {groupedResults.genre.length > 5 && (
-                    <li
-                      className="text-sm text-ivory/70 hover:text-rosy cursor-pointer flex items-center"
-                      onClick={() => handleViewAllCategoryResults("genre")}>
-                      <span>
-                        +{groupedResults.genre.length - 5} more genres
-                      </span>
-                      <ArrowRight size={12} className="ml-1" />
-                    </li>
-                  )}
-                </ul>
-              </div>
-            )}
-
-            {/* Publisher results */}
-            {groupedResults.publisher &&
-              groupedResults.publisher.length > 0 && (
-                <div>
-                  <h4 className="text-sm font-medium text-ivory/80 mb-2">
-                    Publisher Matches
-                  </h4>
-                  <ul className="pl-3">
-                    {groupedResults.publisher.slice(0, 5).map((game) => (
-                      <li
-                        key={`publisher-${game.id}`}
-                        className="mb-2 hover:text-rosy">
-                        <a
-                          href={`/games/${game.id}`}
-                          className="flex items-center gap-2">
-                          <img
-                            src={game.thumbnail}
-                            alt={game.title}
-                            className="w-10 h-10 object-cover rounded"
-                          />
-                          <span>{game.title}</span>
-                          <span className="text-xs text-ivory/60">
-                            ({game.publisher})
-                          </span>
-                        </a>
-                      </li>
-                    ))}
-                    {groupedResults.publisher.length > 5 && (
-                      <li
-                        className="text-sm text-ivory/70 hover:text-rosy cursor-pointer flex items-center"
-                        onClick={() =>
-                          handleViewAllCategoryResults("publisher")
-                        }>
-                        <span>
-                          +{groupedResults.publisher.length - 5} more publishers
-                        </span>
-                        <ArrowRight size={12} className="ml-1" />
-                      </li>
-                    )}
-                  </ul>
-                </div>
-              )}
+      {isSearchActive &&
+        filteredGames.length === 0 &&
+        searchQuery.trim() !== "" && (
+          <div className="bg-midnight/30 p-4 rounded-lg text-ivory/80 text-sm mb-6">
+            No results found for "{searchQuery}"
           </div>
         )}
-
-        {isSearchActive &&
-          filteredGames.length === 0 &&
-          searchQuery.trim() !== "" && (
-            <div className="bg-midnight/30 p-4 rounded-lg text-ivory/80 mb-6">
-              No results found for "{searchQuery}"
-            </div>
-          )}
-
-        <CouponSection />
-      </div>
-      <div>{!isSearchActive && <AllGames />}</div>
-    </>
+    </div>
   );
 }

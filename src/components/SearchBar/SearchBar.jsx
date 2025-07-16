@@ -9,7 +9,7 @@ import {
   clearSearch,
   removeActiveFilter,
 } from "@/lib/features/searchSlice";
-import { Search, X } from "lucide-react";
+import { Search, X, Filter } from "lucide-react";
 
 export default function SearchBar() {
   const dispatch = useDispatch();
@@ -132,68 +132,77 @@ export default function SearchBar() {
   };
 
   const getFilterColor = (type) => {
-    return type === "genre" ? "bg-moss text-ivory" : "bg-rosy text-ivory";
+    switch (type) {
+      case "genre":
+        return "bg-moss/90 text-ivory";
+      case "publisher":
+        return "bg-plum/90 text-ivory";
+      default:
+        return "bg-rosy/90 text-ivory";
+    }
   };
 
   return (
-    <>
-      <div className="flex flex-col w-full mb-4">
-        <div className="flex w-full mb-2">
-          <div className="relative flex-grow">
-            <input
-              type="text"
-              name="search"
-              id="search"
-              value={searchQuery}
-              onChange={handleChange}
-              placeholder="Search..."
-              className={
-                isFocused
-                  ? "bg-midnight w-full text-ivory px-4 py-2 rounded-b-2xl rounded-t-lg focus:outline-none ring-2 ring-rosy/70"
-                  : "focus:outline-none bg-midnight w-full text-ivory px-4 py-2 rounded-b-2xl rounded-t-lg"
-              }
-            />
-            {searchQuery && (
-              <button
-                onClick={handleClearSearch}
-                className="absolute right-14 top-1/2 transform -translate-y-1/2 text-ivory/70 hover:text-ivory">
-                <X size={16} />
-              </button>
-            )}
-          </div>
-          <button className="bg-rosy text-ivory inline-block px-4 py-2 rounded-b-lg rounded-t-lg hover:bg-pine transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-rosy/70 items-center">
-            <Search size={18} />
+    <div className="w-full">
+      <div className="relative flex">
+        <input
+          type="text"
+          name="search"
+          id="search"
+          value={searchQuery}
+          onChange={handleChange}
+          placeholder="Search for games, genres, publishers..."
+          className={`w-full bg-midnight/70 text-ivory px-4 py-3 rounded-l-lg border ${
+            isFocused
+              ? "border-rosy/70 ring-2 ring-rosy/30"
+              : "border-ivory/20 focus:border-rosy/70 focus:ring-2 focus:ring-rosy/30"
+          } placeholder-ivory/50 focus:outline-none transition-all duration-300`}
+        />
+        {searchQuery && (
+          <button
+            onClick={handleClearSearch}
+            className="absolute right-16 top-1/2 transform -translate-y-1/2 text-ivory/70 hover:text-ivory">
+            <X size={16} />
           </button>
-        </div>
-
-        {/* Active filters */}
-        {activeFilters.length > 0 && (
-          <div className="flex flex-wrap gap-2 mb-2">
-            {activeFilters.map((filter, index) => (
-              <div
-                key={`${filter.type}-${filter.value}-${index}`}
-                className={`${getFilterColor(
-                  filter.type
-                )} px-3 py-1 rounded-lg text-sm flex items-center gap-2`}>
-                <span className="capitalize">{filter.type}:</span>
-                <span>{filter.value}</span>
-                <button
-                  onClick={() => handleRemoveFilter(filter.type, filter.value)}
-                  className="hover:text-ivory/80 transition-colors">
-                  <X size={14} />
-                </button>
-              </div>
-            ))}
-            {activeFilters.length > 0 && (
-              <button
-                onClick={handleClearSearch}
-                className="text-xs text-ivory/60 hover:text-ivory underline">
-                Clear all filters
-              </button>
-            )}
-          </div>
         )}
+        <button className="bg-rosy hover:bg-pine transition-colors duration-300 text-ivory px-5 py-3 rounded-r-lg flex items-center justify-center">
+          <Search size={18} />
+        </button>
       </div>
-    </>
+
+      {/* Active filters */}
+      {activeFilters.length > 0 && (
+        <div className="mt-3 flex flex-wrap gap-2 items-center">
+          <div className="flex items-center text-ivory/70">
+            <Filter size={14} className="mr-1" />
+            <span className="text-sm">Active filters:</span>
+          </div>
+
+          {activeFilters.map((filter, index) => (
+            <div
+              key={`${filter.type}-${filter.value}-${index}`}
+              className={`${getFilterColor(
+                filter.type
+              )} px-3 py-1 rounded-md text-xs flex items-center gap-2 shadow-sm`}>
+              <span className="font-medium capitalize">{filter.type}:</span>
+              <span>{filter.value}</span>
+              <button
+                onClick={() => handleRemoveFilter(filter.type, filter.value)}
+                className="hover:text-ivory/80 transition-colors ml-1">
+                <X size={14} />
+              </button>
+            </div>
+          ))}
+
+          {activeFilters.length > 0 && (
+            <button
+              onClick={handleClearSearch}
+              className="text-xs text-ivory/60 hover:text-ivory underline ml-1">
+              Clear all
+            </button>
+          )}
+        </div>
+      )}
+    </div>
   );
 }

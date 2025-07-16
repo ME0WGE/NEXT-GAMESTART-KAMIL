@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Ticket, ShoppingBag } from "lucide-react";
+import { Ticket, ShoppingBag, Gift } from "lucide-react";
 import { useSelector } from "react-redux";
 import { calculateCouponDiscount } from "@/lib/features/couponSlice";
 
@@ -12,46 +12,57 @@ export default function CouponSection() {
   const couponInfo = calculateCouponDiscount(cartItems);
 
   return (
-    <div className="bg-gradient-to-r from-rosy/30 via-plum/30 to-rosy/30 py-8 mt-12 mb-8">
-      <div className="container mx-auto px-4">
-        <div className="bg-midnight/70 backdrop-blur-md border border-ivory/20 rounded-lg p-6 shadow-xl">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+    <div className="bg-gradient-to-r from-midnight via-midnight/80 to-midnight rounded-xl overflow-hidden shadow-xl">
+      <div className="relative">
+        {/* Decorative pattern */}
+        <div className="absolute inset-0 opacity-10 circuit-pattern"></div>
+
+        <div className="bg-gradient-to-r from-rosy/20 to-plum/30 p-6 relative z-10">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-5 text-ivory">
             <div className="flex items-center">
-              <Ticket className="text-pine mr-4" size={40} />
+              <div className="bg-rosy/20 p-3 rounded-full mr-4">
+                <Gift className="text-rosy" size={28} />
+              </div>
               <div>
-                <h3 className="text-xl font-bold text-ivory mb-1">
-                  Coupon spécial "4+1 gratuit"
+                <h3 className="text-xl font-bold mb-1">
+                  Special Offer: Buy 4, Get 1 Free
                 </h3>
-                <p className="text-slate-300 max-w-md">
-                  Le jeu le moins cher est offert lors de l'achat de 5 jeux ou
-                  plus.
+                <p className="text-ivory/80 max-w-md">
+                  Add 5 or more games to your cart and get the cheapest one
+                  completely free!
                 </p>
               </div>
             </div>
 
-            <div className="flex items-center bg-midnight/60 p-3 rounded-lg border border-ivory/10">
-              <ShoppingBag className="text-moss mr-3" size={24} />
+            <div className="flex items-center bg-midnight/80 backdrop-blur-sm p-4 rounded-lg border border-ivory/10 shadow-lg">
+              <div className="mr-4 bg-plum/20 p-2 rounded-full">
+                <ShoppingBag className="text-moss" size={20} />
+              </div>
               <div>
-                <p className="text-ivory text-sm">
-                  {cartItems.length < 5 ? (
-                    <>
-                      <span className="font-bold text-ivory">
-                        {5 - cartItems.length} jeux de plus
+                {cartItems.length < 5 ? (
+                  <div className="text-center">
+                    <p className="text-ivory/70 text-sm">
+                      Add{" "}
+                      <span className="font-bold text-ivory text-lg">
+                        {5 - cartItems.length}
                       </span>{" "}
-                      pour bénéficier du coupon
-                    </>
-                  ) : (
-                    <>
-                      <span className="font-bold text-pine">
-                        Coupon appliqué!
-                      </span>{" "}
-                      <span className="line-through text-slate-400 mr-2">
+                      more
+                    </p>
+                    <p className="text-ivory/90">games to qualify</p>
+                  </div>
+                ) : (
+                  <div className="text-center">
+                    <p className="text-pine font-bold">Coupon Applied!</p>
+                    <div className="flex items-center gap-2">
+                      <span className="line-through text-ivory/50">
                         {couponInfo.cheapestGame?.price}€
                       </span>
-                      <span className="text-moss font-bold">GRATUIT</span>
-                    </>
-                  )}
-                </p>
+                      <span className="bg-moss/20 text-moss font-bold px-2 py-0.5 rounded">
+                        FREE
+                      </span>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
