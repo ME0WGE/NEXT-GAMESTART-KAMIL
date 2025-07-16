@@ -84,7 +84,7 @@ export default function Library() {
                 <div className="relative h-48 w-full">
                   <img
                     src={
-                      game.image ||
+                      game.thumbnail ||
                       "https://via.placeholder.com/300x180?text=Game+Image"
                     }
                     alt={game.title}

@@ -68,11 +68,38 @@ export default function Checkout() {
 
     setIsCheckingOut(true);
     try {
-      await dispatch(purchaseGames(user.id)).unwrap();
+      // Get the correct user ID - check Redux user first, then fallback to email lookup
+      const userId = user.id || (await getUserIdFromEmail());
+      if (!userId) {
+        throw new Error("Unable to determine user ID for checkout");
+      }
+
+      await dispatch(purchaseGames(userId)).unwrap();
     } catch (error) {
       console.error("Checkout failed:", error);
     } finally {
       setIsCheckingOut(false);
+    }
+  };
+
+  // Helper function to get user ID by email from session
+  const getUserIdFromEmail = async () => {
+    if (!session?.user?.email) return null;
+
+    try {
+      // Query the API to find the user by email
+      const response = await fetch(
+        `/api/users/lookup?email=${encodeURIComponent(session.user.email)}`
+      );
+      const data = await response.json();
+
+      if (data.success && data.user) {
+        return data.user.id;
+      }
+      return null;
+    } catch (error) {
+      console.error("Error looking up user ID:", error);
+      return null;
     }
   };
 
@@ -174,7 +201,7 @@ export default function Checkout() {
                     <div className="flex-shrink-0 w-16 h-16 mr-4 relative rounded overflow-hidden">
                       <img
                         src={
-                          item.image ||
+                          item.thumbnail ||
                           "https://via.placeholder.com/80?text=Game"
                         }
                         alt={item.title}

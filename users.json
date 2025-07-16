@@ -30,7 +30,38 @@
     "email": "baldygakamil@gmail.com",
     "avatar_url": "https://lh3.googleusercontent.com/a/ACg8ocIIqXIapriwLzJTe7o4wigxVgVJrCFkTSZGO7RZCEjSKHXkew=s96-c",
     "description": "",
-    "purchasedGames": [],
+    "purchasedGames": [
+      {
+        "id": 447,
+        "title": "Dota Underlords",
+        "thumbnail": "https://www.freetogame.com/g/447/thumbnail.jpg",
+        "short_description": "A free-to-play auto battler strategy game set in the world of Valve's Dota franchise.",
+        "game_url": "https://www.freetogame.com/open/dota-underlords",
+        "genre": "Strategy",
+        "platform": "PC (Windows)",
+        "publisher": "Valve",
+        "developer": "Valve",
+        "release_date": "2019-06-21",
+        "freetogame_profile_url": "https://www.freetogame.com/dota-underlords",
+        "price": "86.99",
+        "quantity": 1
+      },
+      {
+        "id": 337,
+        "title": "Priston Tale",
+        "thumbnail": "https://www.freetogame.com/g/337/thumbnail.jpg",
+        "short_description": "A free to play action-oriented fantasy MMORPG!",
+        "game_url": "https://www.freetogame.com/open/priston-tale",
+        "genre": "MMORPG",
+        "platform": "PC (Windows)",
+        "publisher": "Suba Games",
+        "developer": "Trglow Pictures",
+        "release_date": "2007-05-17",
+        "freetogame_profile_url": "https://www.freetogame.com/priston-tale",
+        "price": "53.99",
+        "quantity": 1
+      }
+    ],
     "isConnected": false,
     "oauthProvider": "oauth"
   }
