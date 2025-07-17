@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import Login from "@/components/Login";
+import ProtectedRoute from "@/components/ProtectedRoute";
 import {
   purchaseGames,
   purchaseGamesWithCredits,
@@ -81,17 +81,9 @@ export default function Checkout() {
     }
   }, [successMessage, dispatch]);
 
-  // Check if user is authenticated with either Redux or NextAuth
-  const isAuthenticated = user.isConnected || !!session;
-
   // Check if user has sufficient credits
   const hasSufficientCredits = (user.creditBalance || 0) >= total;
   const creditBalance = user.creditBalance || 0;
-
-  // If not logged in, show login component
-  if (!isAuthenticated) {
-    return <Login />;
-  }
 
   const handleCheckout = async () => {
     if (cartItems.length === 0) return;
@@ -168,280 +160,274 @@ export default function Checkout() {
     );
   }
 
-  if (purchaseComplete) {
-    return (
-      <div className="min-h-screen bg-neutral-900 text-neutral-100 flex flex-col pt-20 px-6 md:px-10">
-        <div className="max-w-4xl mx-auto w-full bg-neutral-800 rounded-lg p-8 my-8 text-center">
-          <div className="flex justify-center mb-4">
-            <div className="bg-pine rounded-full p-3">
-              <Check size={48} className="text-white" />
-            </div>
-          </div>
-          <h1 className="text-3xl font-bold mb-2">Achat terminé!</h1>
-          <p className="text-neutral-300 mb-6">
-            Vos jeux ont été ajoutés à votre bibliothèque.
-          </p>
-          <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <button
-              onClick={() => router.push("/library")}
-              className="px-6 py-3 bg-pine text-white rounded-md hover:bg-pine/90 transition">
-              Aller à la bibliothèque
-            </button>
-            <button
-              onClick={() => router.push("/games")}
-              className="px-6 py-3 bg-neutral-700 text-white rounded-md hover:bg-neutral-600 transition">
-              Continuer les achats
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (cartItems.length === 0) {
-    return (
-      <div className="min-h-screen bg-neutral-900 text-neutral-100 flex flex-col pt-20 px-6 md:px-10">
-        <div className="max-w-4xl mx-auto w-full bg-neutral-800 rounded-lg p-8 my-8 text-center">
-          <ShoppingCart size={48} className="mx-auto mb-4 text-neutral-400" />
-          <h1 className="text-2xl font-bold mb-2">Votre panier est vide</h1>
-          <p className="text-neutral-400 mb-6">
-            Ajoutez des jeux à votre panier avant de passer à la caisse.
-          </p>
-          <button
-            onClick={() => router.push("/games")}
-            className="px-6 py-3 bg-pine text-white rounded-md hover:bg-pine/90 transition">
-            Parcourir les jeux
-          </button>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="min-h-screen bg-neutral-900 text-neutral-100 flex flex-col pt-20 px-6 md:px-10">
-      <div className="max-w-6xl mx-auto w-full">
-        <h1 className="text-3xl font-bold mb-6">Checkout</h1>
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Cart items */}
-          <div className="lg:col-span-2">
-            <div className="bg-neutral-800 rounded-lg p-6">
-              <h2 className="text-xl font-semibold mb-4 flex items-center">
-                <ShoppingCart size={20} className="mr-2" />
-                Cart Items
-              </h2>
-
-              <div className="space-y-4">
-                {cartItems.map((item) => {
-                  const originalPrice = originalPrices[item.id] || 0;
-                  const discountedPrice = discountedPrices[item.id] || 0;
-                  const hasDiscount = originalPrice > discountedPrice;
-
-                  return (
-                    <div
-                      key={item.id}
-                      className="flex items-center bg-neutral-700/50 p-3 rounded-md">
-                      <div className="flex-shrink-0 w-16 h-16 mr-4 relative rounded overflow-hidden">
-                        <img
-                          src={
-                            item.thumbnail ||
-                            "https://via.placeholder.com/80?text=Game"
-                          }
-                          alt={item.title}
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                      <div className="flex-grow">
-                        <h3 className="font-medium text-white">{item.title}</h3>
-                        <p className="text-neutral-400 text-sm">
-                          Téléchargement digital
-                        </p>
-                      </div>
-                      <div className="ml-4 font-medium">
-                        {hasDiscount ? (
-                          <div className="text-right">
-                            <div className="line-through text-neutral-400 text-sm">
-                              ${originalPrice.toFixed(2)}
-                            </div>
-                            <div className="text-green-400">
-                              ${discountedPrice.toFixed(2)}
-                            </div>
-                          </div>
-                        ) : (
-                          <span>${originalPrice.toFixed(2)}</span>
-                        )}
-                      </div>
-                    </div>
-                  );
-                })}
+    <ProtectedRoute redirectTo="/checkout">
+      <div className="min-h-screen bg-neutral-900 text-neutral-100 flex flex-col pt-20 px-6 md:px-10">
+        {purchaseComplete ? (
+          <div className="max-w-4xl mx-auto w-full bg-neutral-800 rounded-lg p-8 my-8 text-center">
+            <div className="flex justify-center mb-4">
+              <div className="bg-pine rounded-full p-3">
+                <Check size={48} className="text-white" />
               </div>
-
-              <div className="mt-6 flex justify-between items-center">
-                <button
-                  onClick={handleClearCart}
-                  className="text-red-400 hover:text-red-300 flex items-center text-sm">
-                  <X size={16} className="mr-1" />
-                  Vider le panier
-                </button>
-
-                <div className="text-lg">
-                  Total:{" "}
-                  <span className="font-bold text-white">
-                    ${total.toFixed(2)}
-                  </span>
-                </div>
-              </div>
-
-              {/* Coupon Notification */}
-              {isCouponApplicable && couponDiscount > 0 && (
-                <div className="mt-4 p-3 bg-green-500/10 border border-green-500/20 rounded-lg">
-                  <div className="flex items-center gap-2 text-green-400">
-                    <Tag size={16} />
-                    <span className="font-medium">
-                      4+1 Promotion appliquée!
-                    </span>
-                  </div>
-                  <p className="text-green-300 text-sm mt-1">
-                    Vous avez économisé ${couponDiscount.toFixed(2)} sur votre
-                    jeu le moins cher.
-                  </p>
-                </div>
-              )}
             </div>
-          </div>
-
-          {/* Payment section */}
-          <div className="lg:col-span-1">
-            <div className="bg-neutral-800 rounded-lg p-6 sticky top-24">
-              <h2 className="text-xl font-semibold mb-4 flex items-center">
-                <CreditCard size={20} className="mr-2" />
-                Paiement
-              </h2>
-
-              {/* Credit Balance Display */}
-              <div className="bg-neutral-700/50 p-4 rounded-md mb-4">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-neutral-300 text-sm">
-                    Solde de crédit
-                  </span>
-                  <span className="text-lg font-bold text-white">
-                    ${creditBalance.toFixed(2)}
-                  </span>
-                </div>
-                {!hasSufficientCredits && (
-                  <div className="flex items-center gap-2 text-red-400 text-sm">
-                    <AlertCircle size={14} />
-                    <span>Solde insuffisant</span>
-                  </div>
-                )}
-              </div>
-
-              {/* Payment Method Selection */}
-              <div className="mb-4">
-                <h3 className="text-sm font-medium text-neutral-300 mb-3">
-                  Méthode de paiement
-                </h3>
-
-                {/* Banking Card Option */}
-                <label className="flex items-center p-3 bg-neutral-700/50 rounded-md cursor-pointer hover:bg-neutral-700/70 transition-colors">
-                  <input
-                    type="radio"
-                    name="paymentMethod"
-                    value="card"
-                    checked={paymentMethod === "card"}
-                    onChange={(e) => setPaymentMethod(e.target.value)}
-                    className="mr-3"
-                  />
-                  <div className="flex items-center gap-2">
-                    <CreditCard size={16} className="text-pine" />
-                    <span className="text-white">Carte bancaire</span>
-                  </div>
-                </label>
-
-                {/* Credit Balance Option */}
-                <label
-                  className={`flex items-center p-3 rounded-md cursor-pointer transition-colors mt-2 ${
-                    hasSufficientCredits
-                      ? "bg-neutral-700/50 hover:bg-neutral-700/70"
-                      : "bg-neutral-800/50 opacity-50 cursor-not-allowed"
-                  }`}>
-                  <input
-                    type="radio"
-                    name="paymentMethod"
-                    value="credits"
-                    checked={paymentMethod === "credits"}
-                    onChange={(e) => setPaymentMethod(e.target.value)}
-                    disabled={!hasSufficientCredits}
-                    className="mr-3"
-                  />
-                  <div className="flex items-center gap-2">
-                    <CreditCard size={16} className="text-pine" />
-                    <span className="text-white">Solde de crédit</span>
-                  </div>
-                </label>
-              </div>
-
-              {/* Order Summary */}
-              <div className="bg-neutral-700/50 p-4 rounded-md mb-4">
-                <p className="text-neutral-300 mb-2">
-                  Récapitulatif de la commande
-                </p>
-                <div className="flex justify-between mb-1">
-                  <span className="text-neutral-400">Sous-total</span>
-                  <span>${subtotal.toFixed(2)}</span>
-                </div>
-                {couponDiscount > 0 && (
-                  <div className="flex justify-between mb-1 text-green-400">
-                    <span className="flex items-center gap-1">
-                      <Tag size={12} />
-                      4+1 Promotion
-                    </span>
-                    <span>-${couponDiscount.toFixed(2)}</span>
-                  </div>
-                )}
-                <div className="flex justify-between mb-1">
-                  <span className="text-neutral-400">Taxe</span>
-                  <span>$0.00</span>
-                </div>
-                <div className="border-t border-neutral-600 my-2"></div>
-                <div className="flex justify-between font-medium">
-                  <span>Total à payer</span>
-                  <span>${total.toFixed(2)}</span>
-                </div>
-              </div>
-
-              {/* Error Message */}
-              {checkoutError && (
-                <div className="flex items-center gap-2 p-3 bg-red-500/10 border border-red-500/20 rounded-lg mb-4">
-                  <AlertCircle
-                    size={16}
-                    className="text-red-400 flex-shrink-0"
-                  />
-                  <p className="text-red-400 text-sm">{checkoutError}</p>
-                </div>
-              )}
-
+            <h1 className="text-3xl font-bold mb-2">Achat terminé!</h1>
+            <p className="text-neutral-300 mb-6">
+              Vos jeux ont été ajoutés à votre bibliothèque.
+            </p>
+            <div className="flex flex-col sm:flex-row justify-center gap-4">
               <button
-                onClick={handleCheckout}
-                disabled={
-                  isCheckingOut ||
-                  cartItems.length === 0 ||
-                  (paymentMethod === "credits" && !hasSufficientCredits)
-                }
-                className="w-full py-3 bg-pine hover:bg-pine/90 text-white rounded-md transition disabled:opacity-70 disabled:cursor-not-allowed flex justify-center items-center">
-                {isCheckingOut ? (
-                  <>
-                    <Loader className="animate-spin mr-2" size={16} />
-                    Traitement...
-                  </>
-                ) : (
-                  <>Acheter</>
-                )}
+                onClick={() => router.push("/library")}
+                className="px-6 py-3 bg-pine text-white rounded-md hover:bg-pine/90 transition">
+                Aller à la bibliothèque
+              </button>
+              <button
+                onClick={() => router.push("/games")}
+                className="px-6 py-3 bg-neutral-700 text-white rounded-md hover:bg-neutral-600 transition">
+                Continuer les achats
               </button>
             </div>
           </div>
-        </div>
+        ) : cartItems.length === 0 ? (
+          <div className="max-w-4xl mx-auto w-full bg-neutral-800 rounded-lg p-8 my-8 text-center">
+            <ShoppingCart size={48} className="mx-auto mb-4 text-neutral-400" />
+            <h1 className="text-2xl font-bold mb-2">Votre panier est vide</h1>
+            <p className="text-neutral-400 mb-6">
+              Ajoutez des jeux à votre panier avant de passer à la caisse.
+            </p>
+            <button
+              onClick={() => router.push("/games")}
+              className="px-6 py-3 bg-pine text-white rounded-md hover:bg-pine/90 transition">
+              Parcourir les jeux
+            </button>
+          </div>
+        ) : (
+          <div className="max-w-6xl mx-auto w-full">
+            <h1 className="text-3xl font-bold mb-6">Checkout</h1>
+
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              {/* Cart items */}
+              <div className="lg:col-span-2">
+                <div className="bg-neutral-800 rounded-lg p-6">
+                  <h2 className="text-xl font-semibold mb-4 flex items-center">
+                    <ShoppingCart size={20} className="mr-2" />
+                    Cart Items
+                  </h2>
+
+                  <div className="space-y-4">
+                    {cartItems.map((item) => {
+                      const originalPrice = originalPrices[item.id] || 0;
+                      const discountedPrice = discountedPrices[item.id] || 0;
+                      const hasDiscount = originalPrice > discountedPrice;
+
+                      return (
+                        <div
+                          key={item.id}
+                          className="flex items-center bg-neutral-700/50 p-3 rounded-md">
+                          <div className="flex-shrink-0 w-16 h-16 mr-4 relative rounded overflow-hidden">
+                            <img
+                              src={
+                                item.thumbnail ||
+                                "https://via.placeholder.com/80?text=Game"
+                              }
+                              alt={item.title}
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
+                          <div className="flex-grow">
+                            <h3 className="font-medium text-white">
+                              {item.title}
+                            </h3>
+                            <p className="text-neutral-400 text-sm">
+                              Téléchargement digital
+                            </p>
+                          </div>
+                          <div className="ml-4 font-medium">
+                            {hasDiscount ? (
+                              <div className="text-right">
+                                <div className="line-through text-neutral-400 text-sm">
+                                  ${originalPrice.toFixed(2)}
+                                </div>
+                                <div className="text-green-400">
+                                  ${discountedPrice.toFixed(2)}
+                                </div>
+                              </div>
+                            ) : (
+                              <span>${originalPrice.toFixed(2)}</span>
+                            )}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  <div className="mt-6 flex justify-between items-center">
+                    <button
+                      onClick={handleClearCart}
+                      className="text-red-400 hover:text-red-300 flex items-center text-sm">
+                      <X size={16} className="mr-1" />
+                      Vider le panier
+                    </button>
+
+                    <div className="text-lg">
+                      Total:{" "}
+                      <span className="font-bold text-white">
+                        ${total.toFixed(2)}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Coupon Notification */}
+                  {isCouponApplicable && couponDiscount > 0 && (
+                    <div className="mt-4 p-3 bg-green-500/10 border border-green-500/20 rounded-lg">
+                      <div className="flex items-center gap-2 text-green-400">
+                        <Tag size={16} />
+                        <span className="font-medium">
+                          4+1 Promotion appliquée!
+                        </span>
+                      </div>
+                      <p className="text-green-300 text-sm mt-1">
+                        Vous avez économisé ${couponDiscount.toFixed(2)} sur
+                        votre jeu le moins cher.
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Payment section */}
+              <div className="lg:col-span-1">
+                <div className="bg-neutral-800 rounded-lg p-6 sticky top-24">
+                  <h2 className="text-xl font-semibold mb-4 flex items-center">
+                    <CreditCard size={20} className="mr-2" />
+                    Paiement
+                  </h2>
+
+                  {/* Credit Balance Display */}
+                  <div className="bg-neutral-700/50 p-4 rounded-md mb-4">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-neutral-300 text-sm">
+                        Solde de crédit
+                      </span>
+                      <span className="text-lg font-bold text-white">
+                        ${creditBalance.toFixed(2)}
+                      </span>
+                    </div>
+                    {!hasSufficientCredits && (
+                      <div className="flex items-center gap-2 text-red-400 text-sm">
+                        <AlertCircle size={14} />
+                        <span>Solde insuffisant</span>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Payment Method Selection */}
+                  <div className="mb-4">
+                    <h3 className="text-sm font-medium text-neutral-300 mb-3">
+                      Méthode de paiement
+                    </h3>
+
+                    {/* Banking Card Option */}
+                    <label className="flex items-center p-3 bg-neutral-700/50 rounded-md cursor-pointer hover:bg-neutral-700/70 transition-colors">
+                      <input
+                        type="radio"
+                        name="paymentMethod"
+                        value="card"
+                        checked={paymentMethod === "card"}
+                        onChange={(e) => setPaymentMethod(e.target.value)}
+                        className="mr-3"
+                      />
+                      <div className="flex items-center gap-2">
+                        <CreditCard size={16} className="text-pine" />
+                        <span className="text-white">Carte bancaire</span>
+                      </div>
+                    </label>
+
+                    {/* Credit Balance Option */}
+                    <label
+                      className={`flex items-center p-3 rounded-md cursor-pointer transition-colors mt-2 ${
+                        hasSufficientCredits
+                          ? "bg-neutral-700/50 hover:bg-neutral-700/70"
+                          : "bg-neutral-800/50 opacity-50 cursor-not-allowed"
+                      }`}>
+                      <input
+                        type="radio"
+                        name="paymentMethod"
+                        value="credits"
+                        checked={paymentMethod === "credits"}
+                        onChange={(e) => setPaymentMethod(e.target.value)}
+                        disabled={!hasSufficientCredits}
+                        className="mr-3"
+                      />
+                      <div className="flex items-center gap-2">
+                        <CreditCard size={16} className="text-pine" />
+                        <span className="text-white">Solde de crédit</span>
+                      </div>
+                    </label>
+                  </div>
+
+                  {/* Order Summary */}
+                  <div className="bg-neutral-700/50 p-4 rounded-md mb-4">
+                    <p className="text-neutral-300 mb-2">
+                      Récapitulatif de la commande
+                    </p>
+                    <div className="flex justify-between mb-1">
+                      <span className="text-neutral-400">Sous-total</span>
+                      <span>${subtotal.toFixed(2)}</span>
+                    </div>
+                    {couponDiscount > 0 && (
+                      <div className="flex justify-between mb-1 text-green-400">
+                        <span className="flex items-center gap-1">
+                          <Tag size={12} />
+                          4+1 Promotion
+                        </span>
+                        <span>-${couponDiscount.toFixed(2)}</span>
+                      </div>
+                    )}
+                    <div className="flex justify-between mb-1">
+                      <span className="text-neutral-400">Taxe</span>
+                      <span>$0.00</span>
+                    </div>
+                    <div className="border-t border-neutral-600 my-2"></div>
+                    <div className="flex justify-between font-medium">
+                      <span>Total à payer</span>
+                      <span>${total.toFixed(2)}</span>
+                    </div>
+                  </div>
+
+                  {/* Error Message */}
+                  {checkoutError && (
+                    <div className="flex items-center gap-2 p-3 bg-red-500/10 border border-red-500/20 rounded-lg mb-4">
+                      <AlertCircle
+                        size={16}
+                        className="text-red-400 flex-shrink-0"
+                      />
+                      <p className="text-red-400 text-sm">{checkoutError}</p>
+                    </div>
+                  )}
+
+                  <button
+                    onClick={handleCheckout}
+                    disabled={
+                      isCheckingOut ||
+                      cartItems.length === 0 ||
+                      (paymentMethod === "credits" && !hasSufficientCredits)
+                    }
+                    className="w-full py-3 bg-pine hover:bg-pine/90 text-white rounded-md transition disabled:opacity-70 disabled:cursor-not-allowed flex justify-center items-center">
+                    {isCheckingOut ? (
+                      <>
+                        <Loader className="animate-spin mr-2" size={16} />
+                        Traitement...
+                      </>
+                    ) : (
+                      <>Acheter</>
+                    )}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
-    </div>
+    </ProtectedRoute>
   );
 }
