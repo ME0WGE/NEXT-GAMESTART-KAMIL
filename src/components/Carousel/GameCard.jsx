@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Percent } from "lucide-react";
+import GamePrice from "@/components/GamePrice";
 
 export default function GameCard({
   game,
@@ -74,30 +74,12 @@ export default function GameCard({
 
               {/* Price Information */}
               <div className="flex items-center gap-2 mt-1">
-                {/* Discount */}
-                {showDiscount && game.discount && (
-                  <div className="flex items-center gap-1 bg-pine text-white px-2 py-1 rounded text-xs font-bold">
-                    <Percent size={12} />-{game.discount}%
-                  </div>
-                )}
-
-                <div className="flex items-center gap-2">
-                  {/* Current Price */}
-                  {game.currentPrice && (
-                    <span className="text-yellow-400 font-bold text-sm">
-                      €{game.currentPrice}
-                    </span>
-                  )}
-
-                  {/* Original Price */}
-                  {showDiscount &&
-                    game.originalPrice &&
-                    game.originalPrice !== game.currentPrice && (
-                      <span className="text-gray-400 line-through text-xs">
-                        €{game.originalPrice}
-                      </span>
-                    )}
-                </div>
+                <GamePrice
+                  game={game}
+                  gameId={game.id}
+                  size="small"
+                  showDiscountBadge={showDiscount}
+                />
               </div>
             </div>
           </div>

@@ -5,6 +5,7 @@ import { TrendingUp, ShoppingCart, Trash2, View } from "lucide-react";
 import { useMostPlayedGames } from "@/lib/hooks/useMostPlayedGames";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart, removeFromCart } from "@/lib/features/gameDetailsSlice";
+import GamePrice from "@/components/GamePrice";
 import Link from "next/link";
 
 export default function PopularGames() {
@@ -42,12 +43,8 @@ export default function PopularGames() {
     try {
       e.stopPropagation();
       setAddingGameId(game.id);
-      // Add price if not present
-      const gameWithPrice = {
-        ...game,
-        price: game.price || `${Math.floor(Math.random() * 96) + 5}.99`,
-      };
-      await dispatch(addToCart(gameWithPrice)).unwrap();
+      // Use game as is - prices are handled consistently
+      await dispatch(addToCart(game)).unwrap();
     } catch (error) {
       console.error("Failed to add to cart:", error);
     } finally {

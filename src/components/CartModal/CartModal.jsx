@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { X, Trash2, ShoppingBag, ShoppingCart, Tag } from "lucide-react";
 import { removeFromCart, addToCart } from "@/lib/features/gameDetailsSlice";
 import { calculateCouponDiscount } from "@/lib/features/couponSlice";
+import GamePrice from "@/components/GamePrice";
 import Link from "next/link";
 
 export default function CartModal({ isOpen, onClose }) {
@@ -43,12 +44,7 @@ export default function CartModal({ isOpen, onClose }) {
   const handleAddToCart = async (game) => {
     try {
       setAddingGameId(game.id);
-      // Add price if not present
-      const gameWithPrice = {
-        ...game,
-        price: game.price || `${Math.floor(Math.random() * 96) + 5}.99`,
-      };
-      await dispatch(addToCart(gameWithPrice)).unwrap();
+      await dispatch(addToCart(game)).unwrap();
     } catch (error) {
       console.error("Failed to add to cart:", error);
     } finally {
@@ -183,7 +179,13 @@ export default function CartModal({ isOpen, onClose }) {
                             </span>
                           </>
                         ) : (
-                          <p className="text-ivory font-bold">{item.price}€</p>
+                          <GamePrice
+                            game={item}
+                            gameId={item.id}
+                            size="small"
+                            showDiscountBadge={false}
+                            className="text-ivory"
+                          />
                         )}
                       </div>
                     </div>

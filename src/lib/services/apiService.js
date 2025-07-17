@@ -1,4 +1,5 @@
 import axios from "axios";
+import { generatePrice } from "../features/gameSlice";
 
 // Configuration Axios
 const api = axios.create({
@@ -24,7 +25,18 @@ export const apiService = {
   async getAllGames() {
     try {
       const response = await api.get("/games");
-      return response.data;
+      // Add consistent pricing to each game
+      const games = response.data.map((game) => {
+        const priceData = generatePrice(game.id);
+        return {
+          ...game,
+          price: priceData.price,
+          discount: priceData.discount,
+          discountedPrice: priceData.discountedPrice,
+          hasDiscount: priceData.hasDiscount,
+        };
+      });
+      return games;
     } catch (error) {
       console.error("Error while fetching games:", error);
 
@@ -76,11 +88,23 @@ export const apiService = {
   async getPopularGames(limit = 16) {
     try {
       const response = await api.get("/games");
-      const games = response.data;
+      const allGames = response.data;
 
       // Shuffle the array and take the first games
-      const shuffled = games.sort(() => 0.5 - Math.random());
-      return shuffled.slice(0, limit);
+      const shuffled = allGames.sort(() => 0.5 - Math.random());
+      const games = shuffled.slice(0, limit);
+
+      // Add consistent pricing to each game
+      return games.map((game) => {
+        const priceData = generatePrice(game.id);
+        return {
+          ...game,
+          price: priceData.price,
+          discount: priceData.discount,
+          discountedPrice: priceData.discountedPrice,
+          hasDiscount: priceData.hasDiscount,
+        };
+      });
     } catch (error) {
       console.error("Error while fetching popular games:", error);
 
@@ -88,16 +112,23 @@ export const apiService = {
       throw error;
     }
   },
+
   // Get random price of all games
   async getRandomPriceOfAllGames() {
     try {
       const response = await api.get("/games");
       const games = response.data;
 
-      return games.map((game) => ({
-        ...game,
-        price: `${Math.floor(Math.random() * 96) + 5}`,
-      }));
+      return games.map((game) => {
+        const priceData = generatePrice(game.id);
+        return {
+          ...game,
+          price: priceData.price,
+          discount: priceData.discount,
+          discountedPrice: priceData.discountedPrice,
+          hasDiscount: priceData.hasDiscount,
+        };
+      });
     } catch (error) {
       console.error("Error while fetching games prices:", error);
 
@@ -110,11 +141,26 @@ export const apiService = {
   async getDiscountedGames(limit = 6) {
     try {
       const response = await api.get("/games");
-      const games = response.data;
+      const allGames = response.data;
 
       // Shuffle the array and take the first games
-      const shuffled = games.sort(() => 0.5 - Math.random());
-      return shuffled.slice(0, limit);
+      const shuffled = allGames.sort(() => 0.5 - Math.random());
+      // Filter for games with discount only (based on their ID)
+      const games = shuffled
+        .map((game) => {
+          const priceData = generatePrice(game.id);
+          return {
+            ...game,
+            price: priceData.price,
+            discount: priceData.discount,
+            discountedPrice: priceData.discountedPrice,
+            hasDiscount: priceData.hasDiscount,
+          };
+        })
+        .filter((game) => game.hasDiscount)
+        .slice(0, limit);
+
+      return games;
     } catch (error) {
       console.error("Error while fetching discounted games:", error);
 

@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addToCart, removeFromCart } from "@/lib/features/gameDetailsSlice";
 import { ShoppingCart, Trash2, User } from "lucide-react";
 import Link from "next/link";
+import GamePrice from "@/components/GamePrice";
 
 export default function AllGames() {
   const [displayCount, setDisplayCount] = useState(12);
@@ -41,17 +42,16 @@ export default function AllGames() {
     setImageLoadStates((prev) => ({ ...prev, [gameId]: "error" }));
   };
 
-  // Handle add to cart
+  // Handle adding item to cart
   const handleAddToCart = async (game, e) => {
+    if (e) {
+      e.preventDefault(); // Prevent link navigation
+    }
+
     try {
-      e.preventDefault();
       setAddingGameId(game.id);
-      // Add price if not present
-      const gameWithPrice = {
-        ...game,
-        price: game.price || `${Math.floor(Math.random() * 96) + 5}.99`,
-      };
-      await dispatch(addToCart(gameWithPrice)).unwrap();
+      // Use game as is (prices are now consistently handled)
+      await dispatch(addToCart(game)).unwrap();
     } catch (error) {
       console.error("Failed to add to cart:", error);
     } finally {
@@ -215,11 +215,14 @@ export default function AllGames() {
                   </div>
 
                   {/* Price and Action */}
-                  <div className="flex justify-between items-center mt-auto pt-4 border-t border-ivory/10">
+                  <div className="flex justify-between items-center mt-auto pt-4 border-t border-ivory/10 text-ivory">
                     <div className="flex flex-col">
-                      <span className="font-bold text-2xl text-ivory">
-                        {game.price?.toString().replace(",", ".") || "29.99"}€
-                      </span>
+                      <GamePrice
+                        game={game}
+                        gameId={game.id}
+                        size="default"
+                        showDiscountBadge={true}
+                      />
                       <span className="text-ivory/60 text-sm">Prix TTC</span>
                     </div>
 

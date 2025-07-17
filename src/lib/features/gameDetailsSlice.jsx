@@ -1,18 +1,18 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { apiService } from "../services/apiService";
+import { generatePrice } from "./gameSlice";
 
 export const fetchGameDetails = createAsyncThunk(
   "gameDetails/fetchGameDetails",
   async (gameId, { rejectWithValue }) => {
     try {
       const game = await apiService.getGameById(gameId);
-      game.price = `${Math.floor(Math.random() * 96) + 5}.99`;
 
-      const hasDiscount = Math.random() < 0.5;
-      game.discount = hasDiscount ? Math.floor(Math.random() * 41) + 10 : 0;
-      game.discountedPrice = hasDiscount
-        ? (parseFloat(game.price) * (1 - game.discount / 100)).toFixed(2)
-        : game.price;
+      // Generate price data
+      const priceData = generatePrice(gameId);
+      game.price = priceData.price;
+      game.discount = priceData.discount;
+      game.discountedPrice = priceData.discountedPrice;
 
       // Placeholder video URL
       game.video = `https://www.freetogame.com/g/${gameId}/videoplayback.webm`;
