@@ -8,8 +8,8 @@ export const generatePrice = (gameId) => {
   const basePrice = ((seed % 95) + 5 + 0.99).toFixed(2);
 
   // Determine if game has discount (based on game ID for consistency)
-  const hasDiscount = seed % 3 === 0;
-  const discount = hasDiscount ? Math.floor(seed % 41) + 10 : 0;
+  const hasDiscount = seed % 5 === 0;
+  const discount = hasDiscount ? Math.floor(seed % 21) + 10 : 0;
 
   // Calculate discounted price if applicable
   const discountedPrice = hasDiscount
