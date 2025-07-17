@@ -82,13 +82,25 @@ export async function POST(request) {
 
     // Load cart items to add to purchased games
     const cartItems = loadCart();
-    const purchasedGameIds = cartItems.map((item) => item.id);
+
+    if (cartItems.length === 0) {
+      return NextResponse.json(
+        { success: false, message: "Cart is empty" },
+        { status: 400 }
+      );
+    }
+
+    // Add items to user's purchased games if not already owned
+    const currentPurchasedGames = users[userIndex].purchasedGames || [];
+    const newPurchases = cartItems.filter(
+      (item) => !currentPurchasedGames.some((game) => game.id === item.id)
+    );
 
     // Deduct credits and add games to purchased list
     users[userIndex].creditBalance = currentBalance - parseFloat(total);
     users[userIndex].purchasedGames = [
-      ...(users[userIndex].purchasedGames || []),
-      ...purchasedGameIds,
+      ...currentPurchasedGames,
+      ...newPurchases,
     ];
 
     saveUsersToFile(users);
