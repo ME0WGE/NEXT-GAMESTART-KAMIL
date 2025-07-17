@@ -356,6 +356,7 @@ export default function Login() {
                 required
                 type="text"
                 placeholder="Nom"
+                autoComplete="username"
                 value={auth.setName}
                 onChange={(e) => dispatch(authSetName(e.target.value))}
               />
@@ -364,6 +365,7 @@ export default function Login() {
                 required
                 type="email"
                 placeholder="Mail"
+                autoComplete="email"
                 value={auth.setEmail}
                 onChange={(e) => dispatch(authSetEmail(e.target.value))}
               />
@@ -372,6 +374,7 @@ export default function Login() {
                 required
                 type="password"
                 placeholder="Password"
+                autoComplete="new-password"
                 value={auth.setPassword}
                 onChange={(e) => dispatch(authSetPassword(e.target.value))}
               />
@@ -430,6 +433,7 @@ export default function Login() {
                 required
                 type="email"
                 placeholder="Mail"
+                autoComplete="email"
                 value={auth.setEmail}
                 onChange={(e) => dispatch(authSetEmail(e.target.value))}
               />
@@ -438,6 +442,7 @@ export default function Login() {
                 required
                 type="password"
                 placeholder="Password"
+                autoComplete="current-password"
                 value={auth.setPassword}
                 onChange={(e) => dispatch(authSetPassword(e.target.value))}
               />
