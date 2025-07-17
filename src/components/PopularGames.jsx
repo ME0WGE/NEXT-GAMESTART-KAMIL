@@ -67,11 +67,13 @@ export default function PopularGames() {
 
   return (
     <>
-      <div className="bg-slate-900 text-white py-12">
-        <div className="container mx-auto relative">
+      <div className="bg-gradient-to-b from-midnight to-midnight/90 circuit-pattern text-ivory py-12">
+        <div className="container mx-auto relative px-4 md:px-8">
           {/* Header of the section */}
           <div className="flex items-center gap-3 mb-8">
-            <TrendingUp className="text-copper" size={32} />
+            <div className="bg-rosy/10 p-3 rounded-full">
+              <TrendingUp className="text-rosy" size={32} />
+            </div>
             <h2 className="text-3xl md:text-4xl font-bold text-ivory">
               Les plus joués du moment
             </h2>
@@ -84,11 +86,11 @@ export default function PopularGames() {
               {Array.from({ length: 8 }).map((_, index) => (
                 <div
                   key={index}
-                  className="bg-slate-800 rounded-xl h-48 animate-pulse">
-                  <div className="w-full h-32 bg-slate-700 rounded-t-xl"></div>
+                  className="bg-midnight/60 backdrop-blur-sm rounded-xl h-48 animate-pulse border border-plum/10">
+                  <div className="w-full h-32 bg-midnight/80 rounded-t-xl"></div>
                   <div className="p-4">
-                    <div className="h-4 bg-slate-700 rounded mb-2"></div>
-                    <div className="h-3 bg-slate-700 rounded w-2/3"></div>
+                    <div className="h-4 bg-midnight/80 rounded mb-2"></div>
+                    <div className="h-3 bg-midnight/80 rounded w-2/3"></div>
                   </div>
                 </div>
               ))}
@@ -99,7 +101,7 @@ export default function PopularGames() {
                 {displayedGames.map((game) => (
                   <div
                     key={game.id}
-                    className="relative bg-slate-800 overflow-hidden h-50 w-90 hover:bg-slate-700 hover:scale-105 transition-all duration-100 cursor-pointer group">
+                    className="relative bg-midnight/60 backdrop-blur-sm overflow-hidden h-50 w-90 hover:bg-slate-700 hover:scale-105 transition-all duration-100 cursor-pointer group rounded-xl border border-plum/20 hover:shadow-rosy/20 hover:border-rosy/40">
                     {/* Game image - takes full space */}
                     <div className="relative w-full h-full">
                       <img
@@ -124,23 +126,25 @@ export default function PopularGames() {
                       </div>
 
                       {/* Overlay with game information - slides up from bottom */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg">
+                      <div className="absolute inset-0 bg-gradient-to-t from-midnight/80 via-midnight/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg">
                         <div className="absolute bottom-0 left-0 right-0 p-4 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
                           <h3 className="font-bold text-lg text-ivory mb-2 truncate">
                             {game.title}
                           </h3>
-                          <div className="flex items-center justify-between text-sm text-gray-300 mb-3">
-                            <span className="bg-slate px-2 py-1 rounded text-xs font-medium">
+                          <div className="flex items-center justify-between text-sm text-ivory/70 mb-3">
+                            <span className="bg-plum/80 px-2 py-1 rounded text-xs font-medium text-ivory">
                               {game.genre}
                             </span>
-                            <span>{game.platform}</span>
+                            <span className="text-ivory/70">
+                              {game.platform}
+                            </span>
                           </div>
                           <div className="flex items-center justify-between">
                             {isInCart(game.id) ? (
                               ""
                             ) : (
                               <Link href={`/games/${game.id}`}>
-                                <button className="w-full bg-moss hover:bg-pine text-slate font-bold py-2 px-2 rounded-lg transition-all duration-200 hover:scale-103 hover:text-ivory shadow-lg flex items-center justify-center gap-2 text-sm cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">
+                                <button className="w-full bg-rosy hover:bg-rosy/90 text-midnight font-bold py-2 px-2 rounded-lg transition-all duration-200 hover:scale-103 hover:text-ivory shadow-lg flex items-center justify-center gap-2 text-sm cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">
                                   <span>Voir plus</span>
                                 </button>
                               </Link>
@@ -156,7 +160,7 @@ export default function PopularGames() {
                                 addingGameId === game.id ||
                                 isInCart(game.id)
                               }
-                              className="not-disabled:w-3/4 w-3/4 bg-moss hover:bg-pine text-slate font-bold py-2 px-3 rounded-lg transition-all duration-200 not-disabled:hover:scale-103 hover:text-ivory shadow-lg flex items-center justify-center gap-2 text-sm cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">
+                              className="not-disabled:w-3/4 w-3/4 bg-rosy hover:bg-rosy/90 text-midnight font-bold py-2 px-3 rounded-lg transition-all duration-200 not-disabled:hover:scale-103 hover:text-ivory shadow-lg flex items-center justify-center gap-2 text-sm cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">
                               <ShoppingCart size={16} />
                               {addingGameId === game.id
                                 ? "Patientez..."

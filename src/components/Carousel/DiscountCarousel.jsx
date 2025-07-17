@@ -167,7 +167,7 @@ export default function DiscountCarousel() {
   return (
     <section
       ref={carouselRef}
-      className="bg-gradient-to-b from-slate-900 to-slate-800 text-white py-10 min-h-[90vh] md:min-h-[80vh]"
+      className="bg-gradient-to-b from-midnight to-midnight/90 circuit-pattern text-ivory py-10 min-h-[90vh] md:min-h-[80vh]"
       tabIndex="0"
       aria-roledescription="carousel"
       aria-label="Featured games with 30% discount">
