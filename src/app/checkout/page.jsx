@@ -177,20 +177,20 @@ export default function Checkout() {
               <Check size={48} className="text-white" />
             </div>
           </div>
-          <h1 className="text-3xl font-bold mb-2">Purchase Complete!</h1>
+          <h1 className="text-3xl font-bold mb-2">Achat terminé!</h1>
           <p className="text-neutral-300 mb-6">
-            Your games have been added to your library.
+            Vos jeux ont été ajoutés à votre bibliothèque.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <button
               onClick={() => router.push("/library")}
               className="px-6 py-3 bg-pine text-white rounded-md hover:bg-pine/90 transition">
-              Go to Library
+              Aller à la bibliothèque
             </button>
             <button
               onClick={() => router.push("/games")}
               className="px-6 py-3 bg-neutral-700 text-white rounded-md hover:bg-neutral-600 transition">
-              Continue Shopping
+              Continuer les achats
             </button>
           </div>
         </div>
@@ -203,14 +203,14 @@ export default function Checkout() {
       <div className="min-h-screen bg-neutral-900 text-neutral-100 flex flex-col pt-20 px-6 md:px-10">
         <div className="max-w-4xl mx-auto w-full bg-neutral-800 rounded-lg p-8 my-8 text-center">
           <ShoppingCart size={48} className="mx-auto mb-4 text-neutral-400" />
-          <h1 className="text-2xl font-bold mb-2">Your cart is empty</h1>
+          <h1 className="text-2xl font-bold mb-2">Votre panier est vide</h1>
           <p className="text-neutral-400 mb-6">
-            Add some games to your cart before checking out.
+            Ajoutez des jeux à votre panier avant de passer à la caisse.
           </p>
           <button
             onClick={() => router.push("/games")}
             className="px-6 py-3 bg-pine text-white rounded-md hover:bg-pine/90 transition">
-            Browse Games
+            Parcourir les jeux
           </button>
         </div>
       </div>

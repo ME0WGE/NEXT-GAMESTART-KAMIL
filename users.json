@@ -5,7 +5,27 @@
     "email": "a@a.a",
     "password": "123",
     "description": "",
-    "purchasedGames": [],
+    "purchasedGames": [
+      {
+        "id": 3,
+        "title": "Warframe",
+        "thumbnail": "https://www.freetogame.com/g/3/thumbnail.jpg",
+        "short_description": "A cooperative free-to-play third person online action shooter set in an stunning sci-fi world. ",
+        "game_url": "https://www.freetogame.com/open/warframe",
+        "genre": "Shooter",
+        "platform": "PC (Windows)",
+        "publisher": "Digital Extremes",
+        "developer": "Digital Extremes",
+        "release_date": "2013-03-25",
+        "freetogame_profile_url": "https://www.freetogame.com/warframe",
+        "price": "8.99",
+        "discount": 0,
+        "discountedPrice": "8.99",
+        "hasDiscount": false,
+        "priceToPay": "8.99",
+        "quantity": 1
+      }
+    ],
     "isConnected": false,
     "creditBalance": 405.66999999999985
   },
