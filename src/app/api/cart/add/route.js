@@ -46,19 +46,27 @@ export async function POST(request) {
       // Do nothing, you can't add more than one quantity of the same game to the cart
       console.log("You already have this game in your cart");
     } else {
-      // Determine the price to use (discounted price if available, otherwise regular price)
+      // Determine the price to use for calculations (discounted price if available, otherwise regular price)
       const priceToUse =
         game.hasDiscount && game.discountedPrice
           ? game.discountedPrice
           : game.price;
 
-      // Add new item to cart with the correct price
+      // Add new item to cart with the correct price structure
       cartItems.push({
         ...game,
-        price: priceToUse, // Use the correct price
+        // Keep the original price in the price field for display purposes
+        price: game.price, // Original price (for crossed-out display)
+        // Add a separate field for the actual price to pay
+        priceToPay: priceToUse, // Price after discount (for calculations)
         quantity: 1,
       });
-      console.log("Game added to cart with price:", priceToUse);
+      console.log(
+        "Game added to cart with original price:",
+        game.price,
+        "and price to pay:",
+        priceToUse
+      );
     }
 
     // Save cart to file

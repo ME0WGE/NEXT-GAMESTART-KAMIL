@@ -11,15 +11,19 @@ export const calculateCouponDiscount = (cartItems) => {
     };
   }
 
-  // Find the cheapest game
+  // Find the cheapest game using priceToPay if available, otherwise use price
   let cheapestGame = cartItems.reduce((cheapest, game) => {
-    const gamePrice = parseFloat(game.price || 0);
-    const cheapestPrice = parseFloat(cheapest?.price || Infinity);
+    const gamePrice = parseFloat(game.priceToPay || game.price || 0);
+    const cheapestPrice = parseFloat(
+      cheapest?.priceToPay || cheapest?.price || Infinity
+    );
     return gamePrice < cheapestPrice ? game : cheapest;
   }, null);
 
   // Calculate the discount amount (price of the cheapest game)
-  const discountAmount = parseFloat(cheapestGame?.price || 0);
+  const discountAmount = parseFloat(
+    cheapestGame?.priceToPay || cheapestGame?.price || 0
+  );
 
   return {
     isApplicable: true,

@@ -66,7 +66,7 @@ export default function CartModal({ isOpen, onClose }) {
 
   // Calculate total price (with coupon discount)
   const subtotal = cartItems.reduce((total, item) => {
-    const price = parseFloat(item.price || "0");
+    const price = parseFloat(item.priceToPay || item.price || "0");
     return total + price;
   }, 0);
 
@@ -171,7 +171,7 @@ export default function CartModal({ isOpen, onClose }) {
                         couponInfo.cheapestGame?.id === item.id ? (
                           <>
                             <p className="line-through text-slate-400 mr-2">
-                              {item.price}€
+                              {item.priceToPay || item.price}€
                             </p>
                             <p className="text-moss font-bold">GRATUIT</p>
                             <span className="bg-pine/20 text-pine text-xs px-2 py-1 rounded ml-2">

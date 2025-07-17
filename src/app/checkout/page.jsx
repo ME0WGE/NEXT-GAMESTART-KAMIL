@@ -44,9 +44,9 @@ export default function Checkout() {
         const data = await apiService.getCart();
         setCartItemsLocal(data);
 
-        // Calculate total
+        // Calculate total using priceToPay if available, otherwise use price
         const sum = data.reduce((acc, item) => {
-          const price = parseFloat(item.price);
+          const price = parseFloat(item.priceToPay || item.price);
           return acc + price;
         }, 0);
 
@@ -248,7 +248,20 @@ export default function Checkout() {
                         Digital Download
                       </p>
                     </div>
-                    <div className="ml-4 font-medium">${item.price}</div>
+                    <div className="ml-4 font-medium">
+                      {item.hasDiscount && item.discountedPrice ? (
+                        <div className="text-right">
+                          <div className="line-through text-neutral-400 text-sm">
+                            ${item.price}
+                          </div>
+                          <div className="text-green-400">
+                            ${item.priceToPay || item.discountedPrice}
+                          </div>
+                        </div>
+                      ) : (
+                        <span>${item.price}</span>
+                      )}
+                    </div>
                   </div>
                 ))}
               </div>

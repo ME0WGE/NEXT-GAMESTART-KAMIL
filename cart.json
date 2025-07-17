@@ -1,1 +1,67 @@
-[]
+[
+  {
+    "id": 20,
+    "title": "Splitgate: Arena Warfare",
+    "thumbnail": "https://www.freetogame.com/g/20/thumbnail.jpg",
+    "status": "Live",
+    "short_description": "A free-to-play multiplayer shooter developed and published by 1047 games. ",
+    "description": "Splitgate: Arena Warfare is a free-to-play multiplayer shooter developed and published by 1047 games. \r\n\r\nThe game combines elements of shooters from the last two decades with dimension altering portals. Similar to the game Portal, players can use these to move things from one area of the map to another — including their opponents, or themselves. Drop your opponent through a hole or sneak up behind them using the portal tech.\r\n\r\nThe game features close-quarters combat and allows players to take on nine other players or fight against AI. It’s designed for veteran and new players and boasts an “infinitely high skill cap”. As with most competitive shooters, players can expect a ranking system. Splitgate’s is based solely on wins and losses — something the developers feel will cut back on griefing and boosting.",
+    "game_url": "https://www.freetogame.com/open/splitgate-arena-warfare",
+    "genre": "Shooter",
+    "platform": "Windows",
+    "publisher": "1047 Games",
+    "developer": "1047 Games",
+    "release_date": "2019-05-22",
+    "freetogame_profile_url": "https://www.freetogame.com/splitgate-arena-warfare",
+    "minimum_system_requirements": {
+      "os": "64-bit Windows 7, Windows 8.1, Windows 10",
+      "processor": "Any dual core CPU",
+      "memory": "6 GB RAM",
+      "graphics": "NVIDIA GeForce GTX 560 1GB",
+      "storage": "15 GB available space"
+    },
+    "screenshots": [
+      {
+        "id": 75,
+        "image": "https://www.freetogame.com/g/20/splitgate-arena-warefare-4.jpg"
+      },
+      {
+        "id": 76,
+        "image": "https://www.freetogame.com/g/20/splitgate-arena-warefare-1.jpg"
+      },
+      {
+        "id": 77,
+        "image": "https://www.freetogame.com/g/20/splitgate-arena-warefare-2.jpg"
+      },
+      {
+        "id": 78,
+        "image": "https://www.freetogame.com/g/20/splitgate-arena-warefare-3.jpg"
+      }
+    ],
+    "price": "25.99",
+    "discount": 30,
+    "discountedPrice": "18.19",
+    "video": "https://www.freetogame.com/g/20/videoplayback.webm",
+    "priceToPay": "25.99",
+    "quantity": 1
+  },
+  {
+    "id": 570,
+    "title": "The Finals",
+    "thumbnail": "https://www.freetogame.com/g/570/thumbnail.jpg",
+    "short_description": "A game-show style PvP shooter from Embark Studios.",
+    "game_url": "https://www.freetogame.com/open/the-finals",
+    "genre": "Shooter",
+    "platform": "PC (Windows)",
+    "publisher": "Embark Studios",
+    "developer": "Embark Studios",
+    "release_date": "2023-12-07",
+    "freetogame_profile_url": "https://www.freetogame.com/the-finals",
+    "price": "5.99",
+    "discount": 13,
+    "discountedPrice": "5.21",
+    "hasDiscount": true,
+    "priceToPay": "5.21",
+    "quantity": 1
+  }
+]
