@@ -204,7 +204,7 @@ export default function SearchBar() {
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(searchQuery.length > 0)}
             placeholder={getSearchPlaceholder()}
-            className={`w-full bg-midnight/80 text-ivory pl-12 pr-24 py-4 text-lg placeholder-ivory/50 focus:outline-none transition-all duration-300 ${
+            className={`w-full bg-midnight/80 text-ivory pl-12 pr-20 sm:pr-24 py-3 sm:py-4 text-base sm:text-lg placeholder-ivory/50 focus:outline-none transition-all duration-300 ${
               isFocused ? "bg-midnight/90" : ""
             }`}
           />
@@ -213,9 +213,9 @@ export default function SearchBar() {
           {searchQuery && (
             <button
               onClick={handleClearSearch}
-              className="absolute right-16 top-1/2 transform -translate-y-1/2 text-ivory/60 hover:text-ivory transition-colors duration-200 p-2 hover:bg-midnight/50 rounded-full"
+              className="absolute right-12 sm:right-16 top-1/2 transform -translate-y-1/2 text-ivory/60 hover:text-ivory transition-colors duration-200 p-1.5 sm:p-2 hover:bg-midnight/50 rounded-full"
               aria-label="Effacer la recherche">
-              <X size={18} />
+              <X size={16} className="sm:w-4.5 sm:h-4.5" />
             </button>
           )}
 
@@ -223,13 +223,13 @@ export default function SearchBar() {
           <button
             onClick={filterGames}
             disabled={isSearching}
-            className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-rosy hover:bg-pine transition-colors duration-300 text-ivory px-4 py-2 rounded-lg flex items-center justify-center disabled:opacity-50 shadow-lg">
+            className="absolute right-1 sm:right-2 top-1/2 transform -translate-y-1/2 bg-rosy hover:bg-pine transition-colors duration-300 text-ivory px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg flex items-center justify-center disabled:opacity-50 shadow-lg">
             {isSearching ? (
               <div className="animate-pulse">
-                <Search size={18} />
+                <Search size={16} className="sm:w-4.5 sm:h-4.5" />
               </div>
             ) : (
-              <Search size={18} />
+              <Search size={16} className="sm:w-4.5 sm:h-4.5" />
             )}
           </button>
         </div>

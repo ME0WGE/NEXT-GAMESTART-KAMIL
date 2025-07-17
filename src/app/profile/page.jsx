@@ -17,22 +17,24 @@ export default function Profile() {
   // Show loading state if data is loading
   if (isLoading) {
     return (
-      <div className="profile-page min-h-screen bg-neutral-900 text-neutral-100 flex flex-col items-center justify-center pt-16">
-        <div className="animate-pulse text-xl">Loading profile data...</div>
+      <div className="min-h-screen bg-neutral-900 text-neutral-100 flex flex-col items-center justify-center pt-16">
+        <div className="animate-spin w-12 h-12 border-4 border-ivory/20 border-t-pine rounded-full"></div>
+        <p className="mt-4 text-xl text-neutral-300">Chargement du profil...</p>
       </div>
     );
   }
 
   return (
     <ProtectedRoute redirectTo="/profile">
-      <div className="profile-page min-h-screen bg-neutral-900 text-neutral-100 flex flex-col pt-16">
-        <div className="max-w-5xl mx-auto w-full px-8">
-          <div className="bg-neutral-800 shadow-lg flex flex-col overflow-hidden">
+      <div className="min-h-screen bg-neutral-900 text-neutral-100 flex flex-col pt-16">
+        <div className="max-w-5xl mx-auto w-full px-4 sm:px-6 lg:px-8">
+          <div className="bg-neutral-800 shadow-lg flex flex-col overflow-hidden rounded-lg">
             {/* Profile Banner */}
-            <section className="py-8 px-8 border-b border-neutral-700">
-              <div className="profile-banner-content flex items-start justify-between">
-                <div className="profile-avatar-section flex items-center gap-6">
-                  <div className="avatar w-28 h-28 rounded-md border-4 border-neutral-950 bg-neutral-700 shadow-lg overflow-hidden">
+            <section className="py-6 sm:py-8 px-4 sm:px-6 lg:px-8 border-b border-neutral-700">
+              <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
+                {/* Avatar and User Details */}
+                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6">
+                  <div className="avatar w-20 h-20 sm:w-28 sm:h-28 rounded-md border-4 border-neutral-950 bg-neutral-700 shadow-lg overflow-hidden flex-shrink-0">
                     {(user.avatar_url || session?.user?.image) && (
                       <img
                         src={user.avatar_url || session?.user?.image}
@@ -41,19 +43,21 @@ export default function Profile() {
                       />
                     )}
                   </div>
-                  <div className="user-details flex flex-col gap-1">
-                    <h2 className="username text-3xl font-semibold leading-tight">
+                  <div className="user-details flex flex-col gap-1 min-w-0 flex-1">
+                    <h2 className="username text-2xl sm:text-3xl font-semibold leading-tight text-white">
                       {user.name || session?.user?.name || "Username"}
                     </h2>
-                    <p className="email text-neutral-400">
+                    <p className="email text-neutral-400 text-sm sm:text-base">
                       {user.email || session?.user?.email || ""}
                     </p>
-                    <p className="description text-neutral-300 text-lg mt-2">
+                    <p className="description text-neutral-300 text-sm sm:text-lg mt-2">
                       {user.description || "Aucune description fournie"}
                     </p>
                   </div>
                 </div>
-                <div className="profile-settings-section flex flex-col gap-4">
+
+                {/* Profile Settings Section */}
+                <div className="flex flex-col gap-4 w-full lg:w-auto">
                   {/* Credit Balance Display */}
                   <div className="bg-neutral-700/50 rounded-lg p-4 border border-neutral-600">
                     <div className="flex items-center gap-2 mb-2">
@@ -62,7 +66,7 @@ export default function Profile() {
                         Solde de crédit
                       </span>
                     </div>
-                    <p className="text-2xl font-bold text-white">
+                    <p className="text-xl sm:text-2xl font-bold text-white">
                       {(user.creditBalance || 0).toFixed(2)} €
                     </p>
                     <button
@@ -77,9 +81,10 @@ export default function Profile() {
                 </div>
               </div>
             </section>
+
             {/* Main Content */}
-            <div className="flex items-stretch">
-              <main className="flex-1 p-6">
+            <div className="flex flex-col lg:flex-row items-stretch">
+              <main className="flex-1 p-4 sm:p-6">
                 <ProfileOrders />
               </main>
             </div>

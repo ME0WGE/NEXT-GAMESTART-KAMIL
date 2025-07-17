@@ -26,7 +26,7 @@ export const useBudgetGames = () => {
             : game.price;
           return priceToCheck < 10;
         })
-        .slice(0, 12); // Limit to 12 games initially
+        .slice(0, 37); // Limit to 12 games initially
 
       dispatch(setBudgetGames(games));
       dispatch(setLoading(false));

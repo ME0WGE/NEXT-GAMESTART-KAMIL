@@ -201,14 +201,16 @@ export default function Checkout() {
             </button>
           </div>
         ) : (
-          <div className="max-w-6xl mx-auto w-full">
-            <h1 className="text-3xl font-bold mb-6">Checkout</h1>
+          <div className="max-w-6xl mx-auto w-full px-4 sm:px-6 lg:px-8">
+            <h1 className="text-2xl sm:text-3xl font-bold mb-6 text-white">
+              Checkout
+            </h1>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
               {/* Cart items */}
               <div className="lg:col-span-2">
-                <div className="bg-neutral-800 rounded-lg p-6">
-                  <h2 className="text-xl font-semibold mb-4 flex items-center">
+                <div className="bg-neutral-800 rounded-lg p-4 sm:p-6">
+                  <h2 className="text-lg sm:text-xl font-semibold mb-4 flex items-center text-white">
                     <ShoppingCart size={20} className="mr-2" />
                     Cart Items
                   </h2>
@@ -222,8 +224,8 @@ export default function Checkout() {
                       return (
                         <div
                           key={item.id}
-                          className="flex items-center bg-neutral-700/50 p-3 rounded-md">
-                          <div className="flex-shrink-0 w-16 h-16 mr-4 relative rounded overflow-hidden">
+                          className="flex flex-col sm:flex-row items-start sm:items-center bg-neutral-700/50 p-3 sm:p-4 rounded-md gap-3 sm:gap-4">
+                          <div className="flex-shrink-0 w-16 h-16 sm:w-20 sm:h-20 relative rounded overflow-hidden">
                             <img
                               src={
                                 item.thumbnail ||
@@ -233,26 +235,28 @@ export default function Checkout() {
                               className="w-full h-full object-cover"
                             />
                           </div>
-                          <div className="flex-grow">
-                            <h3 className="font-medium text-white">
+                          <div className="flex-grow min-w-0">
+                            <h3 className="font-medium text-white text-sm sm:text-base mb-1">
                               {item.title}
                             </h3>
-                            <p className="text-neutral-400 text-sm">
+                            <p className="text-neutral-400 text-xs sm:text-sm">
                               Téléchargement digital
                             </p>
                           </div>
-                          <div className="ml-4 font-medium">
+                          <div className="flex-shrink-0 font-medium text-right">
                             {hasDiscount ? (
                               <div className="text-right">
-                                <div className="line-through text-neutral-400 text-sm">
+                                <div className="line-through text-neutral-400 text-xs sm:text-sm">
                                   ${originalPrice.toFixed(2)}
                                 </div>
-                                <div className="text-green-400">
+                                <div className="text-green-400 text-sm sm:text-base">
                                   ${discountedPrice.toFixed(2)}
                                 </div>
                               </div>
                             ) : (
-                              <span>${originalPrice.toFixed(2)}</span>
+                              <span className="text-white text-sm sm:text-base">
+                                ${originalPrice.toFixed(2)}
+                              </span>
                             )}
                           </div>
                         </div>
@@ -260,7 +264,7 @@ export default function Checkout() {
                     })}
                   </div>
 
-                  <div className="mt-6 flex justify-between items-center">
+                  <div className="mt-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                     <button
                       onClick={handleClearCart}
                       className="text-red-400 hover:text-red-300 flex items-center text-sm">
@@ -268,24 +272,22 @@ export default function Checkout() {
                       Vider le panier
                     </button>
 
-                    <div className="text-lg">
+                    <div className="text-base sm:text-lg text-white">
                       Total:{" "}
-                      <span className="font-bold text-white">
-                        ${total.toFixed(2)}
-                      </span>
+                      <span className="font-bold">${total.toFixed(2)}</span>
                     </div>
                   </div>
 
                   {/* Coupon Notification */}
                   {isCouponApplicable && couponDiscount > 0 && (
-                    <div className="mt-4 p-3 bg-green-500/10 border border-green-500/20 rounded-lg">
+                    <div className="mt-4 p-3 sm:p-4 bg-green-500/10 border border-green-500/20 rounded-lg">
                       <div className="flex items-center gap-2 text-green-400">
                         <Tag size={16} />
-                        <span className="font-medium">
+                        <span className="font-medium text-sm sm:text-base">
                           4+1 Promotion appliquée!
                         </span>
                       </div>
-                      <p className="text-green-300 text-sm mt-1">
+                      <p className="text-green-300 text-xs sm:text-sm mt-1">
                         Vous avez économisé ${couponDiscount.toFixed(2)} sur
                         votre jeu le moins cher.
                       </p>
@@ -296,8 +298,8 @@ export default function Checkout() {
 
               {/* Payment section */}
               <div className="lg:col-span-1">
-                <div className="bg-neutral-800 rounded-lg p-6 sticky top-24">
-                  <h2 className="text-xl font-semibold mb-4 flex items-center">
+                <div className="bg-neutral-800 rounded-lg p-4 sm:p-6 sticky top-24">
+                  <h2 className="text-lg sm:text-xl font-semibold mb-4 flex items-center text-white">
                     <CreditCard size={20} className="mr-2" />
                     Paiement
                   </h2>
@@ -338,7 +340,9 @@ export default function Checkout() {
                       />
                       <div className="flex items-center gap-2">
                         <CreditCard size={16} className="text-pine" />
-                        <span className="text-white">Carte bancaire</span>
+                        <span className="text-white text-sm sm:text-base">
+                          Carte bancaire
+                        </span>
                       </div>
                     </label>
 
@@ -360,22 +364,24 @@ export default function Checkout() {
                       />
                       <div className="flex items-center gap-2">
                         <CreditCard size={16} className="text-pine" />
-                        <span className="text-white">Solde de crédit</span>
+                        <span className="text-white text-sm sm:text-base">
+                          Solde de crédit
+                        </span>
                       </div>
                     </label>
                   </div>
 
                   {/* Order Summary */}
                   <div className="bg-neutral-700/50 p-4 rounded-md mb-4">
-                    <p className="text-neutral-300 mb-2">
+                    <p className="text-neutral-300 mb-2 text-sm sm:text-base">
                       Récapitulatif de la commande
                     </p>
-                    <div className="flex justify-between mb-1">
+                    <div className="flex justify-between mb-1 text-sm">
                       <span className="text-neutral-400">Sous-total</span>
-                      <span>${subtotal.toFixed(2)}</span>
+                      <span className="text-white">${subtotal.toFixed(2)}</span>
                     </div>
                     {couponDiscount > 0 && (
-                      <div className="flex justify-between mb-1 text-green-400">
+                      <div className="flex justify-between mb-1 text-green-400 text-sm">
                         <span className="flex items-center gap-1">
                           <Tag size={12} />
                           4+1 Promotion
@@ -383,43 +389,42 @@ export default function Checkout() {
                         <span>-${couponDiscount.toFixed(2)}</span>
                       </div>
                     )}
-                    <div className="flex justify-between mb-1">
+                    <div className="flex justify-between mb-1 text-sm">
                       <span className="text-neutral-400">Taxe</span>
-                      <span>$0.00</span>
+                      <span className="text-white">$0.00</span>
                     </div>
                     <div className="border-t border-neutral-600 my-2"></div>
-                    <div className="flex justify-between font-medium">
-                      <span>Total à payer</span>
-                      <span>${total.toFixed(2)}</span>
+                    <div className="flex justify-between font-medium text-sm sm:text-base">
+                      <span className="text-white">Total à payer</span>
+                      <span className="text-white">${total.toFixed(2)}</span>
                     </div>
                   </div>
 
                   {/* Error Message */}
                   {checkoutError && (
                     <div className="flex items-center gap-2 p-3 bg-red-500/10 border border-red-500/20 rounded-lg mb-4">
-                      <AlertCircle
-                        size={16}
-                        className="text-red-400 flex-shrink-0"
-                      />
-                      <p className="text-red-400 text-sm">{checkoutError}</p>
+                      <AlertCircle size={16} className="text-red-400" />
+                      <span className="text-red-400 text-sm">
+                        {checkoutError}
+                      </span>
                     </div>
                   )}
 
+                  {/* Checkout Button */}
                   <button
                     onClick={handleCheckout}
-                    disabled={
-                      isCheckingOut ||
-                      cartItems.length === 0 ||
-                      (paymentMethod === "credits" && !hasSufficientCredits)
-                    }
-                    className="w-full py-3 bg-pine hover:bg-pine/90 text-white rounded-md transition disabled:opacity-70 disabled:cursor-not-allowed flex justify-center items-center">
+                    disabled={isCheckingOut}
+                    className="w-full bg-pine hover:bg-pine/90 disabled:bg-neutral-600 text-white font-medium py-3 px-4 rounded-lg transition-colors disabled:cursor-not-allowed flex items-center justify-center gap-2">
                     {isCheckingOut ? (
                       <>
-                        <Loader className="animate-spin mr-2" size={16} />
-                        Traitement...
+                        <div className="animate-spin w-5 h-5 border-2 border-white/30 border-t-white rounded-full"></div>
+                        <span>Traitement...</span>
                       </>
                     ) : (
-                      <>Acheter</>
+                      <>
+                        <CreditCard size={20} />
+                        <span>Finaliser la commande</span>
+                      </>
                     )}
                   </button>
                 </div>

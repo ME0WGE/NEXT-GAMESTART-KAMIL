@@ -80,23 +80,28 @@ export default function Library() {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-neutral-900 text-neutral-100 flex flex-col items-center justify-center pt-16">
-        <div className="animate-pulse text-xl">Loading library...</div>
+        <div className="animate-spin w-12 h-12 border-4 border-ivory/20 border-t-pine rounded-full"></div>
+        <p className="mt-4 text-xl text-neutral-300">
+          Chargement de la bibliothèque...
+        </p>
       </div>
     );
   }
 
   return (
     <ProtectedRoute redirectTo="/library">
-      <div className="min-h-screen bg-neutral-900 text-neutral-100 flex flex-col pt-20 px-6 md:px-10">
-        <div className="max-w-7xl mx-auto w-full">
-          <h1 className="text-3xl font-bold mb-6">Your Game Library</h1>
+      <div className="min-h-screen bg-neutral-900 text-neutral-100 flex flex-col pt-16 sm:pt-20">
+        <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+          <h1 className="text-2xl sm:text-3xl font-bold mb-6 text-white">
+            Votre Bibliothèque de Jeux
+          </h1>
 
           {/* Search and filters */}
-          <div className="mb-6">
+          <div className="mb-6 sm:mb-8">
             <input
               type="text"
-              placeholder="Search your games..."
-              className="w-full md:w-1/2 px-4 py-2 bg-neutral-800 border border-neutral-700 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-pine"
+              placeholder="Rechercher dans vos jeux..."
+              className="w-full sm:w-1/2 lg:w-1/3 px-4 py-2 sm:py-3 bg-neutral-800 border border-neutral-700 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-pine text-sm sm:text-base"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
@@ -104,21 +109,21 @@ export default function Library() {
 
           {/* Game library grid */}
           {purchasedGames.length === 0 ? (
-            <div className="bg-neutral-800 p-8 rounded-lg text-center">
-              <h2 className="text-2xl font-semibold mb-2">
+            <div className="bg-neutral-800 p-6 sm:p-8 rounded-lg text-center">
+              <h2 className="text-xl sm:text-2xl font-semibold mb-2 text-white">
                 Votre bibliothèque est vide
               </h2>
-              <p className="text-neutral-400 mb-4">
+              <p className="text-neutral-400 mb-4 text-sm sm:text-base">
                 Vous n'avez pas encore acheté de jeux.
               </p>
               <Link
                 href="/games"
-                className="inline-block px-6 py-3 bg-pine text-white rounded-md hover:bg-pine/90 transition">
+                className="inline-block px-4 sm:px-6 py-2 sm:py-3 bg-pine text-white rounded-md hover:bg-pine/90 transition text-sm sm:text-base">
                 Parcourir les jeux
               </Link>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
               {filteredGames.map((game) => {
                 const isDownloading = downloadingGames.has(game.id);
 
@@ -127,7 +132,7 @@ export default function Library() {
                     key={game.id}
                     className="game-card bg-neutral-800 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-transform hover:-translate-y-1">
                     <Link href={`/games/${game.id}`} className="block">
-                      <div className="relative h-48 w-full">
+                      <div className="relative h-40 sm:h-48 w-full">
                         <img
                           src={
                             game.thumbnail ||
@@ -136,19 +141,21 @@ export default function Library() {
                           alt={game.title}
                           className="w-full h-full object-cover"
                         />
+                        {/* Overlay for better text readability */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-neutral-900/80 via-transparent to-transparent"></div>
                       </div>
-                      <div className="p-4">
-                        <h2 className="text-lg font-semibold text-white mb-1">
+                      <div className="p-3 sm:p-4">
+                        <h2 className="text-base sm:text-lg font-semibold text-white mb-2 line-clamp-2">
                           {game.title}
                         </h2>
-                        <div className="flex justify-between items-center">
-                          <span className="text-sm bg-pine/90 text-white px-2 py-1 rounded">
+                        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 sm:gap-3">
+                          <span className="text-xs sm:text-sm bg-pine/90 text-white px-2 py-1 rounded">
                             Acheté
                           </span>
                           <button
                             onClick={(e) => handlePlayGame(game, e)}
                             disabled={isDownloading}
-                            className={`flex items-center gap-1 px-3 py-1 rounded text-sm transition-colors ${
+                            className={`flex items-center gap-1 px-2 sm:px-3 py-1 sm:py-1.5 rounded text-xs sm:text-sm transition-colors ${
                               isDownloading
                                 ? "bg-neutral-600 text-neutral-400 cursor-not-allowed"
                                 : "bg-neutral-700 hover:bg-neutral-600 text-white"
@@ -173,6 +180,25 @@ export default function Library() {
               })}
             </div>
           )}
+
+          {/* No search results */}
+          {purchasedGames.length > 0 &&
+            filteredGames.length === 0 &&
+            searchTerm && (
+              <div className="bg-neutral-800 p-6 sm:p-8 rounded-lg text-center">
+                <h2 className="text-xl sm:text-2xl font-semibold mb-2 text-white">
+                  Aucun jeu trouvé
+                </h2>
+                <p className="text-neutral-400 mb-4 text-sm sm:text-base">
+                  Aucun jeu ne correspond à votre recherche "{searchTerm}".
+                </p>
+                <button
+                  onClick={() => setSearchTerm("")}
+                  className="inline-block px-4 sm:px-6 py-2 sm:py-3 bg-neutral-700 text-white rounded-md hover:bg-neutral-600 transition text-sm sm:text-base">
+                  Effacer la recherche
+                </button>
+              </div>
+            )}
         </div>
       </div>
     </ProtectedRoute>

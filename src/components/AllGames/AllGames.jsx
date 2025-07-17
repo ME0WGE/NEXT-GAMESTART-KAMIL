@@ -151,7 +151,7 @@ export default function AllGames() {
         </div>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
         {gamesToDisplay.map((game) => {
           const imageState = imageLoadStates[game.id] || "loading";
 
@@ -181,9 +181,12 @@ export default function AllGames() {
 
                   {/* Cart Status Indicator */}
                   {isInCart(game.id) && (
-                    <div className="absolute bottom-4 right-4 bg-pine/90 backdrop-blur-sm px-3 py-1 rounded-full border border-pine/30">
+                    <div className="absolute bottom-2 sm:bottom-4 right-2 sm:right-4 bg-pine/90 backdrop-blur-sm px-2 sm:px-3 py-1 rounded-full border border-pine/30">
                       <div className="flex items-center gap-1">
-                        <ShoppingCart size={12} className="text-white" />
+                        <ShoppingCart
+                          size={10}
+                          className="text-white sm:w-3 sm:h-3"
+                        />
                         <span className="text-white text-xs font-medium">
                           Dans le panier
                         </span>
@@ -193,31 +196,34 @@ export default function AllGames() {
                 </div>
 
                 {/* Content */}
-                <div className="p-6 flex-grow flex flex-col">
+                <div className="p-3 sm:p-4 lg:p-6 flex-grow flex flex-col">
                   {/* Title */}
-                  <h3 className="font-bold text-xl text-ivory group-hover:text-rosy transition-colors duration-300 line-clamp-2 mb-3">
+                  <h3 className="font-bold text-lg sm:text-xl text-ivory group-hover:text-rosy transition-colors duration-300 line-clamp-2 mb-2 sm:mb-3">
                     {game.title}
                   </h3>
 
                   {/* Metadata */}
-                  <div className="flex items-center gap-4 mb-4">
+                  <div className="flex items-center gap-2 sm:gap-4 mb-3 sm:mb-4">
                     <div className="flex items-center gap-1">
-                      <User size={14} className="text-ivory/60" />
-                      <span className="text-ivory/60 text-sm">
+                      <User
+                        size={12}
+                        className="text-ivory/60 sm:w-3.5 sm:h-3.5"
+                      />
+                      <span className="text-ivory/60 text-xs sm:text-sm">
                         {game.publisher || "Unknown"}
                       </span>
                     </div>
                   </div>
 
                   {/* Genre Tag */}
-                  <div className="mb-6">
-                    <span className="inline-block bg-plum/20 text-plum px-3 py-1.5 rounded-full text-sm font-medium border border-plum/30">
+                  <div className="mb-4 sm:mb-6">
+                    <span className="inline-block bg-plum/20 text-plum px-2 sm:px-3 py-1 sm:py-1.5 rounded-full text-xs sm:text-sm font-medium border border-plum/30">
                       {game.genre}
                     </span>
                   </div>
 
                   {/* Price and Action */}
-                  <div className="flex justify-between items-center mt-auto pt-4 border-t border-ivory/10 text-ivory">
+                  <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-4 mt-auto pt-3 sm:pt-4 border-t border-ivory/10 text-ivory">
                     <div className="flex flex-col">
                       <GamePrice
                         game={game}
@@ -225,20 +231,24 @@ export default function AllGames() {
                         size="default"
                         showDiscountBadge={true}
                       />
-                      <span className="text-ivory/60 text-sm">Prix TTC</span>
+                      <span className="text-ivory/60 text-xs sm:text-sm">
+                        Prix TTC
+                      </span>
                     </div>
 
                     {isInCart(game.id) ? (
                       <button
                         onClick={(e) => handleRemoveFromCart(game.id, e)}
                         disabled={removingGameId === game.id}
-                        className="bg-red-500/90 hover:bg-red-600 text-white px-4 py-2.5 rounded-lg transition-all duration-300 flex items-center gap-2 disabled:opacity-50 shadow-lg hover:shadow-red-500/25 min-w-[120px] justify-center">
+                        className="w-full sm:w-auto bg-red-500/90 hover:bg-red-600 text-white px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 shadow-lg hover:shadow-red-500/25 min-w-[100px] sm:min-w-[120px]">
                         {removingGameId === game.id ? (
                           <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
                         ) : (
                           <>
-                            <Trash2 size={16} />
-                            <span className="font-medium">Retirer</span>
+                            <Trash2 size={14} className="sm:w-4 sm:h-4" />
+                            <span className="font-medium text-sm sm:text-base">
+                              Retirer
+                            </span>
                           </>
                         )}
                       </button>
@@ -246,13 +256,15 @@ export default function AllGames() {
                       <button
                         onClick={(e) => handleAddToCart(game, e)}
                         disabled={addingToCart || addingGameId === game.id}
-                        className="bg-pine hover:bg-moss text-white px-4 py-2.5 rounded-lg transition-all duration-300 flex items-center gap-2 disabled:opacity-50 shadow-lg hover:shadow-pine/25 min-w-[120px] justify-center">
+                        className="w-full sm:w-auto bg-pine hover:bg-moss text-white px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 shadow-lg hover:shadow-pine/25 min-w-[100px] sm:min-w-[120px]">
                         {addingGameId === game.id ? (
                           <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
                         ) : (
                           <>
-                            <ShoppingCart size={16} />
-                            <span className="font-medium">Ajouter</span>
+                            <ShoppingCart size={14} className="sm:w-4 sm:h-4" />
+                            <span className="font-medium text-sm sm:text-base">
+                              Ajouter
+                            </span>
                           </>
                         )}
                       </button>
