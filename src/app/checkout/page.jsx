@@ -5,8 +5,15 @@ import { useSelector, useDispatch } from "react-redux";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Login from "@/components/Login";
-import { purchaseGames } from "@/lib/features/authSlice";
-import { X, Check, ShoppingCart, CreditCard, Loader } from "lucide-react";
+import { purchaseGames, useUserCredits } from "@/lib/features/authSlice";
+import {
+  X,
+  Check,
+  ShoppingCart,
+  CreditCard,
+  Loader,
+  Wallet,
+} from "lucide-react";
 import { apiService } from "@/lib/services/apiService";
 
 export default function Checkout() {
@@ -18,6 +25,8 @@ export default function Checkout() {
   const [total, setTotal] = useState(0);
   const [fetchingCart, setFetchingCart] = useState(true);
   const [purchaseComplete, setPurchaseComplete] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState("creditCard"); // creditCard or credits
+  const [creditError, setCreditError] = useState("");
 
   const dispatch = useDispatch();
   const { data: session } = useSession();
@@ -50,7 +59,10 @@ export default function Checkout() {
 
   // Check for successful purchase
   useEffect(() => {
-    if (successMessage === "Purchase completed successfully") {
+    if (
+      successMessage === "Purchase completed successfully" ||
+      successMessage === "Purchase completed with credits"
+    ) {
       setPurchaseComplete(true);
     }
   }, [successMessage]);
@@ -67,6 +79,8 @@ export default function Checkout() {
     if (cartItems.length === 0) return;
 
     setIsCheckingOut(true);
+    setCreditError("");
+
     try {
       // Get the correct user ID - check Redux user first, then fallback to email lookup
       const userId = user.id || (await getUserIdFromEmail());
@@ -74,9 +88,29 @@ export default function Checkout() {
         throw new Error("Unable to determine user ID for checkout");
       }
 
-      await dispatch(purchaseGames(userId)).unwrap();
+      if (paymentMethod === "credits") {
+        // Check if user has enough credits
+        if ((user.credits || 0) < total) {
+          setCreditError(
+            `Insufficient credits. You need ${total.toFixed(
+              2
+            )} credits but only have ${user.credits?.toFixed(2) || 0}.`
+          );
+          setIsCheckingOut(false);
+          return;
+        }
+
+        // Use credits for payment
+        await dispatch(useUserCredits({ userId, amount: total })).unwrap();
+      } else {
+        // Regular purchase
+        await dispatch(purchaseGames(userId)).unwrap();
+      }
     } catch (error) {
       console.error("Checkout failed:", error);
+      if (error.includes && error.includes("Insufficient credits")) {
+        setCreditError("Insufficient credits for this purchase.");
+      }
     } finally {
       setIsCheckingOut(false);
     }
@@ -262,9 +296,77 @@ export default function Checkout() {
                 </div>
               </div>
 
+              {/* Payment Method Selection */}
+              <div className="mb-4">
+                <p className="text-neutral-300 mb-2">Payment Method</p>
+                <div className="space-y-2">
+                  <label className="flex items-center bg-neutral-700/30 p-3 rounded-md cursor-pointer hover:bg-neutral-700/50 transition-colors">
+                    <input
+                      type="radio"
+                      name="paymentMethod"
+                      value="creditCard"
+                      checked={paymentMethod === "creditCard"}
+                      onChange={() => {
+                        setPaymentMethod("creditCard");
+                        setCreditError("");
+                      }}
+                      className="mr-2"
+                    />
+                    <CreditCard size={16} className="mr-2" />
+                    <span>Credit Card (Simulated)</span>
+                  </label>
+
+                  <label
+                    className={`flex items-center bg-neutral-700/30 p-3 rounded-md cursor-pointer hover:bg-neutral-700/50 transition-colors ${
+                      (user.credits || 0) < total ? "opacity-75" : ""
+                    }`}>
+                    <input
+                      type="radio"
+                      name="paymentMethod"
+                      value="credits"
+                      checked={paymentMethod === "credits"}
+                      onChange={() => {
+                        setPaymentMethod("credits");
+                        setCreditError("");
+                      }}
+                      className="mr-2"
+                    />
+                    <Wallet size={16} className="mr-2" />
+                    <div className="flex flex-col">
+                      <span>Store Credits</span>
+                      <div className="flex items-center text-xs mt-1">
+                        <span
+                          className={`${
+                            (user.credits || 0) >= total
+                              ? "text-pine"
+                              : "text-red-400"
+                          }`}>
+                          Balance: ${user.credits?.toFixed(2) || "0.00"}
+                        </span>
+                        {(user.credits || 0) < total && (
+                          <span className="ml-2 text-red-400">
+                            (Insufficient)
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </label>
+                </div>
+
+                {creditError && (
+                  <div className="mt-2 p-2 bg-red-500/20 border border-red-500/30 rounded text-red-400 text-sm">
+                    {creditError}
+                  </div>
+                )}
+              </div>
+
               <button
                 onClick={handleCheckout}
-                disabled={isCheckingOut || cartItems.length === 0}
+                disabled={
+                  isCheckingOut ||
+                  cartItems.length === 0 ||
+                  (paymentMethod === "credits" && (user.credits || 0) < total)
+                }
                 className="w-full py-3 bg-pine hover:bg-pine/90 text-white rounded-md transition disabled:opacity-70 disabled:cursor-not-allowed flex justify-center items-center">
                 {isCheckingOut ? (
                   <>
@@ -275,6 +377,17 @@ export default function Checkout() {
                   <>Complete Purchase</>
                 )}
               </button>
+
+              {paymentMethod === "credits" &&
+                (user.credits || 0) < total &&
+                !creditError && (
+                  <div className="mt-2 text-center text-sm text-neutral-400">
+                    <a href="/profile" className="text-pine hover:underline">
+                      Add more credits
+                    </a>{" "}
+                    to your account to complete this purchase.
+                  </div>
+                )}
             </div>
           </div>
         </div>

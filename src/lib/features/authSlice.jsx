@@ -153,6 +153,58 @@ export const syncOAuthUser = createAsyncThunk(
   }
 );
 
+// Add new thunk for adding credits
+export const addUserCredits = createAsyncThunk(
+  "auth/addUserCredits",
+  async ({ userId, amount }, { rejectWithValue }) => {
+    try {
+      const response = await fetch(`/api/users/${userId}/credits`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ amount }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        return rejectWithValue(data.message || "Failed to add credits");
+      }
+
+      return data.user;
+    } catch (error) {
+      return rejectWithValue(error.message || "Failed to add credits");
+    }
+  }
+);
+
+// Add new thunk for using credits in checkout
+export const useUserCredits = createAsyncThunk(
+  "auth/useUserCredits",
+  async ({ userId, amount }, { rejectWithValue }) => {
+    try {
+      const response = await fetch(`/api/users/${userId}/credits/use`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ amount }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        return rejectWithValue(data.message || "Failed to use credits");
+      }
+
+      return data.user;
+    } catch (error) {
+      return rejectWithValue(error.message || "Failed to use credits");
+    }
+  }
+);
+
 const initialState = {
   // --------------------------------------------------------------------|
   // --------------------- Array of registered users --------------------|
@@ -165,6 +217,7 @@ const initialState = {
       description: "",
       purchasedGames: [],
       isConnected: false,
+      credits: 0, // Add credits field with default value
     },
   ],
   // --------------------------------------------------------------------|
@@ -176,6 +229,7 @@ const initialState = {
     description: "",
     purchasedGames: [],
     isConnected: false,
+    credits: 0, // Add credits field with default value
   },
   setEmail: "",
   setPassword: "",
@@ -186,6 +240,7 @@ const initialState = {
     register: "Cette adresse mail est déjà utilisée.",
     login: "Adresse mail ou mot de passe invalide",
     update: "Mise à jour échouée",
+    credits: "Opération de crédit échouée", // Add error message for credits operations
   },
   successMessage: "",
   redirectTo: null,
@@ -237,6 +292,7 @@ const AuthSlice = createSlice({
           description: "",
           purchasedGames: [],
           isConnected: true,
+          credits: sessionUser.credits || 0, // Add credits with default value
         };
       }
     },
@@ -345,6 +401,38 @@ const AuthSlice = createSlice({
         state.isLoading = false;
         state.isError = true;
         state.error.update = action.payload || "Failed to sync OAuth user";
+      })
+
+      // Add credits
+      .addCase(addUserCredits.pending, (state) => {
+        state.isLoading = true;
+        state.isError = false;
+      })
+      .addCase(addUserCredits.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.user.credits = action.payload.credits;
+        state.successMessage = "Credits added successfully";
+      })
+      .addCase(addUserCredits.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.error.credits = action.payload || "Failed to add credits";
+      })
+
+      // Use credits
+      .addCase(useUserCredits.pending, (state) => {
+        state.isLoading = true;
+        state.isError = false;
+      })
+      .addCase(useUserCredits.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.user.credits = action.payload.credits;
+        state.successMessage = "Purchase completed with credits";
+      })
+      .addCase(useUserCredits.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.error.credits = action.payload || "Failed to use credits";
       });
   },
 });

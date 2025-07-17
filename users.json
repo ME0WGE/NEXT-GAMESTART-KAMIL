@@ -5,8 +5,28 @@
     "email": "a@a.a",
     "password": "123",
     "description": "",
-    "purchasedGames": [],
-    "isConnected": false
+    "purchasedGames": [
+      {
+        "id": 264,
+        "title": "Dragon Nest",
+        "thumbnail": "https://www.freetogame.com/g/264/thumbnail.jpg",
+        "short_description": "A free-to-play action MMORPG with non-targeting combat.",
+        "game_url": "https://www.freetogame.com/open/dragon-nest",
+        "genre": "MMORPG",
+        "platform": "PC (Windows)",
+        "publisher": " Eyedentity Games Inc.",
+        "developer": " Eyedentity Games Inc.",
+        "release_date": "2011-09-28",
+        "freetogame_profile_url": "https://www.freetogame.com/dragon-nest",
+        "price": "79.99",
+        "discount": 0,
+        "discountedPrice": "79.99",
+        "hasDiscount": false,
+        "quantity": 1
+      }
+    ],
+    "isConnected": false,
+    "credits": 603.06
   },
   {
     "id": "1752661271688",
