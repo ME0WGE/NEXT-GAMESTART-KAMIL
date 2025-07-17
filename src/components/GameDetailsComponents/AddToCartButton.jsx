@@ -76,7 +76,7 @@ export default function AddToCartButton({ gameId, className = "" }) {
     return (
       <div
         className={`${className} inline-flex items-center justify-center px-4 py-2 bg-pine text-white rounded-md`}>
-        Owned
+        Acheté
       </div>
     );
   }
@@ -92,7 +92,11 @@ export default function AddToCartButton({ gameId, className = "" }) {
       } text-white px-4 py-2 rounded-md transition-colors ${
         isLoading ? "opacity-75 cursor-not-allowed" : ""
       }`}>
-      {isLoading ? "Loading..." : inCart ? "Remove from Cart" : "Add to Cart"}
+      {isLoading
+        ? "Loading..."
+        : inCart
+        ? "Retirer du panier"
+        : "Ajouter au panier"}
     </button>
   );
 }

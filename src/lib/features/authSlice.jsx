@@ -76,6 +76,56 @@ export const updateUserDescription = createAsyncThunk(
   }
 );
 
+export const addCredits = createAsyncThunk(
+  "auth/addCredits",
+  async ({ userId, amount }, { rejectWithValue }) => {
+    try {
+      const response = await fetch("/api/users/add-credits", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ userId, amount }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        return rejectWithValue(data.message || "Failed to add credits");
+      }
+
+      return data.user;
+    } catch (error) {
+      return rejectWithValue(error.message || "Failed to add credits");
+    }
+  }
+);
+
+export const purchaseGamesWithCredits = createAsyncThunk(
+  "auth/purchaseGamesWithCredits",
+  async ({ userId, total }, { rejectWithValue }) => {
+    try {
+      const response = await fetch("/api/users/purchase-with-credits", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ userId, total }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        return rejectWithValue(data.message || "Purchase failed");
+      }
+
+      return data.user;
+    } catch (error) {
+      return rejectWithValue(error.message || "Purchase failed");
+    }
+  }
+);
+
 export const purchaseGames = createAsyncThunk(
   "auth/purchaseGames",
   async (userId, { rejectWithValue }) => {
@@ -165,6 +215,7 @@ const initialState = {
       description: "",
       purchasedGames: [],
       isConnected: false,
+      creditBalance: 0,
     },
   ],
   // --------------------------------------------------------------------|
@@ -176,6 +227,7 @@ const initialState = {
     description: "",
     purchasedGames: [],
     isConnected: false,
+    creditBalance: 0,
   },
   setEmail: "",
   setPassword: "",
@@ -237,6 +289,7 @@ const AuthSlice = createSlice({
           description: "",
           purchasedGames: [],
           isConnected: true,
+          creditBalance: sessionUser.creditBalance || 0,
         };
       }
     },
@@ -309,6 +362,42 @@ const AuthSlice = createSlice({
         state.isLoading = false;
         state.isError = true;
         state.error.update = action.payload || "Update failed";
+      })
+
+      // Add credits
+      .addCase(addCredits.pending, (state) => {
+        state.isLoading = true;
+        state.isError = false;
+      })
+      .addCase(addCredits.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.user = {
+          ...state.user,
+          creditBalance: action.payload.creditBalance,
+        };
+        state.successMessage = "Credits added successfully";
+      })
+      .addCase(addCredits.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.error.update = action.payload || "Failed to add credits";
+      })
+
+      // Purchase games with credits
+      .addCase(purchaseGamesWithCredits.pending, (state) => {
+        state.isLoading = true;
+        state.isError = false;
+      })
+      .addCase(purchaseGamesWithCredits.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.user.purchasedGames = action.payload.purchasedGames;
+        state.user.creditBalance = action.payload.creditBalance;
+        state.successMessage = "Purchase completed successfully with credits";
+      })
+      .addCase(purchaseGamesWithCredits.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.error.update = action.payload || "Purchase failed";
       })
 
       // Purchase games

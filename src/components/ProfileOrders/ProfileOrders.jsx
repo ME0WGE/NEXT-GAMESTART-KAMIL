@@ -19,10 +19,10 @@ export default function ProfileOrders() {
     return (
       <section className="profile-orders-section bg-neutral-900 rounded-lg p-6 shadow-inner">
         <h3 className="profile-orders-title text-lg font-semibold mb-3 text-neutral-100">
-          Purchased Games
+          Jeux achetés
         </h3>
         <div className="text-neutral-400 p-4 bg-neutral-800 rounded">
-          You haven't purchased any games yet.
+          Vous n'avez pas encore acheté de jeux.
         </div>
       </section>
     );
@@ -31,7 +31,7 @@ export default function ProfileOrders() {
   return (
     <section className="profile-orders-section bg-neutral-900 rounded-lg p-6 shadow-inner">
       <h3 className="profile-orders-title text-lg font-semibold mb-4 text-neutral-100">
-        Purchased Games
+        Jeux achetés
       </h3>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {purchasedGames.map((game) => (
@@ -52,9 +52,9 @@ export default function ProfileOrders() {
             <div className="p-3">
               <h4 className="font-medium text-white">{game.title}</h4>
               <div className="flex justify-between items-center mt-1">
-                <span className="text-sm text-neutral-400">Purchased</span>
+                <span className="text-sm text-neutral-400">Acheté</span>
                 <span className="text-sm font-medium text-pine">
-                  ${game.price}
+                  {game.price} €
                 </span>
               </div>
             </div>

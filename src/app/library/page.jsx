@@ -56,15 +56,15 @@ export default function Library() {
           {purchasedGames.length === 0 ? (
             <div className="bg-neutral-800 p-8 rounded-lg text-center">
               <h2 className="text-2xl font-semibold mb-2">
-                Your library is empty
+                Votre bibliothèque est vide
               </h2>
               <p className="text-neutral-400 mb-4">
-                You haven't purchased any games yet.
+                Vous n'avez pas encore acheté de jeux.
               </p>
               <Link
                 href="/games"
                 className="inline-block px-6 py-3 bg-pine text-white rounded-md hover:bg-pine/90 transition">
-                Browse Games
+                Parcourir les jeux
               </Link>
             </div>
           ) : (
@@ -90,10 +90,10 @@ export default function Library() {
                     </h2>
                     <div className="flex justify-between items-center">
                       <span className="text-sm bg-pine/90 text-white px-2 py-1 rounded">
-                        Owned
+                        Acheté
                       </span>
                       <button className="bg-neutral-700 hover:bg-neutral-600 text-white px-3 py-1 rounded text-sm">
-                        Play
+                        Jouer
                       </button>
                     </div>
                   </div>

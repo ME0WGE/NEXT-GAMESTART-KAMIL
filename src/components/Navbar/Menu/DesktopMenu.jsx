@@ -1,4 +1,4 @@
-import { Search } from "lucide-react";
+import { Search, CreditCard } from "lucide-react";
 import { ShoppingCart } from "lucide-react";
 import Login from "../../Login";
 import { useSelector } from "react-redux";
@@ -11,6 +11,7 @@ export default function DesktopMenu({
   toggleCart,
 }) {
   const { cartItems } = useSelector((state) => state.gameDetails);
+  const { user } = useSelector((state) => state.auth);
   const cartItemCount = cartItems?.length || 0;
 
   return (
@@ -57,6 +58,16 @@ export default function DesktopMenu({
           </span>
         )}
       </div>
+
+      {/* Credit Balance - Only show if user is logged in */}
+      {user.isConnected && (
+        <div className="flex items-center gap-2 bg-neutral-700/50 px-3 py-1 rounded-lg border border-neutral-600">
+          <CreditCard size={16} className="text-pine" />
+          <span className="text-sm font-medium text-white">
+            {(user.creditBalance || 0).toFixed(2)} €
+          </span>
+        </div>
+      )}
 
       {/* Login */}
       <Login />

@@ -12,6 +12,7 @@ export let users = [
     description: "Administrator account",
     purchasedGames: [],
     isConnected: false,
+    creditBalance: 0,
   },
 ];
 
@@ -63,6 +64,7 @@ export async function POST(request) {
         ...userData,
         id: Date.now().toString(),
         purchasedGames: [],
+        creditBalance: 0, // Initialize with 0 credits
       };
       users.push(newUser);
       console.log("New user added:", newUser);

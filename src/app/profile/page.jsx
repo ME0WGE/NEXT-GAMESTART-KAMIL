@@ -3,12 +3,16 @@
 import ProfileInfo from "@/components/ProfileInfo/ProfileInfo";
 import ProfileOrders from "@/components/ProfileOrders/ProfileOrders";
 import ProtectedRoute from "@/components/ProtectedRoute";
+import AddCreditsModal from "@/components/AddCreditsModal";
 import { useSelector } from "react-redux";
 import { useSession } from "next-auth/react";
+import { useState } from "react";
+import { CreditCard, Plus } from "lucide-react";
 
 export default function Profile() {
   const { user, isLoading } = useSelector((state) => state.auth);
   const { data: session } = useSession();
+  const [isCreditsModalOpen, setIsCreditsModalOpen] = useState(false);
 
   // Show loading state if data is loading
   if (isLoading) {
@@ -49,7 +53,26 @@ export default function Profile() {
                     </p>
                   </div>
                 </div>
-                <div className="profile-settings-section">
+                <div className="profile-settings-section flex flex-col gap-4">
+                  {/* Credit Balance Display */}
+                  <div className="bg-neutral-700/50 rounded-lg p-4 border border-neutral-600">
+                    <div className="flex items-center gap-2 mb-2">
+                      <CreditCard size={16} className="text-pine" />
+                      <span className="text-sm font-medium text-neutral-300">
+                        Solde de crédit
+                      </span>
+                    </div>
+                    <p className="text-2xl font-bold text-white">
+                      {(user.creditBalance || 0).toFixed(2)} €
+                    </p>
+                    <button
+                      onClick={() => setIsCreditsModalOpen(true)}
+                      className="mt-3 w-full flex items-center justify-center gap-2 px-4 py-2 bg-pine text-white rounded-md hover:bg-pine/90 transition-colors text-sm font-medium">
+                      <Plus size={16} />
+                      Ajouter des crédits
+                    </button>
+                  </div>
+
                   <ProfileInfo />
                 </div>
               </div>
@@ -62,6 +85,12 @@ export default function Profile() {
             </div>
           </div>
         </div>
+
+        {/* Add Credits Modal */}
+        <AddCreditsModal
+          isOpen={isCreditsModalOpen}
+          onClose={() => setIsCreditsModalOpen(false)}
+        />
       </div>
     </ProtectedRoute>
   );

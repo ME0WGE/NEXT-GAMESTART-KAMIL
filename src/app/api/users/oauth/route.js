@@ -47,6 +47,7 @@ export async function POST(request) {
         avatar_url: oauthUser.image || existingUser.avatar_url,
         isConnected: true,
         oauthProvider: "google",
+        creditBalance: existingUser.creditBalance || 0, // Preserve existing credit balance
       };
 
       userId = existingUser.id;
@@ -65,6 +66,7 @@ export async function POST(request) {
         purchasedGames: [],
         isConnected: true,
         oauthProvider: "google",
+        creditBalance: 0, // Initialize with 0 credits
       };
 
       users.push(newUser);
