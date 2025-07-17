@@ -27,32 +27,32 @@ export const generatePrice = (gameId) => {
 const GameSlice = createSlice({
   name: "game",
   initialState: {
-    games: [],
-    mostPlayedGames: [],
-    allGames: [],
-    discountedGames: [],
-    randomPriceOfAllGames: [],
     loading: false,
     error: null,
+    allGames: [],
+    mostPlayedGames: [],
+    randomPriceOfAllGames: [],
+    discountedGames: [],
+    budgetGames: [], // Add budgetGames to state
   },
   reducers: {
-    setGames: (state, action) => {
-      state.games = action.payload;
-    },
-    setLoading: (state, action) => {
-      state.loading = action.payload;
+    setAllGames: (state, action) => {
+      state.allGames = action.payload;
     },
     setMostPlayedGames: (state, action) => {
       state.mostPlayedGames = action.payload;
     },
-    setAllGames: (state, action) => {
-      state.allGames = action.payload;
+    setRandomPriceOfAllGames: (state, action) => {
+      state.randomPriceOfAllGames = action.payload;
     },
     setDiscountedGames: (state, action) => {
       state.discountedGames = action.payload;
     },
-    setRandomPriceOfAllGames: (state, action) => {
-      state.randomPriceOfAllGames = action.payload;
+    setBudgetGames: (state, action) => {
+      state.budgetGames = action.payload;
+    },
+    setLoading: (state, action) => {
+      state.loading = action.payload;
     },
     setError: (state, action) => {
       state.error = action.payload;
@@ -64,12 +64,12 @@ const GameSlice = createSlice({
 });
 
 export const {
-  setGames,
-  setLoading,
-  setMostPlayedGames,
   setAllGames,
-  setDiscountedGames,
+  setMostPlayedGames,
   setRandomPriceOfAllGames,
+  setDiscountedGames,
+  setBudgetGames,
+  setLoading,
   setError,
   clearError,
 } = GameSlice.actions;
