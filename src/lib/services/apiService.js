@@ -145,7 +145,7 @@ export const apiService = {
 
       // Shuffle the array and take the first games
       const shuffled = allGames.sort(() => 0.5 - Math.random());
-      // Filter for games with discount only (based on their ID)
+      // Filter for games with 30% discount only
       const games = shuffled
         .map((game) => {
           const priceData = generatePrice(game.id);
@@ -157,7 +157,7 @@ export const apiService = {
             hasDiscount: priceData.hasDiscount,
           };
         })
-        .filter((game) => game.hasDiscount)
+        .filter((game) => game.discount === 30)
         .slice(0, limit);
 
       return games;
