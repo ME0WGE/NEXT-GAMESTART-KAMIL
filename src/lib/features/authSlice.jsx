@@ -53,14 +53,14 @@ export const registerUser = createAsyncThunk(
 
 export const updateUserDescription = createAsyncThunk(
   "auth/updateUserDescription",
-  async ({ userId, description, name }, { rejectWithValue }) => {
+  async ({ userId, description, name, email }, { rejectWithValue }) => {
     try {
       const response = await fetch(`/api/users/${userId}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ description, name }),
+        body: JSON.stringify({ description, name, email }),
       });
 
       const data = await response.json();
@@ -355,6 +355,7 @@ const AuthSlice = createSlice({
           ...state.user,
           description: action.payload.description,
           name: action.payload.name,
+          email: action.payload.email,
         };
         state.successMessage = "Profile updated successfully";
       })

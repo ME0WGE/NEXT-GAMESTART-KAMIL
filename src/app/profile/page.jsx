@@ -49,7 +49,7 @@ export default function Profile() {
                       {user.email || session?.user?.email || ""}
                     </p>
                     <p className="description text-neutral-300 text-lg mt-2">
-                      {user.description || "No description provided"}
+                      {user.description || "Aucune description fournie"}
                     </p>
                   </div>
                 </div>

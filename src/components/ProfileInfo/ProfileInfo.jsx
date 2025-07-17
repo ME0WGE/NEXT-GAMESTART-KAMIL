@@ -10,6 +10,7 @@ export default function ProfileInfo() {
   const [profileModal, setProfileModal] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
+    email: "",
     description: "",
   });
   const dispatch = useDispatch();
@@ -21,6 +22,7 @@ export default function ProfileInfo() {
   const handleModal = () => {
     setFormData({
       name: user.name || session?.user?.name || "",
+      email: user.email || session?.user?.email || "",
       description: user.description || "",
     });
     setProfileModal(!profileModal);
@@ -40,10 +42,24 @@ export default function ProfileInfo() {
       return;
     }
 
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      alert("Veuillez entrer une adresse email valide");
+      return;
+    }
+
+    // Check if email is not empty
+    if (!formData.email.trim()) {
+      alert("L'adresse email ne peut pas être vide");
+      return;
+    }
+
     dispatch(
       updateUserDescription({
         userId: user.id,
         name: formData.name,
+        email: formData.email,
         description: formData.description,
       })
     ).then(() => {
@@ -97,6 +113,21 @@ export default function ProfileInfo() {
                   placeholder="Entrez votre nom"
                   onChange={handleChange}
                   value={formData.name}
+                />
+              </div>
+              <div className="flex flex-col gap-2">
+                <label htmlFor="email" className="text-neutral-300">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  className="bg-neutral-700 text-neutral-100 px-4 py-2 rounded-md border border-neutral-600 focus:outline-none focus:border-rosy"
+                  placeholder="Entrez votre email"
+                  onChange={handleChange}
+                  value={formData.email}
+                  required
                 />
               </div>
               <div className="flex flex-col gap-2">

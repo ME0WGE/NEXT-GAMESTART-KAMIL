@@ -60,6 +60,19 @@ export async function PATCH(request, { params }) {
       );
     }
 
+    // Check for email uniqueness if email is being updated
+    if (updates.email) {
+      const existingUser = users.find(
+        (u) => u.email === updates.email && u.id !== userId
+      );
+      if (existingUser) {
+        return NextResponse.json(
+          { success: false, message: "Cette adresse email est déjà utilisée" },
+          { status: 400 }
+        );
+      }
+    }
+
     // Update user data
     users[userIndex] = { ...users[userIndex], ...updates };
 
