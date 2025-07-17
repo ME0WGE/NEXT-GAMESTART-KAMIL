@@ -149,10 +149,28 @@
         "discountedPrice": "7.99",
         "hasDiscount": false,
         "quantity": 1
+      },
+      {
+        "id": 5,
+        "title": "Crossout",
+        "thumbnail": "https://www.freetogame.com/g/5/thumbnail.jpg",
+        "short_description": "A post-apocalyptic MMO vehicle combat game! ",
+        "game_url": "https://www.freetogame.com/open/crossout",
+        "genre": "Shooter",
+        "platform": "PC (Windows)",
+        "publisher": "Targem",
+        "developer": "Gaijin",
+        "release_date": "2017-05-30",
+        "freetogame_profile_url": "https://www.freetogame.com/crossout",
+        "price": "9.34",
+        "discount": 15,
+        "discountedPrice": "9.34",
+        "hasDiscount": true,
+        "quantity": 1
       }
     ],
     "isConnected": false,
-    "creditBalance": 660.8599999999999
+    "creditBalance": 651.5199999999999
   },
   {
     "id": "1752661271688",

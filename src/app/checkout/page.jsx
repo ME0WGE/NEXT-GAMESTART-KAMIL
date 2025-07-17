@@ -9,6 +9,7 @@ import {
   purchaseGames,
   purchaseGamesWithCredits,
 } from "@/lib/features/authSlice";
+import { setCartItems } from "@/lib/features/gameDetailsSlice";
 import {
   X,
   Check,
@@ -23,7 +24,7 @@ export default function Checkout() {
   const { user, isLoading, successMessage } = useSelector(
     (state) => state.auth
   );
-  const [cartItems, setCartItems] = useState([]);
+  const [cartItems, setCartItemsLocal] = useState([]);
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const [total, setTotal] = useState(0);
   const [fetchingCart, setFetchingCart] = useState(true);
@@ -41,7 +42,7 @@ export default function Checkout() {
       try {
         setFetchingCart(true);
         const data = await apiService.getCart();
-        setCartItems(data);
+        setCartItemsLocal(data);
 
         // Calculate total
         const sum = data.reduce((acc, item) => {
@@ -66,9 +67,13 @@ export default function Checkout() {
       successMessage === "Purchase completed successfully" ||
       successMessage === "Purchase completed successfully with credits"
     ) {
+      // Clear both local state and Redux state
+      setCartItemsLocal([]);
+      setTotal(0);
+      dispatch(setCartItems([])); // Clear Redux cart state
       setPurchaseComplete(true);
     }
-  }, [successMessage]);
+  }, [successMessage, dispatch]);
 
   // Check if user is authenticated with either Redux or NextAuth
   const isAuthenticated = user.isConnected || !!session;
@@ -139,9 +144,10 @@ export default function Checkout() {
           method: "DELETE",
         });
       }
-      // Update local state
-      setCartItems([]);
+      // Update both local state and Redux state
+      setCartItemsLocal([]);
       setTotal(0);
+      dispatch(setCartItems([])); // Clear Redux cart state
     } catch (error) {
       console.error("Failed to clear cart:", error);
     }
@@ -218,7 +224,7 @@ export default function Checkout() {
             <div className="bg-neutral-800 rounded-lg p-6">
               <h2 className="text-xl font-semibold mb-4 flex items-center">
                 <ShoppingCart size={20} className="mr-2" />
-                Jeux dans le panier
+                Cart Items
               </h2>
 
               <div className="space-y-4">
@@ -239,10 +245,10 @@ export default function Checkout() {
                     <div className="flex-grow">
                       <h3 className="font-medium text-white">{item.title}</h3>
                       <p className="text-neutral-400 text-sm">
-                        Téléchargement numérique
+                        Digital Download
                       </p>
                     </div>
-                    <div className="ml-4 font-medium">{item.price} €</div>
+                    <div className="ml-4 font-medium">${item.price}</div>
                   </div>
                 ))}
               </div>
@@ -252,13 +258,13 @@ export default function Checkout() {
                   onClick={handleClearCart}
                   className="text-red-400 hover:text-red-300 flex items-center text-sm">
                   <X size={16} className="mr-1" />
-                  Vider le panier
+                  Clear Cart
                 </button>
 
                 <div className="text-lg">
-                  Total à payer:{" "}
+                  Total:{" "}
                   <span className="font-bold text-white">
-                    {total.toFixed(2)} €
+                    ${total.toFixed(2)}
                   </span>
                 </div>
               </div>
@@ -277,16 +283,16 @@ export default function Checkout() {
               <div className="bg-neutral-700/50 p-4 rounded-md mb-4">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-neutral-300 text-sm">
-                    Solde de crédit
+                    Credit Balance
                   </span>
                   <span className="text-lg font-bold text-white">
-                    {creditBalance.toFixed(2)} €
+                    ${creditBalance.toFixed(2)}
                   </span>
                 </div>
                 {!hasSufficientCredits && (
                   <div className="flex items-center gap-2 text-red-400 text-sm">
                     <AlertCircle size={14} />
-                    <span>Solde insuffisant</span>
+                    <span>Insufficient balance</span>
                   </div>
                 )}
               </div>
@@ -294,7 +300,7 @@ export default function Checkout() {
               {/* Payment Method Selection */}
               <div className="mb-4">
                 <h3 className="text-sm font-medium text-neutral-300 mb-3">
-                  Méthode de paiement
+                  Payment Method
                 </h3>
 
                 {/* Banking Card Option */}
@@ -309,7 +315,7 @@ export default function Checkout() {
                   />
                   <div className="flex items-center gap-2">
                     <CreditCard size={16} className="text-pine" />
-                    <span className="text-white">Carte bancaire</span>
+                    <span className="text-white">Banking Card</span>
                   </div>
                 </label>
 
@@ -331,28 +337,26 @@ export default function Checkout() {
                   />
                   <div className="flex items-center gap-2">
                     <CreditCard size={16} className="text-pine" />
-                    <span className="text-white">Solde de crédit</span>
+                    <span className="text-white">Credit Balance</span>
                   </div>
                 </label>
               </div>
 
               {/* Order Summary */}
               <div className="bg-neutral-700/50 p-4 rounded-md mb-4">
-                <p className="text-neutral-300 mb-2">
-                  Récapitulatif de la commande
-                </p>
+                <p className="text-neutral-300 mb-2">Order Summary</p>
                 <div className="flex justify-between mb-1">
-                  <span className="text-neutral-400">Sous-total</span>
-                  <span>{total.toFixed(2)} €</span>
+                  <span className="text-neutral-400">Subtotal</span>
+                  <span>${total.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between mb-1">
-                  <span className="text-neutral-400">Taxe</span>
-                  <span>0.00€</span>
+                  <span className="text-neutral-400">Tax</span>
+                  <span>$0.00</span>
                 </div>
                 <div className="border-t border-neutral-600 my-2"></div>
                 <div className="flex justify-between font-medium">
-                  <span>Total à payer</span>
-                  <span>{total.toFixed(2)} €</span>
+                  <span>Total</span>
+                  <span>${total.toFixed(2)}</span>
                 </div>
               </div>
 
@@ -378,10 +382,10 @@ export default function Checkout() {
                 {isCheckingOut ? (
                   <>
                     <Loader className="animate-spin mr-2" size={16} />
-                    Traitement...
+                    Processing...
                   </>
                 ) : (
-                  <>Acheter</>
+                  <>Complete Purchase</>
                 )}
               </button>
             </div>
