@@ -68,7 +68,7 @@ export default function ProfileInfo() {
         <div className="bg-neutral-800 p-6 rounded-md w-full max-w-md shadow-lg">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-neutral-100 text-xl font-semibold">
-              Edit Profile
+              Modifier le profil
             </h2>
             <button
               className="text-neutral-400 hover:text-neutral-100"
@@ -79,22 +79,22 @@ export default function ProfileInfo() {
           {isOAuthUser ? (
             <div className="text-neutral-300 p-4 bg-neutral-700/50 rounded-md">
               <p>
-                Your profile is being synchronized. Please try again in a
-                moment.
+                Votre profil est en cours de synchronisation. Veuillez réessayer
+                dans un moment.
               </p>
             </div>
           ) : (
             <form className="space-y-4" onSubmit={handleSave}>
               <div className="flex flex-col gap-2">
                 <label htmlFor="name" className="text-neutral-300">
-                  Name
+                  Nom
                 </label>
                 <input
                   type="text"
                   id="name"
                   name="name"
                   className="bg-neutral-700 text-neutral-100 px-4 py-2 rounded-md border border-neutral-600 focus:outline-none focus:border-rosy"
-                  placeholder="Enter your name"
+                  placeholder="Entrez votre nom"
                   onChange={handleChange}
                   value={formData.name}
                 />
@@ -107,7 +107,7 @@ export default function ProfileInfo() {
                   id="description"
                   name="description"
                   className="bg-neutral-700 text-neutral-100 px-4 py-2 rounded-md border border-neutral-600 focus:outline-none focus:border-rosy"
-                  placeholder="Enter your description"
+                  placeholder="Entrez votre description"
                   onChange={handleChange}
                   value={formData.description}
                   rows={4}
@@ -117,7 +117,7 @@ export default function ProfileInfo() {
                 type="submit"
                 disabled={isLoading}
                 className="bg-rosy text-neutral-900 px-4 py-2 rounded-md hover:bg-rosy/80 transition-colors duration-200 text-center font-mono text-sm w-full cursor-pointer">
-                {isLoading ? "Saving..." : "Save Changes"}
+                {isLoading ? "Enregistrement..." : "Enregistrer"}
               </button>
             </form>
           )}
@@ -131,14 +131,9 @@ export default function ProfileInfo() {
       <ul className="profile-info-list space-y-3">
         <li className="flex justify-between text-neutral-300">
           <button
-            className="bg-neutral-800 text-neutral-100 px-4 py-2 rounded-md hover:bg-plum/10 transition-colors duration-200 text-center font-mono text-sm hover:text-pine hover:border-rosy border-2 border-white w-35 cursor-pointer"
+            className="bg-neutral-800 text-neutral-100 px-4 py-2 rounded-md hover:bg-plum/10 transition-colors duration-200 text-center font-mono text-sm hover:text-pine hover:border-rosy border-2 border-white cursor-pointer w-auto"
             onClick={handleModal}>
-            Edit Profile
-          </button>
-        </li>
-        <li className="flex justify-between text-neutral-300">
-          <button className="bg-neutral-800 text-neutral-100 px-4 py-2 rounded-md hover:bg-plum/20 transition-colors duration-200 text-center font-mono text-sm hover:text-pine hover:border-rosy border-2 border-white w-35 cursor-pointer">
-            Add Credits
+            Modifier le profil
           </button>
         </li>
       </ul>

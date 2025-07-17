@@ -5,29 +5,9 @@
     "email": "a@a.a",
     "password": "123",
     "description": "",
-    "purchasedGames": [
-      582,
-      {
-        "id": 475,
-        "title": "Genshin Impact",
-        "thumbnail": "https://www.freetogame.com/g/475/thumbnail.jpg",
-        "short_description": "If you’ve been looking for a game to scratch that open-world action RPG itch, one with perhaps a bit of Asian flair, then you’re going to want to check out miHoYo’s Genshin Impact.",
-        "game_url": "https://www.freetogame.com/open/genshin-impact",
-        "genre": "Action RPG",
-        "platform": "PC (Windows)",
-        "publisher": "miHoYo",
-        "developer": "miHoYo",
-        "release_date": "2020-09-28",
-        "freetogame_profile_url": "https://www.freetogame.com/genshin-impact",
-        "price": "5.99",
-        "discount": 23,
-        "discountedPrice": "4.61",
-        "hasDiscount": true,
-        "quantity": 1
-      }
-    ],
+    "purchasedGames": [],
     "isConnected": false,
-    "creditBalance": 82.01
+    "creditBalance": 764.03
   },
   {
     "id": "1752661271688",
