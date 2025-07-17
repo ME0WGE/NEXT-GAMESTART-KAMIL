@@ -4,6 +4,7 @@ import { useAllGames } from "@/lib/hooks/useAllGames";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart, removeFromCart } from "@/lib/features/gameDetailsSlice";
+import { selectCartItems } from "@/lib/features/cartSlice";
 import { ShoppingCart, Trash2, User } from "lucide-react";
 import Link from "next/link";
 import GamePrice from "@/components/GamePrice";
@@ -12,7 +13,8 @@ export default function AllGames() {
   const [displayCount, setDisplayCount] = useState(12);
   const { loading, error, randomPriceOfAllGames } = useAllGames();
   const dispatch = useDispatch();
-  const { addingToCart, cartItems } = useSelector((state) => state.gameDetails);
+  const { addingToCart } = useSelector((state) => state.gameDetails);
+  const cartItems = useSelector(selectCartItems);
   const { isSearchActive, filteredGames } = useSelector(
     (state) => state.search
   );

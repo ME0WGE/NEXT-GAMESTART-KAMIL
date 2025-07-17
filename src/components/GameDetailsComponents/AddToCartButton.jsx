@@ -5,13 +5,14 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   addToCart as addAction,
   removeFromCart as removeAction,
-  setCartItems,
 } from "@/lib/features/gameDetailsSlice";
+import { selectCartItems } from "@/lib/features/cartSlice";
 
 export default function AddToCartButton({ gameId, className = "" }) {
   const dispatch = useDispatch();
-  const { currentGame, addingToCart, hasAlreadyBoughtGame, error, cartItems } =
+  const { currentGame, addingToCart, hasAlreadyBoughtGame, error } =
     useSelector((state) => state.gameDetails);
+  const cartItems = useSelector(selectCartItems);
   const { user } = useSelector((state) => state.auth);
   const [showError, setShowError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -28,28 +29,7 @@ export default function AddToCartButton({ gameId, className = "" }) {
     }
   }, [user.purchasedGames, currentGame]);
 
-  // Initialize cart items if empty
-  useEffect(() => {
-    const fetchCart = async () => {
-      if (cartItems.length === 0) {
-        setIsLoading(true);
-        try {
-          const response = await fetch("/api/cart");
-          if (response.ok) {
-            const data = await response.json();
-            dispatch(setCartItems(data));
-          }
-        } catch (error) {
-          console.error("Failed to fetch cart:", error);
-          // Don't show error for initial cart load
-        } finally {
-          setIsLoading(false);
-        }
-      }
-    };
 
-    fetchCart();
-  }, [dispatch, cartItems.length]);
 
   const handleClick = async () => {
     try {

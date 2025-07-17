@@ -2,6 +2,7 @@ import { Search, CreditCard } from "lucide-react";
 import { ShoppingCart } from "lucide-react";
 import Login from "../../Login";
 import { useSelector } from "react-redux";
+import { selectCartItems } from "@/lib/features/cartSlice";
 
 export default function DesktopMenu({
   isSearchOpen,
@@ -10,7 +11,7 @@ export default function DesktopMenu({
   searchInputRef,
   toggleCart,
 }) {
-  const { cartItems } = useSelector((state) => state.gameDetails);
+  const cartItems = useSelector(selectCartItems);
   const { user } = useSelector((state) => state.auth);
   const cartItemCount = cartItems?.length || 0;
 

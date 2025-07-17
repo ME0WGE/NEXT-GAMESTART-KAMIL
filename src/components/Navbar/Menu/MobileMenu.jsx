@@ -6,9 +6,10 @@ import Login from "../../Login";
 import { NavbarNavLinksComponent } from "../NavLinks/NavbarNavLinks";
 import { useState, useRef, useEffect } from "react";
 import { useSelector } from "react-redux";
+import { selectCartItems } from "@/lib/features/cartSlice";
 
 function MobileMenu({ toggleMenu, isMenuOpen, toggleCart }) {
-  const { cartItems } = useSelector((state) => state.gameDetails);
+  const cartItems = useSelector(selectCartItems);
   const cartItemCount = cartItems?.length || 0;
 
   return (

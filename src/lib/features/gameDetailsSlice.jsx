@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { apiService } from "../services/apiService";
 import { generatePrice } from "./gameSlice";
+import { setCartItems as setCartItemsAction } from "./cartSlice";
 
 export const fetchGameDetails = createAsyncThunk(
   "gameDetails/fetchGameDetails",
@@ -25,11 +26,15 @@ export const fetchGameDetails = createAsyncThunk(
 
 export const addToCart = createAsyncThunk(
   "gameDetails/addToCart",
-  async (game, { rejectWithValue }) => {
+  async (game, { rejectWithValue, dispatch }) => {
     try {
       const response = await apiService.addToCart(game);
       if (!response || !response.success) {
         return rejectWithValue(response?.message || "Failed to add to cart");
+      }
+      // Update cart slice with new cart items
+      if (response.cart) {
+        dispatch(setCartItemsAction(response.cart));
       }
       return response;
     } catch (error) {
@@ -40,13 +45,17 @@ export const addToCart = createAsyncThunk(
 
 export const removeFromCart = createAsyncThunk(
   "gameDetails/removeFromCart",
-  async (gameId, { rejectWithValue }) => {
+  async (gameId, { rejectWithValue, dispatch }) => {
     try {
       const response = await apiService.removeFromCart(gameId);
       if (!response || !response.success) {
         return rejectWithValue(
           response?.message || "Failed to remove from cart"
         );
+      }
+      // Update cart slice with new cart items
+      if (response.cart) {
+        dispatch(setCartItemsAction(response.cart));
       }
       return response;
     } catch (error) {

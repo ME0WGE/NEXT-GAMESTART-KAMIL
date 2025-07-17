@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useBudgetGames } from "@/lib/hooks/useBudgetGames";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "@/lib/features/gameDetailsSlice";
+import { selectCartItems } from "@/lib/features/cartSlice";
 import { ShoppingCart, Eye, Tags } from "lucide-react";
 import GamePrice from "@/components/GamePrice";
 import { useRouter } from "next/navigation";
@@ -14,7 +15,7 @@ export default function BudgetGames() {
   const router = useRouter();
   const dispatch = useDispatch();
   const { budgetGames, loading, error, loadBudgetGames } = useBudgetGames();
-  const { cartItems } = useSelector((state) => state.gameDetails);
+  const cartItems = useSelector(selectCartItems);
   const [addingGameId, setAddingGameId] = useState(null);
 
   // Check if a game is in the cart

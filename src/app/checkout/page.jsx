@@ -9,7 +9,16 @@ import {
   purchaseGames,
   purchaseGamesWithCredits,
 } from "@/lib/features/authSlice";
-import { setCartItems } from "@/lib/features/gameDetailsSlice";
+import { 
+  setCartItems, 
+  selectCartItems,
+  selectOriginalPrices,
+  selectDiscountedPrices,
+  selectCouponDiscount,
+  selectSubtotal,
+  selectTotal,
+  selectIsCouponApplicable
+} from "@/lib/features/cartSlice";
 import {
   X,
   Check,
@@ -17,6 +26,7 @@ import {
   CreditCard,
   Loader,
   AlertCircle,
+  Tag,
 } from "lucide-react";
 import { apiService } from "@/lib/services/apiService";
 
@@ -24,9 +34,15 @@ export default function Checkout() {
   const { user, isLoading, successMessage } = useSelector(
     (state) => state.auth
   );
-  const [cartItems, setCartItemsLocal] = useState([]);
+  const cartItems = useSelector(selectCartItems);
+  const originalPrices = useSelector(selectOriginalPrices);
+  const discountedPrices = useSelector(selectDiscountedPrices);
+  const couponDiscount = useSelector(selectCouponDiscount);
+  const subtotal = useSelector(selectSubtotal);
+  const total = useSelector(selectTotal);
+  const isCouponApplicable = useSelector(selectIsCouponApplicable);
+  
   const [isCheckingOut, setIsCheckingOut] = useState(false);
-  const [total, setTotal] = useState(0);
   const [fetchingCart, setFetchingCart] = useState(true);
   const [purchaseComplete, setPurchaseComplete] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState("card"); // "card" or "credits"
@@ -42,15 +58,7 @@ export default function Checkout() {
       try {
         setFetchingCart(true);
         const data = await apiService.getCart();
-        setCartItemsLocal(data);
-
-        // Calculate total using priceToPay if available, otherwise use price
-        const sum = data.reduce((acc, item) => {
-          const price = parseFloat(item.priceToPay || item.price);
-          return acc + price;
-        }, 0);
-
-        setTotal(sum);
+        dispatch(setCartItems(data));
       } catch (error) {
         console.error("Failed to fetch cart:", error);
       } finally {
@@ -59,7 +67,7 @@ export default function Checkout() {
     };
 
     fetchCart();
-  }, []);
+  }, [dispatch]);
 
   // Check for successful purchase
   useEffect(() => {
@@ -67,10 +75,8 @@ export default function Checkout() {
       successMessage === "Purchase completed successfully" ||
       successMessage === "Purchase completed successfully with credits"
     ) {
-      // Clear both local state and Redux state
-      setCartItemsLocal([]);
-      setTotal(0);
-      dispatch(setCartItems([])); // Clear Redux cart state
+      // Clear Redux cart state
+      dispatch(setCartItems([]));
       setPurchaseComplete(true);
     }
   }, [successMessage, dispatch]);
@@ -144,10 +150,8 @@ export default function Checkout() {
           method: "DELETE",
         });
       }
-      // Update both local state and Redux state
-      setCartItemsLocal([]);
-      setTotal(0);
-      dispatch(setCartItems([])); // Clear Redux cart state
+      // Clear Redux cart state
+      dispatch(setCartItems([]));
     } catch (error) {
       console.error("Failed to clear cart:", error);
     }
@@ -228,42 +232,48 @@ export default function Checkout() {
               </h2>
 
               <div className="space-y-4">
-                {cartItems.map((item) => (
-                  <div
-                    key={item.id}
-                    className="flex items-center bg-neutral-700/50 p-3 rounded-md">
-                    <div className="flex-shrink-0 w-16 h-16 mr-4 relative rounded overflow-hidden">
-                      <img
-                        src={
-                          item.thumbnail ||
-                          "https://via.placeholder.com/80?text=Game"
-                        }
-                        alt={item.title}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                    <div className="flex-grow">
-                      <h3 className="font-medium text-white">{item.title}</h3>
-                      <p className="text-neutral-400 text-sm">
-                        Digital Download
-                      </p>
-                    </div>
-                    <div className="ml-4 font-medium">
-                      {item.hasDiscount && item.discountedPrice ? (
-                        <div className="text-right">
-                          <div className="line-through text-neutral-400 text-sm">
-                            ${item.price}
+                {cartItems.map((item) => {
+                  const originalPrice = originalPrices[item.id] || 0;
+                  const discountedPrice = discountedPrices[item.id] || 0;
+                  const hasDiscount = originalPrice > discountedPrice;
+                  
+                  return (
+                    <div
+                      key={item.id}
+                      className="flex items-center bg-neutral-700/50 p-3 rounded-md">
+                      <div className="flex-shrink-0 w-16 h-16 mr-4 relative rounded overflow-hidden">
+                        <img
+                          src={
+                            item.thumbnail ||
+                            "https://via.placeholder.com/80?text=Game"
+                          }
+                          alt={item.title}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      <div className="flex-grow">
+                        <h3 className="font-medium text-white">{item.title}</h3>
+                        <p className="text-neutral-400 text-sm">
+                          Digital Download
+                        </p>
+                      </div>
+                      <div className="ml-4 font-medium">
+                        {hasDiscount ? (
+                          <div className="text-right">
+                            <div className="line-through text-neutral-400 text-sm">
+                              ${originalPrice.toFixed(2)}
+                            </div>
+                            <div className="text-green-400">
+                              ${discountedPrice.toFixed(2)}
+                            </div>
                           </div>
-                          <div className="text-green-400">
-                            ${item.priceToPay || item.discountedPrice}
-                          </div>
-                        </div>
-                      ) : (
-                        <span>${item.price}</span>
-                      )}
+                        ) : (
+                          <span>${originalPrice.toFixed(2)}</span>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
 
               <div className="mt-6 flex justify-between items-center">
@@ -281,6 +291,19 @@ export default function Checkout() {
                   </span>
                 </div>
               </div>
+              
+              {/* Coupon Notification */}
+              {isCouponApplicable && couponDiscount > 0 && (
+                <div className="mt-4 p-3 bg-green-500/10 border border-green-500/20 rounded-lg">
+                  <div className="flex items-center gap-2 text-green-400">
+                    <Tag size={16} />
+                    <span className="font-medium">4+1 Discount Applied!</span>
+                  </div>
+                  <p className="text-green-300 text-sm mt-1">
+                    You saved ${couponDiscount.toFixed(2)} on your cheapest game.
+                  </p>
+                </div>
+              )}
             </div>
           </div>
 
@@ -360,8 +383,17 @@ export default function Checkout() {
                 <p className="text-neutral-300 mb-2">Order Summary</p>
                 <div className="flex justify-between mb-1">
                   <span className="text-neutral-400">Subtotal</span>
-                  <span>${total.toFixed(2)}</span>
+                  <span>${subtotal.toFixed(2)}</span>
                 </div>
+                {couponDiscount > 0 && (
+                  <div className="flex justify-between mb-1 text-green-400">
+                    <span className="flex items-center gap-1">
+                      <Tag size={12} />
+                      4+1 Discount
+                    </span>
+                    <span>-${couponDiscount.toFixed(2)}</span>
+                  </div>
+                )}
                 <div className="flex justify-between mb-1">
                   <span className="text-neutral-400">Tax</span>
                   <span>$0.00</span>

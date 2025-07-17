@@ -5,6 +5,7 @@ import { TrendingUp, ShoppingCart, Trash2 } from "lucide-react";
 import { useMostPlayedGames } from "@/lib/hooks/useMostPlayedGames";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart, removeFromCart } from "@/lib/features/gameDetailsSlice";
+import { selectCartItems } from "@/lib/features/cartSlice";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -12,7 +13,8 @@ export default function PopularGames() {
   const [showAll, setShowAll] = useState(false);
   const { loading, mostPlayedGames, error } = useMostPlayedGames();
   const dispatch = useDispatch();
-  const { addingToCart, cartItems } = useSelector((state) => state.gameDetails);
+  const { addingToCart } = useSelector((state) => state.gameDetails);
+  const cartItems = useSelector(selectCartItems);
   const [addingGameId, setAddingGameId] = useState(null);
   const [removingGameId, setRemovingGameId] = useState(null);
 

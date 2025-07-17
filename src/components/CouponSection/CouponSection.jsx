@@ -13,11 +13,12 @@ import {
   X,
 } from "lucide-react";
 import { useSelector } from "react-redux";
+import { selectCartItems } from "@/lib/features/cartSlice";
 import { calculateCouponDiscount } from "@/lib/features/couponSlice";
 
 export default function CouponSection() {
   const [isExpanded, setIsExpanded] = useState(false);
-  const { cartItems } = useSelector((state) => state.gameDetails);
+  const cartItems = useSelector(selectCartItems);
 
   // Calculate coupon discount - returns { isApplicable, cheapestGame, discountAmount }
   const couponInfo = calculateCouponDiscount(cartItems);

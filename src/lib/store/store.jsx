@@ -8,6 +8,7 @@ import searchReducer from "../features/searchSlice";
 import clickerReducer from "../features/clickerSlice";
 import gameReducer from "../features/gameSlice";
 import couponReducer from "../features/couponSlice";
+import cartReducer from "../features/cartSlice";
 
 export const store = configureStore({
   reducer: {
@@ -18,6 +19,7 @@ export const store = configureStore({
     clicker: clickerReducer,
     game: gameReducer,
     coupon: couponReducer,
+    cart: cartReducer,
   },
 });
 
