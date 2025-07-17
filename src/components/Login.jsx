@@ -11,7 +11,7 @@ import {
   authClearSuccessMessage,
   authSetUserFromSession,
 } from "@/lib/features/authSlice";
-import { User, X } from "lucide-react";
+import { User, X, Lock, Mail, AlertCircle, ArrowRight } from "lucide-react";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -20,6 +20,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
+import Link from "next/link";
 
 // Toast Message
 function Toast({ message, type, onClose }) {
@@ -39,21 +40,6 @@ function Toast({ message, type, onClose }) {
   );
 }
 
-// Social Login Buttons
-function SocialLoginButtons() {
-  return (
-    <div className="flex flex-col gap-3">
-      {/* Google Button */}
-      <button
-        className="flex items-center justify-center gap-3 w-full py-3 px-4 bg-white text-gray-700 rounded-lg border border-gray-300 hover:bg-gray-50 hover:shadow-md transition-all duration-200 font-medium"
-        onClick={() => signIn("google")}>
-        <FontAwesomeIcon icon={faGoogle} className="text-red-500 text-lg" />
-        <span>Continuer avec Google</span>
-      </button>
-    </div>
-  );
-}
-
 // Main function
 export default function Login() {
   const auth = useSelector((state) => state.auth);
@@ -64,8 +50,8 @@ export default function Login() {
   const redirect = searchParams.get("redirect");
 
   const [modal, setModal] = useState(false);
+  const [isLogin, setIsLogin] = useState(true);
   const [profileModal, setProfileModal] = useState(false);
-  const [toggle, setToggle] = useState(false);
   const [toast, setToast] = useState({
     show: false,
     message: "",
@@ -77,7 +63,6 @@ export default function Login() {
 
   const handleModal = () => {
     setModal(true);
-    setToggle(!toggle);
   };
 
   // If user is connected, close modal and redirect if needed
@@ -176,6 +161,40 @@ export default function Login() {
     return () => clearTimeout(toastTimeout.current);
   }, [auth.isError, auth.error.login, auth.error.register]);
 
+  // Reset error when switching modes
+  useEffect(() => {
+    dispatch(authResetError());
+  }, [isLogin, dispatch]);
+
+  // Handle form submission
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    dispatch(authResetError());
+
+    if (isLogin) {
+      // Login
+      await dispatch(
+        fetchUserByCredentials({
+          email: auth.setEmail,
+          password: auth.setPassword,
+        })
+      );
+    } else {
+      // Register
+      await dispatch(
+        registerUser({
+          name: auth.setName,
+          email: auth.setEmail,
+          password: auth.setPassword,
+        })
+      );
+    }
+  };
+
+  const handleGoogleSignIn = () => {
+    signIn("google", { callbackUrl: redirect || window.location.pathname });
+  };
+
   // If user is authenticated with NextAuth (Google)
   if (session?.user) {
     return (
@@ -233,12 +252,16 @@ export default function Login() {
                 </div>
               </div>
               <ul className="space-y-1 text-white">
-                <li className="cursor-pointer px-2 py-1 hover:bg-pine rounded text-sm transition-all duration-100">
-                  Mon Profil
-                </li>
-                <li className="cursor-pointer px-2 py-1 hover:bg-pine rounded text-sm transition-all duration-100">
-                  Ma Bibliothèque
-                </li>
+                <Link href="/profile">
+                  <li className="cursor-pointer px-2 py-1 hover:bg-pine rounded text-sm transition-all duration-100">
+                    Mon Profil
+                  </li>
+                </Link>
+                <Link href="/library">
+                  <li className="cursor-pointer px-2 py-1 hover:bg-pine rounded text-sm transition-all duration-100">
+                    Ma Bibliothèque
+                  </li>
+                </Link>
                 <li
                   className="cursor-pointer px-2 py-1 hover:bg-pine rounded text-sm text-red-400 hover:text-red-300 font-bold transition-all duration-100"
                   onClick={() => {
@@ -291,12 +314,16 @@ export default function Login() {
                 </div>
               </div>
               <ul className="space-y-1 text-white">
-                <li className="cursor-pointer px-2 py-1 hover:bg-pine rounded text-sm transition-all duration-100">
-                  Mon Profil
-                </li>
-                <li className="cursor-pointer px-2 py-1 hover:bg-pine rounded text-sm transition-all duration-100">
-                  Ma Bibliothèque
-                </li>
+                <Link href="/profile">
+                  <li className="cursor-pointer px-2 py-1 hover:bg-pine rounded text-sm transition-all duration-100">
+                    Mon Profil
+                  </li>
+                </Link>
+                <Link href="/library">
+                  <li className="cursor-pointer px-2 py-1 hover:bg-pine rounded text-sm transition-all duration-100">
+                    Ma Bibliothèque
+                  </li>
+                </Link>
                 <li
                   className="cursor-pointer px-2 py-1 hover:bg-pine rounded text-sm text-red-400 hover:text-red-300 font-bold transition-all duration-100"
                   onClick={() => {
@@ -326,153 +353,161 @@ export default function Login() {
       <button className="text-slate-300 hover:text-pine hover:bg-rosy p-2 rounded-full transition-all duration-200 cursor-pointer">
         <User size={20} onClick={handleModal} />
       </button>
-      {modal &&
-        (toggle ? ( // Inscription Modal3
+
+      {modal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4  mt-100">
           <div
-            ref={modalRef}
-            className="fixed inset-0 z-50 w-full min-h-screen h-full bg-midnight flex flex-col justify-center p-4 rounded-none shadow-none sm:bg-midnight/95 sm:absolute sm:left-1/2 sm:top-12 sm:-translate-x-1/2 sm:w-80 sm:h-auto sm:max-h-[90vh] sm:rounded-xl sm:shadow-lg sm:p-6 sm:border border-gray-700 sm:min-h-[55vh] sm:justify-start gap-3">
-            <span
-              onClick={() => setModal(false)}
-              className="absolute top-3 right-3 cursor-pointer text-gray-400 hover:text-gray-200">
-              <X size={20} />
-            </span>
-            <h2 className="text-xl font-semibold mb-4 text-center text-gray-100">
-              Inscription
-            </h2>
-            <form
-              className="flex flex-col gap-3"
-              onSubmit={(e) => {
-                e.preventDefault();
-                dispatch(
-                  registerUser({
-                    name: auth.setName,
-                    email: auth.setEmail,
-                    password: auth.setPassword,
-                  })
-                );
-              }}>
-              <input
-                className="border border-gray-700 bg-gray-800 text-gray-100 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-pine placeholder-gray-400"
-                required
-                type="text"
-                placeholder="Nom"
-                autoComplete="username"
-                value={auth.setName}
-                onChange={(e) => dispatch(authSetName(e.target.value))}
-              />
-              <input
-                className="border border-gray-700 bg-gray-800 text-gray-100 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-pine placeholder-gray-400"
-                required
-                type="email"
-                placeholder="Mail"
-                autoComplete="email"
-                value={auth.setEmail}
-                onChange={(e) => dispatch(authSetEmail(e.target.value))}
-              />
-              <input
-                className="border border-gray-700 bg-gray-800 text-gray-100 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-pine placeholder-gray-400"
-                required
-                type="password"
-                placeholder="Password"
-                autoComplete="new-password"
-                value={auth.setPassword}
-                onChange={(e) => dispatch(authSetPassword(e.target.value))}
-              />
+            className="bg-midnight text-ivory w-full max-w-md rounded-2xl shadow-2xl transform transition-all animate-fadeIn"
+            ref={modalRef}>
+            {/* Header */}
+            <div className="p-6 border-b border-slate-700 flex justify-between items-center">
+              <h2 className="text-2xl font-bold">
+                {isLogin ? "Connexion" : "Créer un compte"}
+              </h2>
               <button
-                className="bg-pine text-white rounded py-2 mt-2 hover:bg-pine/85 transition"
-                type="submit"
-                disabled={auth.isLoading}>
-                {auth.isLoading ? "Chargement..." : "S'inscrire"}
+                onClick={() => setModal(false)}
+                className="text-slate-400 hover:text-ivory p-1 rounded-full transition-colors">
+                <X size={24} />
               </button>
-            </form>
-            <p className="text-center text-gray-400 text-sm">ou</p>
-            <SocialLoginButtons />
-            <p className="text-center text-gray-400 text-sm">
-              Vous avez déjà un compte?
-            </p>
-            <span
-              className="cursor-pointer text-rosy hover:text-plum hover:underline text-center self-center max-w-fit"
-              onClick={() => {
-                dispatch(authResetError());
-                setToggle(false);
-              }}>
-              Connectez-vous
-            </span>
-            {auth.isError ? (
-              <p className="text-red-400 text-center">{auth.error.register}</p>
-            ) : (
-              ""
-            )}
-          </div>
-        ) : (
-          // Connexion Modal
-          <div
-            ref={modalRef}
-            className="fixed inset-0 z-50 w-full min-h-screen h-full bg-midnight flex flex-col justify-center p-4 rounded-none shadow-none sm:bg-midnight/95 sm:absolute sm:left-1/2 sm:top-12 sm:-translate-x-1/2 sm:w-80 sm:h-auto sm:max-h-[90vh] sm:rounded-xl sm:shadow-lg sm:p-6 sm:border border-gray-700 sm:min-h-[50vh] sm:justify-start gap-3">
-            <span
-              onClick={() => setModal(false)}
-              className="absolute top-3 right-3 cursor-pointer text-gray-400 hover:text-gray-200">
-              <X size={20} />
-            </span>
-            <h2 className="text-xl font-semibold mb-4 text-center text-gray-100">
-              Connexion
-            </h2>
-            <form
-              className="flex flex-col gap-3"
-              onSubmit={(e) => {
-                e.preventDefault();
-                dispatch(
-                  fetchUserByCredentials({
-                    email: auth.setEmail,
-                    password: auth.setPassword,
-                  })
-                );
-              }}>
-              <input
-                className="border border-gray-700 bg-gray-800 text-gray-100 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-pine placeholder-gray-400"
-                required
-                type="email"
-                placeholder="Mail"
-                autoComplete="email"
-                value={auth.setEmail}
-                onChange={(e) => dispatch(authSetEmail(e.target.value))}
-              />
-              <input
-                className="border border-gray-700 bg-gray-800 text-gray-100 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-pine placeholder-gray-400"
-                required
-                type="password"
-                placeholder="Password"
-                autoComplete="current-password"
-                value={auth.setPassword}
-                onChange={(e) => dispatch(authSetPassword(e.target.value))}
-              />
+            </div>
+
+            {/* Content */}
+            <div className="p-6">
+              {/* Form */}
+              <form onSubmit={handleSubmit} className="space-y-4">
+                {!isLogin && (
+                  <div className="group">
+                    <label className="block text-sm font-medium text-ivory/70 mb-2">
+                      Nom d'utilisateur
+                    </label>
+                    <div className="relative">
+                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <User size={18} className="text-ivory/50" />
+                      </div>
+                      <input
+                        type="text"
+                        value={auth.setName}
+                        autoComplete="username"
+                        onChange={(e) => dispatch(authSetName(e.target.value))}
+                        className="block w-full pl-10 pr-3 py-3 border border-slate-700 rounded-lg bg-slate-800 text-ivory placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-pine focus:border-transparent"
+                        placeholder="Entrez votre nom d'utilisateur"
+                        required
+                      />
+                    </div>
+                  </div>
+                )}
+
+                <div className="group">
+                  <label className="block text-sm font-medium text-ivory/70 mb-2">
+                    Email
+                  </label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                      <Mail size={18} className="text-ivory/50" />
+                    </div>
+                    <input
+                      type="email"
+                      value={auth.setEmail}
+                      autoComplete="email"
+                      onChange={(e) => dispatch(authSetEmail(e.target.value))}
+                      className="block w-full pl-10 pr-3 py-3 border border-slate-700 rounded-lg bg-slate-800 text-ivory placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-pine focus:border-transparent"
+                      placeholder="Entrez votre email"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="group">
+                  <label className="block text-sm font-medium text-ivory/70 mb-2">
+                    Mot de passe
+                  </label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                      <Lock size={18} className="text-ivory/50" />
+                    </div>
+                    <input
+                      type="password"
+                      value={auth.setPassword}
+                      autoComplete="current-password"
+                      onChange={(e) =>
+                        dispatch(authSetPassword(e.target.value))
+                      }
+                      className="block w-full pl-10 pr-3 py-3 border border-slate-700 rounded-lg bg-slate-800 text-ivory placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-pine focus:border-transparent"
+                      placeholder={
+                        isLogin
+                          ? "Entrez votre mot de passe"
+                          : "Créez un mot de passe"
+                      }
+                      required
+                    />
+                  </div>
+                </div>
+
+                {/* Error message */}
+                {auth.isError && (
+                  <div className="bg-red-900/30 border border-red-800 rounded-lg p-3 flex items-start gap-3">
+                    <AlertCircle
+                      size={18}
+                      className="text-red-500 mt-0.5 flex-shrink-0"
+                    />
+                    <p className="text-red-400 text-sm">
+                      {isLogin ? auth.error.login : auth.error.register}
+                    </p>
+                  </div>
+                )}
+
+                {/* Submit button */}
+                <button
+                  type="submit"
+                  disabled={auth.isLoading}
+                  className="w-full bg-pine hover:bg-moss text-ivory py-3 rounded-lg font-bold transition-colors disabled:opacity-70 flex items-center justify-center gap-2">
+                  {auth.isLoading ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-ivory/30 border-t-ivory rounded-full animate-spin"></div>
+                      {isLogin
+                        ? "Connexion en cours..."
+                        : "Inscription en cours..."}
+                    </>
+                  ) : (
+                    <>
+                      {isLogin ? "Se connecter" : "S'inscrire"}
+                      <ArrowRight size={16} />
+                    </>
+                  )}
+                </button>
+              </form>
+
+              {/* Divider */}
+              <div className="flex items-center my-6">
+                <div className="flex-grow h-px bg-slate-700"></div>
+                <p className="mx-4 text-sm text-ivory/50">ou</p>
+                <div className="flex-grow h-px bg-slate-700"></div>
+              </div>
+
+              {/* Social login */}
               <button
-                className="bg-pine text-white rounded py-2 mt-2 hover:bg-pine/85 transition"
-                type="submit"
-                disabled={auth.isLoading}>
-                {auth.isLoading ? "Chargement..." : "Se connecter"}
+                onClick={handleGoogleSignIn}
+                className="w-full bg-white text-gray-800 hover:bg-gray-100 py-3 rounded-lg font-medium transition-colors flex items-center justify-center gap-2">
+                <FontAwesomeIcon icon={faGoogle} className="text-red-500" />
+                Continuer avec Google
               </button>
-            </form>
-            <p className="text-center text-gray-400 text-sm">ou</p>
-            <SocialLoginButtons />
-            <p className="text-center text-gray-400 text-sm">
-              Vous n'avez pas encore de compte?
-            </p>
-            <span
-              className="cursor-pointer text-rosy hover:text-plum hover:underline text-center self-center max-w-fit"
-              onClick={() => {
-                dispatch(authResetError());
-                setToggle(true);
-              }}>
-              Inscrivez-vous
-            </span>
-            {auth.isError ? (
-              <p className="text-red-400 text-center">{auth.error.login}</p>
-            ) : (
-              ""
-            )}
+
+              {/* Switch between login and register */}
+              <div className="mt-6 text-center">
+                <p className="text-ivory/60">
+                  {isLogin ? "Pas encore inscrit ?" : "Déjà inscrit ?"}
+                  <button
+                    type="button"
+                    onClick={() => setIsLogin(!isLogin)}
+                    className="ml-1 text-pine hover:text-moss font-medium">
+                    {isLogin ? "Créer un compte" : "Se connecter"}
+                  </button>
+                </p>
+              </div>
+            </div>
           </div>
-        ))}
+        </div>
+      )}
     </>
   );
 }
