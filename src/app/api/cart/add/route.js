@@ -46,9 +46,19 @@ export async function POST(request) {
       // Do nothing, you can't add more than one quantity of the same game to the cart
       console.log("You already have this game in your cart");
     } else {
-      // Add new item to cart
-      cartItems.push({ ...game, quantity: 1 });
-      console.log("Game added to cart");
+      // Determine the price to use (discounted price if available, otherwise regular price)
+      const priceToUse =
+        game.hasDiscount && game.discountedPrice
+          ? game.discountedPrice
+          : game.price;
+
+      // Add new item to cart with the correct price
+      cartItems.push({
+        ...game,
+        price: priceToUse, // Use the correct price
+        quantity: 1,
+      });
+      console.log("Game added to cart with price:", priceToUse);
     }
 
     // Save cart to file

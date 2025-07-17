@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
+import { cartItems } from "../../cart/add/route";
 
 const usersFilePath = path.join(process.cwd(), "users.json");
 const cartFilePath = path.join(process.cwd(), "cart.json");
@@ -15,16 +16,6 @@ function loadUsers() {
   }
 }
 
-function loadCart() {
-  try {
-    const data = fs.readFileSync(cartFilePath, "utf8");
-    return JSON.parse(data);
-  } catch (error) {
-    console.error("Error loading cart:", error);
-    return [];
-  }
-}
-
 function saveUsersToFile(users) {
   try {
     fs.writeFileSync(usersFilePath, JSON.stringify(users, null, 2));
@@ -34,12 +25,18 @@ function saveUsersToFile(users) {
   }
 }
 
+// Function to clear cart (same as regular purchase endpoint)
 function clearCart() {
   try {
-    fs.writeFileSync(cartFilePath, JSON.stringify([], null, 2));
+    // Clear cart items array
+    cartItems.length = 0;
+    // Save empty cart to file
+    fs.writeFileSync(cartFilePath, JSON.stringify(cartItems, null, 2));
+    console.log("Cart cleared after credit purchase");
+    return true;
   } catch (error) {
     console.error("Error clearing cart:", error);
-    throw new Error("Failed to clear cart");
+    return false;
   }
 }
 
@@ -80,9 +77,7 @@ export async function POST(request) {
       );
     }
 
-    // Load cart items to add to purchased games
-    const cartItems = loadCart();
-
+    // Check if cart is empty
     if (cartItems.length === 0) {
       return NextResponse.json(
         { success: false, message: "Cart is empty" },
