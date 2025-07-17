@@ -9,15 +9,15 @@ import {
   purchaseGames,
   purchaseGamesWithCredits,
 } from "@/lib/features/authSlice";
-import { 
-  setCartItems, 
+import {
+  setCartItems,
   selectCartItems,
   selectOriginalPrices,
   selectDiscountedPrices,
   selectCouponDiscount,
   selectSubtotal,
   selectTotal,
-  selectIsCouponApplicable
+  selectIsCouponApplicable,
 } from "@/lib/features/cartSlice";
 import {
   X,
@@ -41,7 +41,7 @@ export default function Checkout() {
   const subtotal = useSelector(selectSubtotal);
   const total = useSelector(selectTotal);
   const isCouponApplicable = useSelector(selectIsCouponApplicable);
-  
+
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const [fetchingCart, setFetchingCart] = useState(true);
   const [purchaseComplete, setPurchaseComplete] = useState(false);
@@ -236,7 +236,7 @@ export default function Checkout() {
                   const originalPrice = originalPrices[item.id] || 0;
                   const discountedPrice = discountedPrices[item.id] || 0;
                   const hasDiscount = originalPrice > discountedPrice;
-                  
+
                   return (
                     <div
                       key={item.id}
@@ -254,7 +254,7 @@ export default function Checkout() {
                       <div className="flex-grow">
                         <h3 className="font-medium text-white">{item.title}</h3>
                         <p className="text-neutral-400 text-sm">
-                          Digital Download
+                          Téléchargement digital
                         </p>
                       </div>
                       <div className="ml-4 font-medium">
@@ -281,7 +281,7 @@ export default function Checkout() {
                   onClick={handleClearCart}
                   className="text-red-400 hover:text-red-300 flex items-center text-sm">
                   <X size={16} className="mr-1" />
-                  Clear Cart
+                  Vider le panier
                 </button>
 
                 <div className="text-lg">
@@ -291,16 +291,19 @@ export default function Checkout() {
                   </span>
                 </div>
               </div>
-              
+
               {/* Coupon Notification */}
               {isCouponApplicable && couponDiscount > 0 && (
                 <div className="mt-4 p-3 bg-green-500/10 border border-green-500/20 rounded-lg">
                   <div className="flex items-center gap-2 text-green-400">
                     <Tag size={16} />
-                    <span className="font-medium">4+1 Discount Applied!</span>
+                    <span className="font-medium">
+                      4+1 Promotion appliquée!
+                    </span>
                   </div>
                   <p className="text-green-300 text-sm mt-1">
-                    You saved ${couponDiscount.toFixed(2)} on your cheapest game.
+                    Vous avez économisé ${couponDiscount.toFixed(2)} sur votre
+                    jeu le moins cher.
                   </p>
                 </div>
               )}
@@ -312,14 +315,14 @@ export default function Checkout() {
             <div className="bg-neutral-800 rounded-lg p-6 sticky top-24">
               <h2 className="text-xl font-semibold mb-4 flex items-center">
                 <CreditCard size={20} className="mr-2" />
-                Payment
+                Paiement
               </h2>
 
               {/* Credit Balance Display */}
               <div className="bg-neutral-700/50 p-4 rounded-md mb-4">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-neutral-300 text-sm">
-                    Credit Balance
+                    Solde de crédit
                   </span>
                   <span className="text-lg font-bold text-white">
                     ${creditBalance.toFixed(2)}
@@ -328,7 +331,7 @@ export default function Checkout() {
                 {!hasSufficientCredits && (
                   <div className="flex items-center gap-2 text-red-400 text-sm">
                     <AlertCircle size={14} />
-                    <span>Insufficient balance</span>
+                    <span>Solde insuffisant</span>
                   </div>
                 )}
               </div>
@@ -336,7 +339,7 @@ export default function Checkout() {
               {/* Payment Method Selection */}
               <div className="mb-4">
                 <h3 className="text-sm font-medium text-neutral-300 mb-3">
-                  Payment Method
+                  Méthode de paiement
                 </h3>
 
                 {/* Banking Card Option */}
@@ -351,7 +354,7 @@ export default function Checkout() {
                   />
                   <div className="flex items-center gap-2">
                     <CreditCard size={16} className="text-pine" />
-                    <span className="text-white">Banking Card</span>
+                    <span className="text-white">Carte bancaire</span>
                   </div>
                 </label>
 
@@ -373,34 +376,36 @@ export default function Checkout() {
                   />
                   <div className="flex items-center gap-2">
                     <CreditCard size={16} className="text-pine" />
-                    <span className="text-white">Credit Balance</span>
+                    <span className="text-white">Solde de crédit</span>
                   </div>
                 </label>
               </div>
 
               {/* Order Summary */}
               <div className="bg-neutral-700/50 p-4 rounded-md mb-4">
-                <p className="text-neutral-300 mb-2">Order Summary</p>
+                <p className="text-neutral-300 mb-2">
+                  Récapitulatif de la commande
+                </p>
                 <div className="flex justify-between mb-1">
-                  <span className="text-neutral-400">Subtotal</span>
+                  <span className="text-neutral-400">Sous-total</span>
                   <span>${subtotal.toFixed(2)}</span>
                 </div>
                 {couponDiscount > 0 && (
                   <div className="flex justify-between mb-1 text-green-400">
                     <span className="flex items-center gap-1">
                       <Tag size={12} />
-                      4+1 Discount
+                      4+1 Promotion
                     </span>
                     <span>-${couponDiscount.toFixed(2)}</span>
                   </div>
                 )}
                 <div className="flex justify-between mb-1">
-                  <span className="text-neutral-400">Tax</span>
+                  <span className="text-neutral-400">Taxe</span>
                   <span>$0.00</span>
                 </div>
                 <div className="border-t border-neutral-600 my-2"></div>
                 <div className="flex justify-between font-medium">
-                  <span>Total</span>
+                  <span>Total à payer</span>
                   <span>${total.toFixed(2)}</span>
                 </div>
               </div>
@@ -427,10 +432,10 @@ export default function Checkout() {
                 {isCheckingOut ? (
                   <>
                     <Loader className="animate-spin mr-2" size={16} />
-                    Processing...
+                    Traitement...
                   </>
                 ) : (
-                  <>Complete Purchase</>
+                  <>Acheter</>
                 )}
               </button>
             </div>
