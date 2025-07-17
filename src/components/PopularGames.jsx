@@ -135,7 +135,7 @@ export default function PopularGames() {
                         <div className="flex items-center justify-between gap-2 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 opacity-0 group-hover:opacity-100 delay-100">
                           <Link href={`/games/${game.id}`} className="w-1/2">
                             <button className="w-full bg-rosy hover:bg-rosy/90 text-midnight font-bold py-1.5 sm:py-2 px-2 rounded-lg transition-all duration-200 hover:scale-[1.02] hover:text-ivory shadow-lg flex items-center justify-center gap-1 sm:gap-2 text-xs sm:text-sm">
-                              <span>Voir</span>
+                              <span>Découvrir</span>
                             </button>
                           </Link>
 
@@ -151,7 +151,7 @@ export default function PopularGames() {
                                 size={14}
                                 className="hidden sm:inline"
                               />
-                              {addingGameId === game.id ? "..." : "Panier"}
+                              {addingGameId === game.id ? "..." : "Acheter"}
                             </button>
                           ) : (
                             <button
