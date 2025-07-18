@@ -6,7 +6,20 @@ let cartItems = storageService.loadCart();
 
 export async function POST(request) {
   try {
-    const game = await request.json();
+    const { game, userEmail } = await request.json();
+
+    // Check if user is provided and if the game is already purchased
+    if (userEmail) {
+      const users = storageService.loadUsers();
+      const user = users.find(u => u.email === userEmail);
+      
+      if (user && user.purchasedGames && user.purchasedGames.some(purchasedGame => purchasedGame.id === game.id)) {
+        return NextResponse.json(
+          { success: false, message: "This game is already purchased" },
+          { status: 400 }
+        );
+      }
+    }
 
     // Find existing item in cart
     const existingIndex = cartItems.findIndex((item) => item.id === game.id);

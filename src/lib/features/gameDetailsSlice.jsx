@@ -26,9 +26,9 @@ export const fetchGameDetails = createAsyncThunk(
 
 export const addToCart = createAsyncThunk(
   "gameDetails/addToCart",
-  async (game, { rejectWithValue, dispatch }) => {
+  async ({ game, userEmail }, { rejectWithValue, dispatch }) => {
     try {
-      const response = await apiService.addToCart(game);
+      const response = await apiService.addToCart(game, userEmail);
       if (!response || !response.success) {
         return rejectWithValue(response?.message || "Failed to add to cart");
       }

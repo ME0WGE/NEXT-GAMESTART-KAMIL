@@ -5,9 +5,10 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart, removeFromCart } from "@/lib/features/gameDetailsSlice";
 import { selectCartItems } from "@/lib/features/cartSlice";
-import { ShoppingCart, Trash2, User } from "lucide-react";
+import { ShoppingCart, Trash2, User, Check } from "lucide-react";
 import Link from "next/link";
 import GamePrice from "@/components/GamePrice";
+import { isGamePurchased } from "@/lib/utils/gameUtils";
 
 export default function AllGames() {
   const [displayCount, setDisplayCount] = useState(12);
@@ -15,6 +16,7 @@ export default function AllGames() {
   const dispatch = useDispatch();
   const { addingToCart } = useSelector((state) => state.gameDetails);
   const cartItems = useSelector(selectCartItems);
+  const { user } = useSelector((state) => state.auth);
   const { isSearchActive, filteredGames } = useSelector(
     (state) => state.search
   );
@@ -53,7 +55,7 @@ export default function AllGames() {
     try {
       setAddingGameId(game.id);
       // Use game as is (prices are now consistently handled)
-      await dispatch(addToCart(game)).unwrap();
+      await dispatch(addToCart({ game, userEmail: user.email })).unwrap();
     } catch (error) {
       console.error("Failed to add to cart:", error);
     } finally {
@@ -193,6 +195,18 @@ export default function AllGames() {
                       </div>
                     </div>
                   )}
+
+                  {/* Purchased Status Indicator */}
+                  {isGamePurchased(game.id, user) && (
+                    <div className="absolute bottom-2 sm:bottom-4 right-2 sm:right-4 bg-green-500/90 backdrop-blur-sm px-2 sm:px-3 py-1 rounded-full border border-green-500/30">
+                      <div className="flex items-center gap-1">
+                        <Check size={10} className="text-white sm:w-3 sm:h-3" />
+                        <span className="text-white text-xs font-medium">
+                          Acheté
+                        </span>
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 {/* Content */}
@@ -236,7 +250,14 @@ export default function AllGames() {
                       </span>
                     </div>
 
-                    {isInCart(game.id) ? (
+                    {isGamePurchased(game.id, user) ? (
+                      <div className="w-full sm:w-auto bg-green-500/90 text-white px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg flex items-center justify-center gap-2 min-w-[100px] sm:min-w-[120px]">
+                        <Check size={14} className="sm:w-4 sm:h-4" />
+                        <span className="font-medium text-sm sm:text-base">
+                          Acheté
+                        </span>
+                      </div>
+                    ) : isInCart(game.id) ? (
                       <button
                         onClick={(e) => handleRemoveFromCart(game.id, e)}
                         disabled={removingGameId === game.id}

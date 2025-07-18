@@ -7,6 +7,7 @@ import {
   removeFromCart as removeAction,
 } from "@/lib/features/gameDetailsSlice";
 import { selectCartItems } from "@/lib/features/cartSlice";
+import { isGamePurchased } from "@/lib/utils/gameUtils";
 
 export default function AddToCartButton({ gameId, className = "" }) {
   const dispatch = useDispatch();
@@ -16,20 +17,9 @@ export default function AddToCartButton({ gameId, className = "" }) {
   const { user } = useSelector((state) => state.auth);
   const [showError, setShowError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [isOwned, setIsOwned] = useState(false);
 
-  // Check if game is already owned
-  useEffect(() => {
-    if (user.purchasedGames && user.purchasedGames.length > 0) {
-      setIsOwned(
-        user.purchasedGames.some((game) => game.id === currentGame?.id)
-      );
-    } else {
-      setIsOwned(false);
-    }
-  }, [user.purchasedGames, currentGame]);
-
-
+  // Check if game is already owned using the utility function
+  const isOwned = isGamePurchased(gameId, user);
 
   const handleClick = async () => {
     try {
@@ -39,7 +29,9 @@ export default function AddToCartButton({ gameId, className = "" }) {
       if (hasAlreadyBoughtGame) {
         await dispatch(removeAction(currentGame.id)).unwrap();
       } else {
-        await dispatch(addAction(currentGame)).unwrap();
+        await dispatch(
+          addAction({ game: currentGame, userEmail: user.email })
+        ).unwrap();
       }
     } catch (error) {
       console.error("Cart operation failed:", error);

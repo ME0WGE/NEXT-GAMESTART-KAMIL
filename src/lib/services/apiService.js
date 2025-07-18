@@ -170,9 +170,9 @@ export const apiService = {
   },
 
   // Add to cart
-  async addToCart(game) {
+  async addToCart(game, userEmail) {
     try {
-      const response = await api.post("/cart/add", game);
+      const response = await api.post("/cart/add", { game, userEmail });
       return response.data;
     } catch (error) {
       console.error("Error adding to cart:", error);

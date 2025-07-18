@@ -7,15 +7,17 @@ import { useBudgetGames } from "@/lib/hooks/useBudgetGames";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "@/lib/features/gameDetailsSlice";
 import { selectCartItems } from "@/lib/features/cartSlice";
-import { ShoppingCart, Eye, Tags } from "lucide-react";
+import { ShoppingCart, Eye, Tags, Check } from "lucide-react";
 import GamePrice from "@/components/GamePrice";
 import { useRouter } from "next/navigation";
+import { isGamePurchased } from "@/lib/utils/gameUtils";
 
 export default function BudgetGames() {
   const router = useRouter();
   const dispatch = useDispatch();
   const { budgetGames, loading, error, loadBudgetGames } = useBudgetGames();
   const cartItems = useSelector(selectCartItems);
+  const { user } = useSelector((state) => state.auth);
   const [addingGameId, setAddingGameId] = useState(null);
 
   // Check if a game is in the cart
@@ -30,7 +32,7 @@ export default function BudgetGames() {
 
     try {
       setAddingGameId(game.id);
-      await dispatch(addToCart(game)).unwrap();
+      await dispatch(addToCart({ game, userEmail: user.email })).unwrap();
     } catch (error) {
       console.error("Failed to add to cart:", error);
     } finally {
@@ -132,25 +134,34 @@ export default function BudgetGames() {
 
           {/* Action buttons */}
           <div className="flex gap-2">
-            <button
-              onClick={(e) => handleAddToCart(e, game)}
-              disabled={addingGameId === game.id || isInCart(game.id)}
-              className={`flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-rosy ${
-                isInCart(game.id)
-                  ? "bg-pine text-ivory cursor-default"
-                  : "bg-rosy hover:bg-rosy/90 text-midnight font-medium animate-pulse-once"
-              }`}
-              aria-label={
-                isInCart(game.id) ? "Déjà dans le panier" : "Ajouter au panier"
-              }>
-              <ShoppingCart
-                size={18}
-                className={isInCart(game.id) ? "animate-pulse" : ""}
-              />
-              <span className="text-sm">
-                {isInCart(game.id) ? "Dans le panier" : "Ajouter"}
-              </span>
-            </button>
+            {isGamePurchased(game.id, user) ? (
+              <div className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-green-500 text-white rounded-lg">
+                <Check size={18} />
+                <span className="text-sm">Acheté</span>
+              </div>
+            ) : (
+              <button
+                onClick={(e) => handleAddToCart(e, game)}
+                disabled={addingGameId === game.id || isInCart(game.id)}
+                className={`flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-rosy ${
+                  isInCart(game.id)
+                    ? "bg-pine text-ivory cursor-default"
+                    : "bg-rosy hover:bg-rosy/90 text-midnight font-medium animate-pulse-once"
+                }`}
+                aria-label={
+                  isInCart(game.id)
+                    ? "Déjà dans le panier"
+                    : "Ajouter au panier"
+                }>
+                <ShoppingCart
+                  size={18}
+                  className={isInCart(game.id) ? "animate-pulse" : ""}
+                />
+                <span className="text-sm">
+                  {isInCart(game.id) ? "Dans le panier" : "Ajouter"}
+                </span>
+              </button>
+            )}
 
             <Link
               href={`/games/${game.id}`}

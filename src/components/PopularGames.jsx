@@ -1,13 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { TrendingUp, ShoppingCart, Trash2 } from "lucide-react";
+import { TrendingUp, ShoppingCart, Trash2, Check } from "lucide-react";
 import { useMostPlayedGames } from "@/lib/hooks/useMostPlayedGames";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart, removeFromCart } from "@/lib/features/gameDetailsSlice";
 import { selectCartItems } from "@/lib/features/cartSlice";
 import Link from "next/link";
 import Image from "next/image";
+import { isGamePurchased } from "@/lib/utils/gameUtils";
 
 export default function PopularGames() {
   const [showAll, setShowAll] = useState(false);
@@ -15,6 +16,7 @@ export default function PopularGames() {
   const dispatch = useDispatch();
   const { addingToCart } = useSelector((state) => state.gameDetails);
   const cartItems = useSelector(selectCartItems);
+  const { user } = useSelector((state) => state.auth);
   const [addingGameId, setAddingGameId] = useState(null);
   const [removingGameId, setRemovingGameId] = useState(null);
 
@@ -39,7 +41,7 @@ export default function PopularGames() {
     try {
       e.stopPropagation();
       setAddingGameId(game.id);
-      await dispatch(addToCart(game)).unwrap();
+      await dispatch(addToCart({ game, userEmail: user.email })).unwrap();
     } catch (error) {
       console.error("Failed to add to cart:", error);
     } finally {
@@ -142,7 +144,12 @@ export default function PopularGames() {
                           </Link>
 
                           {/* Add to Cart Button */}
-                          {!isInCart(game.id) ? (
+                          {isGamePurchased(game.id, user) ? (
+                            <div className="w-1/2 bg-green-500 text-white font-bold py-1.5 sm:py-2 px-1 sm:px-2 rounded-lg flex items-center justify-center gap-1 sm:gap-2 text-xs sm:text-sm">
+                              <Check size={14} className="hidden sm:inline" />
+                              Acheté
+                            </div>
+                          ) : !isInCart(game.id) ? (
                             <button
                               onClick={(e) => handleAddToCart(game, e)}
                               disabled={
