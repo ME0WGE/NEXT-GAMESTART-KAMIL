@@ -41,10 +41,8 @@ export default function Games() {
                 <FilterSideBar />
               </div>
 
-              {/* Coupon section */}
-              <div>
-                <CouponSection />
-              </div>
+              {/* Coupon section - Inline variant */}
+              <CouponSection variant="inline" />
             </div>
           </aside>
 

@@ -16,7 +16,7 @@ import { useSelector } from "react-redux";
 import { selectCartItems } from "@/lib/features/cartSlice";
 import { calculateCouponDiscount } from "@/lib/features/couponSlice";
 
-export default function CouponSection() {
+export default function CouponSection({ variant = "floating" }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const cartItems = useSelector(selectCartItems);
 
@@ -31,6 +31,165 @@ export default function CouponSection() {
     setIsExpanded(!isExpanded);
   };
 
+  // Inline variant for games page
+  if (variant === "inline") {
+    return (
+      <div className="bg-midnight/70 backdrop-blur-md p-4 rounded-xl border border-ivory/10 shadow-lg hover-lift">
+        <div className="flex items-center gap-3 mb-4">
+          <div className="relative">
+            <div className="bg-gradient-to-br from-rosy to-plum p-2 rounded-lg shadow-md">
+              <Gift className="text-white" size={18} />
+            </div>
+            {isQualified && (
+              <div className="absolute -top-1 -right-1 bg-moss rounded-full p-0.5 shadow-md">
+                <CheckCircle className="text-white" size={10} />
+              </div>
+            )}
+          </div>
+          <div className="flex-1">
+            <h3 className="text-base font-bold text-ivory flex items-center gap-2">
+              Offre spéciale
+              <Sparkles className="text-amber-400" size={14} />
+            </h3>
+            <p className="text-ivory/80 text-sm">
+              5 jeux = 1 <span className="font-bold text-moss">GRATUIT</span>
+            </p>
+          </div>
+        </div>
+
+        {/* Progress Section */}
+        <div className="space-y-3">
+          {/* Progress Info */}
+          <div className="flex items-center justify-between">
+            <span className="text-ivory/80 text-sm font-medium">
+              Progression
+            </span>
+            <span className="text-ivory font-bold text-sm">
+              {cartItems.length}/5
+            </span>
+          </div>
+
+          {/* Progress Bar */}
+          <div className="relative">
+            <div className="w-full bg-midnight/60 rounded-full h-2 shadow-inner">
+              <div
+                className={`h-full rounded-full transition-all duration-700 ease-out ${
+                  isQualified
+                    ? "bg-gradient-to-r from-moss to-pine"
+                    : "bg-gradient-to-r from-rosy to-plum"
+                }`}
+                style={{ width: `${progressPercentage}%` }}>
+                {isQualified && (
+                  <div className="absolute right-1 top-1/2 transform -translate-y-1/2">
+                    <CheckCircle className="text-white" size={8} />
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Progress Steps */}
+          <div className="flex justify-between">
+            {[1, 2, 3, 4, 5].map((step) => (
+              <div
+                key={step}
+                className={`w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-300 ${
+                  cartItems.length >= step
+                    ? "bg-moss text-white shadow-md"
+                    : "bg-midnight/60 text-ivory/60 border border-ivory/20"
+                }`}>
+                {cartItems.length >= step ? <CheckCircle size={10} /> : step}
+              </div>
+            ))}
+          </div>
+
+          {/* Status Section */}
+          <div
+            className={`p-3 rounded-lg border transition-all duration-500 ${
+              isQualified
+                ? "bg-gradient-to-br from-moss/20 to-pine/30 border-moss/30"
+                : "bg-midnight/40 border-ivory/20"
+            }`}>
+            <div className="flex items-center gap-2 mb-2">
+              <div
+                className={`p-1.5 rounded-lg ${
+                  isQualified ? "bg-moss/20" : "bg-rosy/20"
+                }`}>
+                {isQualified ? (
+                  <CheckCircle className="text-moss" size={14} />
+                ) : (
+                  <TrendingUp className="text-rosy" size={14} />
+                )}
+              </div>
+              <div className="flex-1">
+                <h4
+                  className={`font-bold text-sm ${
+                    isQualified ? "text-moss" : "text-ivory"
+                  }`}>
+                  {isQualified ? "Coupon Activé!" : "Presque là!"}
+                </h4>
+                <p className="text-ivory/70 text-xs">
+                  {isQualified
+                    ? "Réduction appliquée"
+                    : `${remaining} jeu${remaining > 1 ? "x" : ""} restant${
+                        remaining > 1 ? "s" : ""
+                      }`}
+                </p>
+              </div>
+            </div>
+
+            {isQualified ? (
+              <div className="space-y-1.5">
+                <div className="flex items-center justify-between p-1.5 bg-midnight/40 rounded text-xs">
+                  <span className="text-ivory/80">Jeu gratuit:</span>
+                  <span className="font-bold text-moss truncate ml-2 max-w-[100px]">
+                    {couponInfo.cheapestGame?.title}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between p-1.5 bg-midnight/40 rounded text-xs">
+                  <span className="text-ivory/80">Économies:</span>
+                  <div className="flex items-center gap-1">
+                    <span className="line-through text-ivory/50">
+                      {couponInfo.cheapestGame?.price}€
+                    </span>
+                    <span className="bg-moss/20 text-moss font-bold px-1 py-0.5 rounded text-xs">
+                      GRATUIT
+                    </span>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="text-center">
+                <div className="bg-midnight/40 rounded-lg p-2">
+                  <div className="flex items-center justify-center gap-2 text-ivory/60">
+                    <ShoppingBag size={12} />
+                    <span className="text-xs">
+                      Ajoutez {remaining} jeu{remaining > 1 ? "x" : ""}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Footer */}
+          <div className="pt-2 border-t border-ivory/10">
+            <div className="flex flex-col gap-1 text-xs text-ivory/60">
+              <div className="flex items-center gap-2">
+                <Ticket size={10} />
+                <span>Offre valable sur tous les jeux</span>
+              </div>
+              <div className="text-center">
+                <span>Réduction automatique • Pas de code requis</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Floating variant (default) for other pages
   return (
     <div className="fixed bottom-4 right-4 z-50">
       {/* Collapsed Version - Small floating button */}
