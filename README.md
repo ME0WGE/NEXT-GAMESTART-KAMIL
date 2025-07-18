@@ -161,7 +161,6 @@ const generatePrice = (gameId) => {
 - **Image Optimization**: Next.js built-in image optimization
 - **API Proxy**: Efficient proxying to external APIs
 - **State Management**: Optimized Redux store with selective updates
-- **Lazy Loading**: Component-based code splitting
 
 ## Development Setup
 
@@ -177,7 +176,7 @@ const generatePrice = (gameId) => {
 GOOGLE_ID=your_google_oauth_client_id
 GOOGLE_SECRET=your_google_oauth_client_secret
 NEXTAUTH_SECRET=your_nextauth_secret
-NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_URL=http://localhost:3000 | vercel.app
 ```
 
 ## Color Palette
@@ -192,9 +191,3 @@ NEXTAUTH_URL=http://localhost:3000
 --color-midnight: #031c26;
 --color-slate: #475569;
 ```
-
-## Browser Support
-
-- Modern browsers with ES6+ support
-- Responsive design for mobile and desktop
-- Progressive enhancement for accessibility
