@@ -309,7 +309,7 @@ export default function DiscountCarousel() {
             {/* Main Content (Center) */}
             <div className="absolute inset-0 z-10 flex items-center justify-center px-16 lg:px-24">
               <div
-                className={`bg-slate-800 rounded-xl p-6 w-full max-w-2xl relative overflow-hidden border border-yellow-400/40 shadow-2xl shadow-yellow-400/10 ${
+                className={`bg-slate-800 rounded-xl p-6 w-full max-w-2xl h-100 relative overflow-hidden border border-yellow-400/40 shadow-2xl shadow-yellow-400/10 ${
                   isAnimating ? "scale-95 opacity-80" : "scale-100 opacity-100"
                 } transition-all duration-300 ease-in-out cursor-pointer hover:shadow-yellow-400/20`}
                 onClick={() => currentGame && handleGameClick(currentGame.id)}
