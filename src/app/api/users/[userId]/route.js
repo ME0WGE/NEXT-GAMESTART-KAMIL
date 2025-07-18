@@ -1,24 +1,10 @@
 import { NextResponse } from "next/server";
-import { users } from "../update/route";
-import fs from "fs";
-import path from "path";
-
-// Function to save users to the file
-function saveUsersToFile() {
-  try {
-    const usersFilePath = path.join(process.cwd(), "users.json");
-    fs.writeFileSync(usersFilePath, JSON.stringify(users, null, 2));
-    console.log("Users saved to file");
-    return true;
-  } catch (error) {
-    console.error("Error saving users to file:", error);
-    return false;
-  }
-}
+import { storageService } from "@/lib/services/storageService";
 
 export async function GET(request, { params }) {
   try {
     const userId = params.userId;
+    const users = storageService.loadUsers();
 
     // Find user by ID
     const user = users.find((u) => u.id === userId);
@@ -49,6 +35,7 @@ export async function PATCH(request, { params }) {
   try {
     const userId = params.userId;
     const updates = await request.json();
+    const users = storageService.loadUsers();
 
     // Find user index
     const userIndex = users.findIndex((u) => u.id === userId);
@@ -76,8 +63,8 @@ export async function PATCH(request, { params }) {
     // Update user data
     users[userIndex] = { ...users[userIndex], ...updates };
 
-    // Save users to file
-    saveUsersToFile();
+    // Save users to storage
+    storageService.saveUsers(users);
 
     // Return updated user without password
     const { password, ...userWithoutPassword } = users[userIndex];

@@ -1,41 +1,11 @@
 import { NextResponse } from "next/server";
-import { users } from "../update/route";
-import { cartItems } from "../../cart/add/route";
-import fs from "fs";
-import path from "path";
-
-// Function to save users to the file
-function saveUsersToFile() {
-  try {
-    const usersFilePath = path.join(process.cwd(), "users.json");
-    fs.writeFileSync(usersFilePath, JSON.stringify(users, null, 2));
-    console.log("Users saved to file after purchase");
-    return true;
-  } catch (error) {
-    console.error("Error saving users to file:", error);
-    return false;
-  }
-}
-
-// Function to clear cart
-function clearCart() {
-  try {
-    const cartFilePath = path.join(process.cwd(), "cart.json");
-    // Clear cart items array
-    cartItems.length = 0;
-    // Save empty cart to file
-    fs.writeFileSync(cartFilePath, JSON.stringify(cartItems, null, 2));
-    console.log("Cart cleared after purchase");
-    return true;
-  } catch (error) {
-    console.error("Error clearing cart:", error);
-    return false;
-  }
-}
+import { storageService } from "@/lib/services/storageService";
 
 export async function POST(request) {
   try {
     const { userId } = await request.json();
+    const users = storageService.loadUsers();
+    const cartItems = storageService.loadCart();
 
     // Find user index
     const userIndex = users.findIndex((u) => u.id === userId);
@@ -67,11 +37,11 @@ export async function POST(request) {
       ...newPurchases,
     ];
 
-    // Save users to file
-    saveUsersToFile();
+    // Save users to storage
+    storageService.saveUsers(users);
 
     // Clear cart
-    clearCart();
+    storageService.saveCart([]);
 
     // Return updated user without password
     const { password, ...userWithoutPassword } = users[userIndex];

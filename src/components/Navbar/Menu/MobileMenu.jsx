@@ -2,7 +2,7 @@ import { ShoppingCart } from "lucide-react";
 import { X } from "lucide-react";
 import { Menu } from "lucide-react";
 import { Search } from "lucide-react";
-import Login from "../../Login";
+import LoginWrapper from "../../LoginWrapper";
 import { NavbarNavLinksComponent } from "../NavLinks/NavbarNavLinks";
 import { useState, useRef, useEffect } from "react";
 import { useSelector } from "react-redux";
@@ -31,7 +31,7 @@ function MobileMenu({ toggleMenu, isMenuOpen, toggleCart }) {
       </div>
 
       {/* Login */}
-      <Login />
+              <LoginWrapper />
 
       {/* Menu Button */}
       <button

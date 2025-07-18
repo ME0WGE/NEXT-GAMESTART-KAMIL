@@ -1,22 +1,8 @@
 import { NextResponse } from "next/server";
-import { cartItems } from "../add/route";
-import fs from "fs";
-import path from "path";
+import { storageService } from "@/lib/services/storageService";
 
-// Path to cart.json file
-const cartFilePath = path.join(process.cwd(), "cart.json");
-
-// Function to save cart to the file
-function saveCartToFile() {
-  try {
-    fs.writeFileSync(cartFilePath, JSON.stringify(cartItems, null, 2));
-    console.log("Cart saved to file after removal");
-    return true;
-  } catch (error) {
-    console.error("Error saving cart to file:", error);
-    return false;
-  }
-}
+// Load cart data from storage
+let cartItems = storageService.loadCart();
 
 export async function DELETE(request) {
   try {
@@ -31,12 +17,11 @@ export async function DELETE(request) {
     }
 
     // Filter out the item with the matching ID
-    // Since we're modifying the original array reference, this will affect all routes
     const index = cartItems.findIndex((item) => item.id === parseInt(gameId));
     if (index !== -1) {
       cartItems.splice(index, 1);
-      // Save cart to file after removal
-      saveCartToFile();
+      // Save cart to storage after removal
+      storageService.saveCart(cartItems);
     }
 
     // Return success response with updated cart

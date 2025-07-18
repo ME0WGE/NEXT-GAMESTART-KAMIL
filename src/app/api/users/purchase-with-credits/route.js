@@ -1,44 +1,5 @@
 import { NextResponse } from "next/server";
-import fs from "fs";
-import path from "path";
-import { cartItems } from "../../cart/add/route";
-
-const usersFilePath = path.join(process.cwd(), "users.json");
-const cartFilePath = path.join(process.cwd(), "cart.json");
-
-function loadUsers() {
-  try {
-    const data = fs.readFileSync(usersFilePath, "utf8");
-    return JSON.parse(data);
-  } catch (error) {
-    console.error("Error loading users:", error);
-    return [];
-  }
-}
-
-function saveUsersToFile(users) {
-  try {
-    fs.writeFileSync(usersFilePath, JSON.stringify(users, null, 2));
-  } catch (error) {
-    console.error("Error saving users:", error);
-    throw new Error("Failed to save user data");
-  }
-}
-
-// Function to clear cart (same as regular purchase endpoint)
-function clearCart() {
-  try {
-    // Clear cart items array
-    cartItems.length = 0;
-    // Save empty cart to file
-    fs.writeFileSync(cartFilePath, JSON.stringify(cartItems, null, 2));
-    console.log("Cart cleared after credit purchase");
-    return true;
-  } catch (error) {
-    console.error("Error clearing cart:", error);
-    return false;
-  }
-}
+import { storageService } from "@/lib/services/storageService";
 
 export async function POST(request) {
   try {
@@ -51,7 +12,8 @@ export async function POST(request) {
       );
     }
 
-    const users = loadUsers();
+    const users = storageService.loadUsers();
+    const cartItems = storageService.loadCart();
     const userIndex = users.findIndex((user) => user.id === userId);
 
     if (userIndex === -1) {
@@ -98,8 +60,8 @@ export async function POST(request) {
       ...newPurchases,
     ];
 
-    saveUsersToFile(users);
-    clearCart();
+    storageService.saveUsers(users);
+    storageService.saveCart([]);
 
     return NextResponse.json({
       success: true,

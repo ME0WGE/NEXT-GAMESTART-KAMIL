@@ -1,8 +1,9 @@
 import { NextResponse } from "next/server";
-import { cartItems } from "./add/route";
+import { storageService } from "@/lib/services/storageService";
 
 export async function GET() {
   try {
+    const cartItems = storageService.loadCart();
     return NextResponse.json(cartItems);
   } catch (error) {
     console.error("Error in cart get route:", error);

@@ -1,11 +1,12 @@
 import { NextResponse } from "next/server";
-import { users } from "../update/route";
+import { storageService } from "@/lib/services/storageService";
 
 export async function GET(request) {
   try {
     // Get email from query params
     const url = new URL(request.url);
     const email = url.searchParams.get("email");
+    const users = storageService.loadUsers();
 
     if (!email) {
       console.error("Lookup error: No email provided");

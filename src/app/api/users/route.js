@@ -1,8 +1,9 @@
 import { NextResponse } from "next/server";
-import { users } from "./update/route";
+import { storageService } from "@/lib/services/storageService";
 
 export async function GET() {
   try {
+    const users = storageService.loadUsers();
     return NextResponse.json(users);
   } catch (error) {
     console.error("Error in users get route:", error);

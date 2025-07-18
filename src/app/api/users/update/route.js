@@ -1,49 +1,24 @@
 import { NextResponse } from "next/server";
-import fs from "fs";
-import path from "path";
+import { storageService } from "@/lib/services/storageService";
 
-// In-memory store for development
-export let users = [
-  {
-    id: "1",
-    name: "admin",
-    email: "a@a.a",
-    password: "123",
-    description: "Administrator account",
-    purchasedGames: [],
-    isConnected: false,
-    creditBalance: 0,
-  },
-];
+// Load users data from storage
+let users = storageService.loadUsers();
 
-// Path to users.json file
-const usersFilePath = path.join(process.cwd(), "users.json");
-
-// Load users data from the file on startup
-try {
-  if (fs.existsSync(usersFilePath)) {
-    const data = fs.readFileSync(usersFilePath, "utf8");
-    users = JSON.parse(data);
-    console.log("Loaded users from file:", users);
-  } else {
-    // Initialize users file if it doesn't exist
-    fs.writeFileSync(usersFilePath, JSON.stringify(users, null, 2));
-    console.log("Created new users file");
-  }
-} catch (error) {
-  console.error("Error loading users from file:", error);
-}
-
-// Function to save users to the file
-function saveUsersToFile() {
-  try {
-    fs.writeFileSync(usersFilePath, JSON.stringify(users, null, 2));
-    console.log("Users saved to file");
-    return true;
-  } catch (error) {
-    console.error("Error saving users to file:", error);
-    return false;
-  }
+// Initialize with default admin user if no users exist
+if (users.length === 0) {
+  users = [
+    {
+      id: "1",
+      name: "admin",
+      email: "a@a.a",
+      password: "123",
+      description: "Administrator account",
+      purchasedGames: [],
+      isConnected: false,
+      creditBalance: 0,
+    },
+  ];
+  storageService.saveUsers(users);
 }
 
 export async function POST(request) {
@@ -70,8 +45,8 @@ export async function POST(request) {
       console.log("New user added:", newUser);
     }
 
-    // Save users to file
-    saveUsersToFile();
+    // Save users to storage
+    storageService.saveUsers(users);
 
     // Return success response with updated user
     return NextResponse.json({

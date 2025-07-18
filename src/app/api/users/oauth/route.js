@@ -1,24 +1,10 @@
 import { NextResponse } from "next/server";
-import { users } from "../update/route";
-import fs from "fs";
-import path from "path";
-
-// Function to save users to the file
-function saveUsersToFile() {
-  try {
-    const usersFilePath = path.join(process.cwd(), "users.json");
-    fs.writeFileSync(usersFilePath, JSON.stringify(users, null, 2));
-    console.log("Users saved to file after OAuth sync");
-    return true;
-  } catch (error) {
-    console.error("Error saving users to file:", error);
-    return false;
-  }
-}
+import { storageService } from "@/lib/services/storageService";
 
 export async function POST(request) {
   try {
     const oauthUser = await request.json();
+    const users = storageService.loadUsers();
 
     // Check required fields
     if (!oauthUser.email) {
@@ -74,8 +60,8 @@ export async function POST(request) {
       console.log("Created new Google user:", newUser.email);
     }
 
-    // Save users to file
-    saveUsersToFile();
+    // Save users to storage
+    storageService.saveUsers(users);
 
     // Return success with user ID and full user data
     const userIndex = users.findIndex((u) => u.id === userId);

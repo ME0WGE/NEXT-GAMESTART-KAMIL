@@ -1,39 +1,8 @@
 import { NextResponse } from "next/server";
-import fs from "fs";
-import path from "path";
+import { storageService } from "@/lib/services/storageService";
 
-// In-memory store for development
-export let cartItems = [];
-
-// Path to cart.json file
-const cartFilePath = path.join(process.cwd(), "cart.json");
-
-// Load cart data from the file on startup
-try {
-  if (fs.existsSync(cartFilePath)) {
-    const data = fs.readFileSync(cartFilePath, "utf8");
-    cartItems = JSON.parse(data);
-    console.log("Loaded cart from file:", cartItems);
-  } else {
-    // Initialize empty cart file if it doesn't exist
-    fs.writeFileSync(cartFilePath, JSON.stringify(cartItems, null, 2));
-    console.log("Created new cart file");
-  }
-} catch (error) {
-  console.error("Error loading cart from file:", error);
-}
-
-// Function to save cart to the file
-function saveCartToFile() {
-  try {
-    fs.writeFileSync(cartFilePath, JSON.stringify(cartItems, null, 2));
-    console.log("Cart saved to file");
-    return true;
-  } catch (error) {
-    console.error("Error saving cart to file:", error);
-    return false;
-  }
-}
+// Load cart data from storage
+let cartItems = storageService.loadCart();
 
 export async function POST(request) {
   try {
@@ -69,8 +38,8 @@ export async function POST(request) {
       );
     }
 
-    // Save cart to file
-    saveCartToFile();
+    // Save cart to storage
+    storageService.saveCart(cartItems);
 
     // Return success response with updated cart
     return NextResponse.json({
