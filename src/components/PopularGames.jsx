@@ -106,11 +106,11 @@ export default function PopularGames() {
                       <img
                         src={game.thumbnail}
                         alt={game.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        className="w-full h-full object-cover sm:group-hover:scale-105 transition-transform duration-300"
                       />
 
-                      {/* Video overlay - appears on hover */}
-                      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      {/* Video overlay - appears on hover (desktop only) */}
+                      <div className="absolute inset-0 opacity-0 sm:group-hover:opacity-100 transition-opacity duration-300 hidden sm:block">
                         <video
                           src={`https://www.freetogame.com//g/${game.id}/videoplayback.webm`}
                           className="w-full h-full object-cover rounded-lg"
@@ -123,8 +123,8 @@ export default function PopularGames() {
                         />
                       </div>
 
-                      {/* Overlay with game information - only visible on hover */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-midnight/90 via-midnight/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg flex flex-col justify-end p-3 sm:p-4">
+                      {/* Overlay with game information - only visible on hover (desktop only) */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-midnight/90 via-midnight/50 to-transparent opacity-0 sm:group-hover:opacity-100 transition-opacity duration-300 rounded-lg flex flex-col justify-end p-3 sm:p-4 hidden sm:flex">
                         <h3 className="font-bold text-sm sm:text-base md:text-lg text-ivory mb-1 sm:mb-2 truncate transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 opacity-0 group-hover:opacity-100">
                           {game.title}
                         </h3>
@@ -173,6 +173,41 @@ export default function PopularGames() {
                           )}
                         </div>
                       </div>
+                    </div>
+                  </div>
+
+                  {/* Mobile Action Buttons - Always visible on mobile */}
+                  <div className="sm:hidden p-3 bg-midnight/80">
+                    <h3 className="font-bold text-sm text-ivory mb-2 truncate">
+                      {game.title}
+                    </h3>
+                    <div className="flex items-center justify-between gap-2">
+                      <Link href={`/games/${game.id}`} className="w-1/2">
+                        <button className="w-full bg-rosy hover:bg-rosy/90 text-midnight font-bold py-2 px-2 rounded-lg transition-all duration-200 text-xs">
+                          Découvrir
+                        </button>
+                      </Link>
+
+                      {/* Add to Cart Button */}
+                      {isGamePurchased(game.id, user) ? (
+                        <div className="w-1/2 bg-green-500 text-white font-bold py-2 px-2 rounded-lg flex items-center justify-center text-xs">
+                          Acheté
+                        </div>
+                      ) : !isInCart(game.id) ? (
+                        <button
+                          onClick={(e) => handleAddToCart(game, e)}
+                          disabled={addingToCart || addingGameId === game.id}
+                          className="w-1/2 bg-rosy hover:bg-rosy/90 text-midnight font-bold py-2 px-2 rounded-lg transition-all duration-200 text-xs disabled:opacity-50 disabled:cursor-not-allowed">
+                          {addingGameId === game.id ? "..." : "Acheter"}
+                        </button>
+                      ) : (
+                        <button
+                          onClick={(e) => handleRemoveFromCart(game.id, e)}
+                          disabled={removingGameId === game.id}
+                          className="w-1/2 bg-red-400 hover:bg-red-500 text-white font-bold py-2 px-2 rounded-lg transition-all duration-200 text-xs disabled:opacity-50 disabled:cursor-not-allowed">
+                          {removingGameId === game.id ? "..." : "Retirer"}
+                        </button>
+                      )}
                     </div>
                   </div>
                 </div>

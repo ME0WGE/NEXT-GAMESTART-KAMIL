@@ -85,7 +85,7 @@ export default function BudgetGames() {
     return budgetGames.map((game) => (
       <div
         key={game.id}
-        className="bg-midnight/60 rounded-xl overflow-hidden shadow-lg border border-plum/20 hover:shadow-rosy/20 hover:border-rosy/40 "
+        className="bg-midnight/60 rounded-xl overflow-hidden shadow-lg border border-plum/20 sm:hover:shadow-rosy/20 sm:hover:border-rosy/40 "
         role="article">
         {/* Game thumbnail */}
         <Link
@@ -96,7 +96,7 @@ export default function BudgetGames() {
             alt={`${game.title} thumbnail`}
             fill
             sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
-            className="object-cover transition-transform duration-500 group-hover:scale-110"
+            className="object-cover transition-transform duration-500 sm:group-hover:scale-110"
             priority={false}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-midnight via-midnight/40 to-transparent" />
@@ -118,7 +118,7 @@ export default function BudgetGames() {
         {/* Game info */}
         <div className="p-4">
           <Link href={`/games/${game.id}`}>
-            <h3 className="font-bold text-lg text-ivory mb-2 line-clamp-1 group-hover:text-rosy transition-colors">
+            <h3 className="font-bold text-lg text-ivory mb-2 line-clamp-1 sm:group-hover:text-rosy transition-colors">
               {game.title}
             </h3>
           </Link>
@@ -174,7 +174,7 @@ export default function BudgetGames() {
         </div>
 
         {/* Hover overlay */}
-        <div className="absolute inset-0 bg-rosy/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+        <div className="absolute inset-0 bg-rosy/10 opacity-0 sm:group-hover:opacity-100 transition-opacity duration-300" />
       </div>
     ));
   };

@@ -159,7 +159,7 @@ export default function AllGames() {
 
           return (
             <Link href={`/games/${game.id}`} key={game.id} className="group">
-              <article className="bg-midnight/60 backdrop-blur-sm rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-2xl hover:shadow-rosy/20 border border-ivory/10 hover:border-rosy/40 flex flex-col h-full hover-lift">
+              <article className="bg-midnight/60 backdrop-blur-sm rounded-2xl overflow-hidden transition-all duration-300 sm:hover:shadow-2xl sm:hover:shadow-rosy/20 border border-ivory/10 sm:hover:border-rosy/40 flex flex-col h-full sm:hover-lift">
                 {/* Image Container */}
                 <div className="relative overflow-hidden">
                   {imageState === "loading" && (
@@ -173,7 +173,7 @@ export default function AllGames() {
                     alt={`${game.title} - ${game.genre} game cover`}
                     onLoad={() => handleImageLoad(game.id)}
                     onError={() => handleImageError(game.id)}
-                    className={`w-full aspect-video object-cover object-center group-hover:scale-110 transition-transform duration-500 ${
+                    className={`w-full aspect-video object-cover object-center sm:group-hover:scale-110 transition-transform duration-500 ${
                       imageState === "loaded" ? "opacity-100" : "opacity-0"
                     }`}
                   />
@@ -212,7 +212,7 @@ export default function AllGames() {
                 {/* Content */}
                 <div className="p-3 sm:p-4 lg:p-6 flex-grow flex flex-col">
                   {/* Title */}
-                  <h3 className="font-bold text-lg sm:text-xl text-ivory group-hover:text-rosy transition-colors duration-300 line-clamp-2 mb-2 sm:mb-3">
+                  <h3 className="font-bold text-lg sm:text-xl text-ivory sm:group-hover:text-rosy transition-colors duration-300 line-clamp-2 mb-2 sm:mb-3">
                     {game.title}
                   </h3>
 
