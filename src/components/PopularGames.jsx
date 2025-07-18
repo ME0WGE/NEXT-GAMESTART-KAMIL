@@ -7,7 +7,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { addToCart, removeFromCart } from "@/lib/features/gameDetailsSlice";
 import { selectCartItems } from "@/lib/features/cartSlice";
 import Link from "next/link";
-import Image from "next/image";
 import { isGamePurchased } from "@/lib/utils/gameUtils";
 
 export default function PopularGames() {

@@ -27,7 +27,7 @@ export const useAllGames = () => {
       dispatch(setRandomPriceOfAllGames(randomPrice));
       dispatch(setLoading(false));
     } catch (error) {
-      console.error(`Erreur lors du chargement de tout les jeux: ${error}`);
+      console.error(`Erreur lors du chargement de tous les jeux: ${error}`);
       dispatch(setError(error.message));
     }
   };
