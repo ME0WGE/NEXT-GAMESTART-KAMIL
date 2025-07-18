@@ -146,9 +146,13 @@ export default function CartModal({ isOpen, onClose }) {
                       {item.genre}
                     </p>
                     <div className="flex items-center justify-between">
-                      <span className="text-rosy font-bold text-sm sm:text-base">
-                        ${generatePrice(item.id).toFixed(2)}
-                      </span>
+                      <GamePrice
+                        game={item}
+                        gameId={item.id}
+                        size="small"
+                        showDiscountBadge={false}
+                        className="text-rosy"
+                      />
                       <button
                         onClick={() => handleRemoveFromCart(item.id)}
                         className="text-red-400 hover:text-red-300 p-1 rounded-full transition-colors">
