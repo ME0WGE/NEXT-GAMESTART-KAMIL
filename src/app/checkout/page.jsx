@@ -69,17 +69,19 @@ export default function Checkout() {
     fetchCart();
   }, [dispatch]);
 
-  // Check for successful purchase
+  // Check for successful purchase (backup mechanism)
   useEffect(() => {
     if (
       successMessage === "Purchase completed successfully" ||
       successMessage === "Purchase completed successfully with credits"
     ) {
-      // Clear Redux cart state
+      // Clear Redux cart state as backup
       dispatch(setCartItems([]));
-      setPurchaseComplete(true);
+      if (!purchaseComplete) {
+        setPurchaseComplete(true);
+      }
     }
-  }, [successMessage, dispatch]);
+  }, [successMessage, dispatch, purchaseComplete]);
 
   // Check if user has sufficient credits
   const hasSufficientCredits = (user.creditBalance || 0) >= total;
@@ -105,6 +107,10 @@ export default function Checkout() {
         // Regular purchase
         await dispatch(purchaseGames(userId)).unwrap();
       }
+
+      // Clear cart immediately after successful purchase
+      dispatch(setCartItems([]));
+      setPurchaseComplete(true);
     } catch (error) {
       console.error("Checkout failed:", error);
       setCheckoutError(error?.message || "Checkout failed. Please try again.");
