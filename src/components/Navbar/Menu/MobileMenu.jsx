@@ -13,7 +13,7 @@ function MobileMenu({ toggleMenu, isMenuOpen, toggleCart }) {
   const cartItemCount = cartItems?.length || 0;
 
   return (
-    <>
+    <div className="flex items-center space-x-3">
       {/* Shopping Cart */}
       <div className="relative">
         <button
@@ -31,7 +31,7 @@ function MobileMenu({ toggleMenu, isMenuOpen, toggleCart }) {
       </div>
 
       {/* Login */}
-              <LoginWrapper />
+      <LoginWrapper />
 
       {/* Menu Button */}
       <button
@@ -39,7 +39,7 @@ function MobileMenu({ toggleMenu, isMenuOpen, toggleCart }) {
         className="text-slate-300 hover:text-pine hover:bg-rosy p-2 rounded-md transition-all duration-200 cursor-pointer">
         {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
       </button>
-    </>
+    </div>
   );
 }
 

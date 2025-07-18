@@ -17,7 +17,7 @@ export default function DesktopMenu({
   const cartItemCount = cartItems?.length || 0;
 
   return (
-    <>
+    <div className="flex items-center space-x-4">
       {/* Shopping Cart */}
       <div className="relative">
         <button
@@ -48,6 +48,6 @@ export default function DesktopMenu({
       <Suspense fallback={<div>Loading...</div>}>
         <LoginWrapper />
       </Suspense>
-    </>
+    </div>
   );
 }
