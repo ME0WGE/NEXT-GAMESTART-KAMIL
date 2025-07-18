@@ -5,6 +5,7 @@ function UpgradeComponent({
   upgrade_price,
   upgrade_value,
   upgrade_icon,
+  upgrade_description,
 }) {
   const canAfford = cookies >= upgrade_price;
 
@@ -19,7 +20,7 @@ function UpgradeComponent({
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-cyan-500/10 to-transparent animate-pulse opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
 
         <div className="relative z-10">
-          <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center justify-between mb-4">
             <div className="text-4xl transform group-hover:scale-110 transition-transform duration-300">
               {upgrade_icon}
             </div>
@@ -34,6 +35,15 @@ function UpgradeComponent({
               </p>
             </div>
           </div>
+
+          {/* Description */}
+          {upgrade_description && (
+            <div className="mb-4 p-3 bg-slate-800/50 rounded-lg border border-slate-600/30">
+              <p className="text-slate-300 text-xs italic font-mono leading-relaxed">
+                "{upgrade_description}"
+              </p>
+            </div>
+          )}
 
           <button
             className={`w-full font-black py-4 px-6 rounded-xl transition-all duration-300 transform group-hover:scale-105 tracking-wider ${
@@ -79,6 +89,7 @@ export default function Upgrade({ upgrades, clicker, handleBuyUpgrade }) {
             upgrade_price={upgrade.price}
             upgrade_value={upgrade.value}
             upgrade_icon={upgrade.icon}
+            upgrade_description={upgrade.description}
           />
         </div>
       ))}
