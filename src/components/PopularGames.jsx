@@ -124,7 +124,7 @@ export default function PopularGames() {
                       </div>
 
                       {/* Overlay with game information - only visible on hover (desktop only) */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-midnight/90 via-midnight/50 to-transparent opacity-0 sm:group-hover:opacity-100 transition-opacity duration-300 rounded-lg flex flex-col justify-end p-3 sm:p-4 hidden sm:flex">
+                      <div className="absolute inset-0 bg-gradient-to-t from-midnight/90 via-midnight/50 to-transparent opacity-0 sm:group-hover:opacity-100 transition-opacity duration-300 rounded-lg flex flex-col justify-end p-3 sm:p-4 sm:flex">
                         <h3 className="font-bold text-sm sm:text-base md:text-lg text-ivory mb-1 sm:mb-2 truncate transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 opacity-0 group-hover:opacity-100">
                           {game.title}
                         </h3>

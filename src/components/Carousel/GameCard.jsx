@@ -14,7 +14,7 @@ export default function GameCard({
 
   // Size Classes
   const sizeClasses = {
-    small: "h-24",
+    small: "h-50",
     medium: "h-32",
     default: "h-40",
     large: "h-48",
