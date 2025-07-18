@@ -1,27 +1,5 @@
 import { NextResponse } from "next/server";
-import fs from "fs";
-import path from "path";
-
-const usersFilePath = path.join(process.cwd(), "users.json");
-
-function loadUsers() {
-  try {
-    const data = fs.readFileSync(usersFilePath, "utf8");
-    return JSON.parse(data);
-  } catch (error) {
-    console.error("Error loading users:", error);
-    return [];
-  }
-}
-
-function saveUsersToFile(users) {
-  try {
-    fs.writeFileSync(usersFilePath, JSON.stringify(users, null, 2));
-  } catch (error) {
-    console.error("Error saving users:", error);
-    throw new Error("Failed to save user data");
-  }
-}
+import { storageService } from "@/lib/services/storageService";
 
 export async function POST(request) {
   try {
@@ -41,7 +19,7 @@ export async function POST(request) {
       );
     }
 
-    const users = loadUsers();
+    const users = storageService.loadUsers();
     const userIndex = users.findIndex((user) => user.id === userId);
 
     if (userIndex === -1) {
@@ -55,7 +33,7 @@ export async function POST(request) {
     const currentBalance = users[userIndex].creditBalance || 0;
     users[userIndex].creditBalance = currentBalance + parseFloat(amount);
 
-    saveUsersToFile(users);
+    storageService.saveUsers(users);
 
     return NextResponse.json({
       success: true,
