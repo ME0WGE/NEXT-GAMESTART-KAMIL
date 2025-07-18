@@ -12,7 +12,7 @@
       },
       {
         "name": "Panier",
-        "url": "/cart"
+        "url": "/checkout"
       }
     ]
   },
