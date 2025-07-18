@@ -107,7 +107,7 @@ export default function Checkout() {
       }
     } catch (error) {
       console.error("Checkout failed:", error);
-      setCheckoutError(error || "Checkout failed. Please try again.");
+      setCheckoutError(error?.message || "Checkout failed. Please try again.");
     } finally {
       setIsCheckingOut(false);
     }
