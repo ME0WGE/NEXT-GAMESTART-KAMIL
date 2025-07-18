@@ -58,12 +58,12 @@ export default function AddCreditsModal({ isOpen, onClose }) {
     // Validation
     const numAmount = parseFloat(amount);
     if (!amount || numAmount <= 0) {
-      setError("Please enter a valid amount greater than 0");
+      setError("Veuillez entrer un montant valide supérieur à 0");
       return;
     }
 
     if (numAmount > 10000) {
-      setError("Maximum credit amount is $10,000");
+      setError("Montant maximum : 10,000 €");
       return;
     }
 
@@ -79,7 +79,7 @@ export default function AddCreditsModal({ isOpen, onClose }) {
         onClose();
       }, 2000);
     } catch (error) {
-      setError(error || "Failed to add credits");
+      setError(error || "Erreur lors de l'ajout de crédits");
     } finally {
       setIsSubmitting(false);
     }
@@ -107,7 +107,9 @@ export default function AddCreditsModal({ isOpen, onClose }) {
             <div className="bg-pine rounded-lg p-2">
               <CreditCard size={20} className="text-white" />
             </div>
-            <h2 className="text-xl font-semibold text-white">Add Credits</h2>
+            <h2 className="text-xl font-semibold text-white">
+              Ajouter des crédits
+            </h2>
           </div>
           <button
             onClick={onClose}
@@ -119,9 +121,9 @@ export default function AddCreditsModal({ isOpen, onClose }) {
 
         {/* Current Balance */}
         <div className="bg-neutral-700/50 rounded-lg p-4 mb-6">
-          <p className="text-neutral-400 text-sm mb-1">Current Balance</p>
+          <p className="text-neutral-400 text-sm mb-1">Solde actuel</p>
           <p className="text-2xl font-bold text-white">
-            ${(user.creditBalance || 0).toFixed(2)}
+            {(user.creditBalance || 0).toFixed(2)} €
           </p>
         </div>
 
@@ -131,7 +133,7 @@ export default function AddCreditsModal({ isOpen, onClose }) {
             <label
               htmlFor="amount"
               className="block text-sm font-medium text-neutral-300 mb-2">
-              Amount to Add ($)
+              Montant à ajouter (€)
             </label>
             <input
               type="text"
@@ -142,7 +144,9 @@ export default function AddCreditsModal({ isOpen, onClose }) {
               className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 rounded-lg text-white placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-pine focus:border-transparent"
               disabled={isSubmitting}
             />
-            <p className="text-xs text-neutral-500 mt-1">Maximum: $10,000.00</p>
+            <p className="text-xs text-neutral-500 mt-1">
+              Maximum: 10,000.00 €
+            </p>
           </div>
 
           {/* Error Message */}
@@ -158,7 +162,7 @@ export default function AddCreditsModal({ isOpen, onClose }) {
             <div className="flex items-center gap-2 p-3 bg-green-500/10 border border-green-500/20 rounded-lg">
               <CheckCircle size={16} className="text-green-400 flex-shrink-0" />
               <p className="text-green-400 text-sm">
-                Credits added successfully!
+                Crédits ajoutés avec succès !
               </p>
             </div>
           )}
@@ -170,13 +174,13 @@ export default function AddCreditsModal({ isOpen, onClose }) {
               onClick={onClose}
               className="flex-1 px-4 py-3 bg-neutral-700 text-white rounded-lg hover:bg-neutral-600 transition-colors"
               disabled={isSubmitting}>
-              Cancel
+              Annuler
             </button>
             <button
               type="submit"
               disabled={isSubmitting || !amount || parseFloat(amount) <= 0}
               className="flex-1 px-4 py-3 bg-pine text-white rounded-lg hover:bg-pine/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
-              {isSubmitting ? "Adding..." : "Add Credits"}
+              {isSubmitting ? "Ajout en cours..." : "Ajouter des crédits"}
             </button>
           </div>
         </form>
